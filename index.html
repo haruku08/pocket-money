@@ -4,6 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Sackgeld">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <title>Pocket Money</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="theme-color" content="#0f3b3a">
@@ -284,6 +291,8 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
       sendParent: "Send to parent", linkCopied: "Link copied. Paste it in WhatsApp.", shareText: "{name}: CHF {total} on my accounts, CHF {debt} debts left. All my entries:",
       linkHere: "Copy this link and send it:", viewing: "{name}'s money", sentAt: "Sent {d} · read only", closeView: "Close",
       lastReport: "Last report from {name}", openReport: "Open",
+      syncTitle: "Live sync", syncHint: "Your parent set up a Google Sheet. Paste the sync link here once, and every entry is sent there automatically.", syncUrl: "Sync link", syncNow: "Send now", syncSaved: "Sync link saved", syncOff: "Not connected", syncOk: "Last sent {d}", syncFail: "Could not send (no internet?). It tries again with the next entry.", syncBad: "That does not look like a Google sync link", syncRemove: "Disconnect",
+      installTitle: "Install as app", installHint: "Put the app on your home screen. It opens like a normal app and also works without internet.", installBtn: "Install app", installIos: "Tap the Share button at the bottom of Safari, then \"Add to Home Screen\".", installOther: "Open the browser menu (⋮) and tap \"Install app\" or \"Add to Home screen\".", installLater: "Later",
       newEntry: "New entry", close: "Close", hoursWorked: "Hours worked", hoursEx: "e.g. 4", amount: "Amount", balanceShown: "Balance shown in your app",
       earned: "Earned", account: "Account", date: "Date", noteOpt: "Note (optional)", noteEx: "e.g. Kebab with friends", saveEntry: "Save entry",
       whichDebt: "Which debt?", typeAmount: "Type an amount first", balUpdated: "Balance updated", savedLog: "Saved to your log",
@@ -340,6 +349,8 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
       sendParent: "An Eltern senden", linkCopied: "Link kopiert. Füge ihn in WhatsApp ein.", shareText: "{name}: CHF {total} auf den Konten, noch CHF {debt} Schulden. Alle Einträge:",
       linkHere: "Kopiere diesen Link und schick ihn:", viewing: "Geld von {name}", sentAt: "Gesendet {d} · nur ansehen", closeView: "Schliessen",
       lastReport: "Letzter Bericht von {name}", openReport: "Öffnen",
+      syncTitle: "Live-Sync", syncHint: "Deine Eltern haben ein Google Sheet eingerichtet. Füge den Sync-Link einmal hier ein, dann wird jeder Eintrag automatisch dorthin geschickt.", syncUrl: "Sync-Link", syncNow: "Jetzt senden", syncSaved: "Sync-Link gespeichert", syncOff: "Nicht verbunden", syncOk: "Zuletzt gesendet {d}", syncFail: "Senden ging nicht (kein Internet?). Es klappt beim nächsten Eintrag wieder.", syncBad: "Das ist kein Google-Sync-Link", syncRemove: "Trennen",
+      installTitle: "Als App installieren", installHint: "Leg die App auf deinen Homescreen. Sie öffnet sich wie eine normale App und funktioniert auch ohne Internet.", installBtn: "App installieren", installIos: "Tippe in Safari unten auf Teilen und dann auf \"Zum Home-Bildschirm\".", installOther: "Öffne das Browser-Menü (⋮) und tippe auf \"App installieren\" oder \"Zum Startbildschirm hinzufügen\".", installLater: "Später",
       newEntry: "Neuer Eintrag", close: "Schliessen", hoursWorked: "Gearbeitete Stunden", hoursEx: "z.B. 4", amount: "Betrag", balanceShown: "Kontostand in deiner App",
       earned: "Verdient", account: "Konto", date: "Datum", noteOpt: "Notiz (optional)", noteEx: "z.B. Kebab mit Kollegen", saveEntry: "Eintrag speichern",
       whichDebt: "Welche Schuld?", typeAmount: "Gib zuerst einen Betrag ein", balUpdated: "Kontostand aktualisiert", savedLog: "Im Verlauf gespeichert",
@@ -422,7 +433,50 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
   function save() {
     if (ui.viewing) return;
     try { localStorage.setItem(KEY, JSON.stringify(own)); storageOk = true; } catch (e) { storageOk = false; }
+    scheduleSync();
   }
+  // ---------- live sync to the parent's Google Sheet (Apps Script web app) ----------
+  var syncTimer = null;
+  function scheduleSync() { if (!own.syncUrl) return; clearTimeout(syncTimer); syncTimer = setTimeout(syncNow, 1500); }
+  function syncPayload() {
+    var st = own, tl = function (k) { return L.en[k] || k; };
+    var acc = function (id) { var a = st.accounts.find(function (x) { return x.id === id; }); return a ? a.name : ""; };
+    var dname = function (d) { return d.name || L.en.licence; };
+    var entries = st.entries.slice().sort(function (a, b) { return a.date !== b.date ? (a.date < b.date ? 1 : -1) : (b.ts || 0) - (a.ts || 0); }).map(function (e) {
+      var what = e.type === "debt" ? (e.debtName || "") : e.type === "newdebt" ? (e.debtName || "") : "";
+      return [e.date, tl("ty_" + e.type), [what, e.note].filter(Boolean).filter(function (v, i, a) { return a.indexOf(v) === i; }).join(" · "), e.type === "newdebt" ? "" : acc(e.account), e.type === "balance" ? e.amount : (e.type === "newdebt" ? e.amount : e.delta), e.type === "balance" ? e.delta : "", e.hours || "", e.ts ? new Date(e.ts).toISOString() : ""];
+    });
+    return {
+      sentAt: new Date().toISOString(), name: st.name || "",
+      total: st.accounts.reduce(function (x, a) { return x + a.balance; }, 0),
+      accounts: st.accounts.map(function (a) { return [a.name, a.balance]; }),
+      debts: st.debts.map(function (d) { return [dname(d), d.total, d.paid, Math.max(0, r2(d.total - d.paid)), d.monthly]; }),
+      budget: [["Allowance", st.s.allowance], ["Parking", st.s.parking], ["Gas budget", st.s.gas], ["Other spending budget", st.s.other], ["Pay per hour", st.s.rate]],
+      entries: entries
+    };
+  }
+  function syncNow(manual) {
+    if (!own.syncUrl) return;
+    fetch(own.syncUrl, { method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(syncPayload()) })
+      .then(function () { own.syncAt = Date.now(); own.syncErr = false; persist(); if (manual) toast(t("syncOk", { d: fmtTime(own.syncAt) })); refreshSync(); })
+      .catch(function () { own.syncErr = true; persist(); if (manual) toast(t("syncFail")); refreshSync(); });
+  }
+  function persist() { try { localStorage.setItem(KEY, JSON.stringify(own)); } catch (e) {} }
+  function fmtTime(ts) { return new Date(ts).toLocaleString(loc(), { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }); }
+  function syncStatus() { return !own.syncUrl ? t("syncOff") : own.syncErr ? t("syncFail") : own.syncAt ? t("syncOk", { d: fmtTime(own.syncAt) }) : ""; }
+  // ---------- install as app ----------
+  var installEvt = null;
+  window.addEventListener("beforeinstallprompt", function (e) { e.preventDefault(); installEvt = e; if (!ui.viewing && (ui.tab === "home" || ui.tab === "settings")) render(); });
+  window.addEventListener("appinstalled", function () { installEvt = null; render(); });
+  function isStandalone() { try { return window.matchMedia("(display-mode: standalone)").matches || navigator.standalone === true; } catch (e) { return false; } }
+  function isIos() { return /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1); }
+  function canInstall() { return !isStandalone() && /^https?:$/.test(location.protocol) && /github\.io$|localhost/.test(location.hostname); }
+  function installBlock(withLater) {
+    if (!canInstall()) return "";
+    var how = installEvt ? '<button class="btn small" id="install-go">' + t("installBtn") + '</button>' : '<p style="font-size:14px"><b>' + (isIos() ? t("installIos") : t("installOther")) + '</b></p>';
+    return '<div class="callout" id="install-box"><div style="display:flex;flex-direction:column;gap:8px"><b>' + t("installTitle") + '</b><span>' + t("installHint") + '</span>' + how + (withLater ? '<button class="btn ghost small" id="install-later" style="align-self:flex-start">' + t("installLater") + '</button>' : "") + '</div></div>';
+  }
+  function refreshSync() { var el = document.getElementById("sync-status"); if (el) el.textContent = syncStatus(); }
   var ui = { tab: "home", sim: null, viewing: null };
   try { var tb = sessionStorage.getItem(KEY + "-tab"); if (tb) ui.tab = tb; } catch (e) {}
   function setLang() {
@@ -591,6 +645,7 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
     return header(t("appName"), '<span class="month-pill">' + monthName(0) + '</span>') +
       '<section class="hero" aria-label="' + t("allMoney") + '"><div><div class="label">' + t("allMoney") + '</div><div class="hero-total num"><small>CHF</small>' + chf(total()) + '</div></div><div class="accounts">' + accts + '</div></section>' +
       (!hasBalance && !ro ? '<div class="callout">' + t("startHere", { a: esc(state.accounts[0].name), b: esc(state.accounts[1] ? state.accounts[1].name : "") }) + '</div>' : "") +
+      (ro || own.installLater ? "" : installBlock(true)) +
       (ro ? "" : '<div class="quick">' + qa("allowance", t("qa_allowance"), "var(--good)") + qa("job", t("qa_job"), "var(--c-other)") + qa("gas", t("qa_gas"), "var(--c-gas)") + qa("debt", t("qa_debt"), "var(--c-debt)") + '</div>') +
       '<section class="card"><div class="row between"><h2>' + t("debts") + '</h2>' + (dl <= 0 ? '<span class="tag good">' + t("debtFree") + '</span>' : '<span class="tag bad">' + t("open") + '</span>') + '</div>' +
         (state.debts.length ?
@@ -751,6 +806,11 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
     try { report = JSON.parse(localStorage.getItem(KEY + "-report")); } catch (e) {}
     return header(t("setup")) +
       (report ? '<section class="card"><div class="row between"><h3>' + esc(t("lastReport", { name: report.name || "?" })) + '</h3><button class="btn small" id="report-open">' + t("openReport") + '</button></div><p class="muted" style="font-size:13px">' + new Date(report.at).toLocaleString(loc(), { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }) + '</p></section>' : "") +
+      installBlock(false) +
+      '<section class="card"><h2>' + t("syncTitle") + '</h2><p class="muted" style="font-size:13px">' + t("syncHint") + '</p>' +
+        '<div class="field"><label for="sync-url">' + t("syncUrl") + '</label><input type="text" id="sync-url" inputmode="url" autocomplete="off" placeholder="https://script.google.com/macros/s/…/exec" value="' + esc(own.syncUrl || "") + '"></div>' +
+        '<div class="row" style="flex-wrap:wrap"><button class="btn small" id="sync-save">' + t("syncNow") + '</button>' + (own.syncUrl ? '<button class="btn ghost small" id="sync-remove">' + t("syncRemove") + '</button>' : "") + '</div>' +
+        '<p class="muted" id="sync-status" style="font-size:13px">' + esc(syncStatus()) + '</p></section>' +
       '<section class="card"><h2>' + t("parentTitle") + '</h2><p class="muted" style="font-size:13px">' + t("parentHint") + '</p>' +
         '<div class="field"><label for="set-name">' + t("f_name") + '</label><input type="text" id="set-name" value="' + esc(state.name || "") + '" maxlength="20"></div>' +
         '<button class="btn" id="share-parent">' + t("sendParent") + '</button><div id="share-fallback" hidden><div class="field"><label for="share-text">' + t("linkHere") + '</label><textarea id="share-text" readonly></textarea></div></div></section>' +
@@ -959,6 +1019,14 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
     }
     if (ev.target.closest("[data-rm-no]")) { render(); return; }
     if (id === "debt-add") return openDebtSheet();
+    if (id === "sync-save") {
+      var u = document.getElementById("sync-url").value.trim();
+      if (!/^https:\/\/script\.google(usercontent)?\.com\//.test(u)) { toast(t("syncBad")); return; }
+      own.syncUrl = u; own.syncErr = false; persist(); syncNow(true); render(); return;
+    }
+    if (id === "install-go" && installEvt) { installEvt.prompt(); installEvt.userChoice.then(function () { installEvt = null; render(); }); return; }
+    if (id === "install-later") { own.installLater = true; persist(); render(); return; }
+    if (id === "sync-remove") { own.syncUrl = ""; own.syncAt = 0; persist(); render(); return; }
     if (id === "share-parent") return shareParent();
     if (id === "report-open") { try { openReport(JSON.parse(localStorage.getItem(KEY + "-report"))); } catch (e) {} return; }
     if (id === "sim-save") {
@@ -996,8 +1064,9 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
   app.addEventListener("input", function (ev) { if (ev.target.id && ev.target.id.indexOf("sim-") === 0) { readSim(); updatePlan(); } });
   window.addEventListener("hashchange", checkHash);
 
+  try { if ("serviceWorker" in navigator && canInstall()) navigator.serviceWorker.register("sw.js").catch(function () {}); } catch (e) {}
   render();
-  checkHash();
+  if (!checkHash() && own.syncUrl) setTimeout(syncNow, 2500);
 })();
 </script>
 </body>
