@@ -1,18 +1,17 @@
 /**
- * Pocket Money → Google Sheet live sync (version 4).
+ * Pocket Money → Google Sheet live sync (version 5).
  *
- * Paste this into Extensions → Apps Script of your Google Sheet,
- * then Deploy → Manage deployments → edit → Version: New version → Deploy
- * (or for a first setup: Deploy → New deployment → Web app,
- *  Execute as: Me, Who has access: Anyone).
+ * Paste this into Extensions → Apps Script of your Google Sheet.
+ * To update an existing setup and KEEP the same link:
+ *   Deploy → Manage deployments → edit (pencil) → Version: New version → Deploy.
+ * First setup: Deploy → New deployment → Web app (Execute as: Me, Who has access: Anyone).
  *
  * "Entries" keeps every entry ever logged, including deleted ones.
  * Tick "Approved" (and optionally write a "Parent note") and your son
  * sees it in his app the next time it syncs.
  *
  * "Debts" is managed by you: add a row (Debt, Total, Per month) and it
- * appears in his app. Change Total or Per month any time. Delete a row
- * to remove the debt. Paid and Left are filled in from his payments.
+ * appears in his app. Delete a row to remove the debt.
  */
 
 var COLS = ['ID', 'Date', 'Type', 'What / note', 'Account', 'Amount (CHF)', 'Balance change', 'Hours', 'Logged at', 'Status', 'Approved', 'Parent note'];
@@ -47,7 +46,7 @@ function json(obj) {
 }
 
 function doGet() {
-  return ContentService.createTextOutput('Pocket Money sync is running (v4).');
+  return ContentService.createTextOutput('Pocket Money sync is running (v5).');
 }
 
 function getSheet(ss, name) {
@@ -165,17 +164,28 @@ function syncDebts(sh, d) {
     var rows = sh.getRange(2, 1, n, DEBT_COLS.length).getValues();
     rows.forEach(function (r, i) {
       var name = String(r[1] || '').trim();
-      var total = Number(r[2]) || 0;
-      if (!name || total <= 0) return;
+      var total = num(r[2]);
+      if (!name || total <= 0) {
+        if (name) { r[4] = ''; r[5] = 'Check Total: use plain numbers like 150'; }
+        return;
+      }
       if (!r[0]) r[0] = 'd' + new Date().getTime().toString(36) + i;
       var paid = Number(paidOf[r[0]]) || 0;
       r[4] = paid;
       r[5] = Math.max(0, Math.round((total - paid) * 100) / 100);
-      out.push({ id: String(r[0]), name: name, total: total, monthly: Number(r[3]) || 0 });
+      out.push({ id: String(r[0]), name: name, total: total, monthly: num(r[3]) });
     });
     sh.getRange(2, 1, n, DEBT_COLS.length).setValues(rows);
     sh.getRange(2, 3, n, 4).setNumberFormat('#,##0.00');
   }
   sh.autoResizeColumns(2, DEBT_COLS.length - 1);
   return out;
+}
+
+// Reads numbers the Swiss way too: 150.-, CHF 1'500, 150,50
+function num(v) {
+  if (typeof v === 'number') return v;
+  var s = String(v || '').replace(/CHF|Fr\.?|\s|'|’/gi, '').replace(/\.-$/, '').replace(/,(\d{1,2})$/, '.$1').replace(/,/g, '');
+  var n = parseFloat(s);
+  return isNaN(n) ? 0 : n;
 }
