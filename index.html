@@ -195,6 +195,23 @@ input[type=range] { width: 100%; accent-color: var(--brand); height: 28px; }
 .toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(92px + env(safe-area-inset-bottom, 0px)); background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 12px; font-weight: 600; font-size: 14px; z-index: 40; max-width: calc(100% - 32px); }
 .preview-note { font-size: 12px; color: var(--muted); text-align: center; }
 textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
+/* v2 additions */
+.top-right { display: flex; gap: 8px; align-items: center; }
+.lang { display: inline-flex; background: var(--surface-2); border-radius: 99px; padding: 3px; }
+.lang button { font: inherit; font-size: 12px; font-weight: 700; border: 0; background: none; color: var(--muted); padding: 4px 9px; border-radius: 99px; cursor: pointer; }
+.lang button[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: var(--shadow); }
+.debt-list { display: flex; flex-direction: column; gap: 14px; }
+.debt-row { display: flex; flex-direction: column; gap: 6px; }
+.debt-row .row { gap: 8px; }
+.debt-row .bar { height: 8px; }
+.debt-name { font-weight: 600; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.viewbar { background: var(--accent); color: var(--accent-ink); border-radius: 16px; padding: 12px 14px; display: flex; align-items: center; gap: 12px; }
+.viewbar div { flex: 1; min-width: 0; }
+.viewbar b { display: block; }
+.viewbar small { font-size: 12px; opacity: .8; }
+.viewbar .btn { background: var(--accent-ink); color: var(--accent); }
+.setup-debt { border: 1.5px solid var(--line); border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 10px; }
+.grid3 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 </style>
 </head>
 <body>
@@ -203,11 +220,11 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
 
 <nav class="tabbar" aria-label="Main">
   <div class="tabbar-in">
-    <button class="tab" data-tab="home" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Home</button>
-    <button class="tab" data-tab="log"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>Log</button>
+    <button class="tab" data-tab="home" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg><span data-t="tab_home">Home</span></button>
+    <button class="tab" data-tab="log"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg><span data-t="tab_log">Log</span></button>
     <button class="tab-add" id="addBtn" aria-label="Add entry"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
-    <button class="tab" data-tab="plan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 6-6"/></svg>Plan</button>
-    <button class="tab" data-tab="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Setup</button>
+    <button class="tab" data-tab="plan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 6-6"/></svg><span data-t="tab_plan">Plan</span></button>
+    <button class="tab" data-tab="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg><span data-t="tab_setup">Setup</span></button>
   </div>
 </nav>
 <div id="layer"></div>
@@ -217,6 +234,130 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
   "use strict";
   var KEY = "pocket-money-v1";
 
+  // ---------- translations (Swiss German: no ß) ----------
+  var L = {
+    en: {
+      appName: "Pocket Money", tab_home: "Home", tab_log: "Log", tab_plan: "Plan", tab_setup: "Setup", addEntry: "Add entry",
+      allMoney: "All my money", tapUpdate: "Tap to update from your app",
+      startHere: "<b>Start here:</b> open your {a} and {b} apps and tap each account above to type in what you see.",
+      qa_allowance: "Allowance", qa_job: "Job hours", qa_gas: "Gas", qa_debt: "Pay debt",
+      debts: "Debts", debtFree: "Debt free", open: "open", stillToPay: "still to pay", ofTotal: "of CHF {n}",
+      hoursOfWork: "That is <b>{h} hours</b> of work at CHF {r}/h.", addDebt: "Add debt", noDebts: "No debts. Keep it that way!",
+      leftOf: "CHF {l} left of {t}", perMonthShort: "CHF {n}/month",
+      whereGoes: "Where the {n} goes", eachMonth: "each month", parkingSpace: "Parking space", gasBudget: "Scooter gas (budget)",
+      debtPayments: "Debt payments", leftOver: "Left to spend or save", missing: "Missing",
+      thisMonth: "This month so far", moneyIn: "Money in", spent: "Spent", jobHours: "Job hours",
+      over: "CHF {n} over", left: "CHF {n} left", paid: "Paid", notPaid: "Not paid yet", toGo: "CHF {n} to go", done: "Done",
+      logParking: "Log parking CHF {n}", otherSpending: "Other spending",
+      latest: "Latest entries", seeAll: "See all", nothingYet: "Nothing logged yet. Every entry you add shows up here with the date.",
+      notSaving: "This browser is not saving data right now (private mode?). Entries will be lost when you close it.",
+      ty_allowance: "Allowance", ty_job: "Job", ty_income: "Other money in", ty_gas: "Scooter gas", ty_parking: "Parking",
+      ty_debt: "Debt payment", ty_spend: "Other spending", ty_balance: "Balance check", ty_newdebt: "New debt",
+      log: "Money log", entries: "{n} entries", noEntries: "No entries yet.",
+      noEntriesHint: "Tap the yellow + to log money you got or spent. The app keeps every entry with its date.",
+      inOut: "in {a} · out {b}", set: "set", del: "Delete entry", delQ: "Delete?",
+      plan: "What if…", perMonth: "per month",
+      planIntro: "Move the sliders to see how fast your debts are gone and when you reach your goal. Your allowance of CHF {a} and parking of CHF {p} are included.",
+      sl_hours: "Job hours per month", sl_gas: "Scooter gas", sl_debt: "Debt payments (all debts)", sl_other: "Other spending (food, games, going out)",
+      moneyOut: "Money out", saved: "Saved",
+      overspend: "You spend <b>CHF {n}</b> more than you get each month. Work about <b>{h} more hours</b> or spend less.",
+      noDebtLeft: "<b>No debts left.</b> Nice.", noPay: "With no debt payments, the CHF {n} never goes away.",
+      debtFreeIn: "Debt free in <b>{m}</b>, in {d}.", tooLong: "At this pace the debts take more than 5 years.",
+      goalHave: "You already have enough for <b>{g}</b> (CHF {n}).", goalIn: "<b>{g}</b> (CHF {n}) reached in <b>{m}</b>.",
+      goalNo: "<b>{g}</b> (CHF {n}) is out of reach with these numbers.", month1: "1 month", months: "{n} months",
+      next12: "Next 12 months", myMoney: "My money", debtLeftLbl: "Debts left", now: "Now",
+      useBudget: "Use these numbers as my monthly budget", budgetUpdated: "Budget updated", chartLabel: "Projection of money and debts over 12 months",
+      setup: "Setup", monthlyMoney: "Monthly money", f_allowance: "Allowance (CHF)", f_parking: "Parking space (CHF)", f_gas: "Gas budget (CHF)",
+      f_other: "Other spending (CHF)", f_rate: "Job pay per hour (CHF)", f_hours: "Usual job hours", f_name: "Your first name",
+      savingsGoal: "Savings goal", defaultGoal: "Savings goal", whatFor: "What for?", amountChf: "Amount (CHF)", accounts: "Accounts",
+      accountName: "Account name", saveSetup: "Save setup", setupSaved: "Setup saved", language: "Language", you: "You",
+      debtName: "What is it for?", debtTotal: "Total debt (CHF)", debtMonthly: "Pay back per month (CHF)", debtAlready: "Already paid (CHF)",
+      paidSoFar: "Paid so far: CHF {n}", removeDebt: "Remove", removeQ: "Remove this debt?", yesRemove: "Yes, remove", cancel: "Cancel",
+      debtRemoved: "Debt removed", debtAdded: "Debt added", newDebtTitle: "New debt", saveDebt: "Add debt", debtNameEx: "e.g. Phone repair",
+      licence: "Driving licence", needName: "Give the debt a name",
+      backup: "Backup", backupHint: "Everything is saved on this phone only. Copy the backup code and keep it somewhere (for example in a note), so you can restore it on a new phone.",
+      copyBackup: "Copy backup code", restoreFrom: "Restore from code", pasteBackup: "Paste backup code", restore: "Restore",
+      backupCopied: "Backup code copied", selectCopy: "Select and copy the code below", backupRestored: "Backup restored", badCode: "That code does not look right",
+      startOver: "Start over", startOverHint: "Deletes all entries and balances on this phone.", deleteAll: "Delete everything",
+      reallyDelete: "Really delete everything?", yesDelete: "Yes, delete", allDeleted: "Everything deleted",
+      parentTitle: "For parents", parentHint: "Send a link with all your entries. Your parent sees everything, but can't change anything. Send a new one whenever you want to show the latest.",
+      sendParent: "Send to parent", linkCopied: "Link copied. Paste it in WhatsApp.", shareText: "{name}: CHF {total} on my accounts, CHF {debt} debts left. All my entries:",
+      linkHere: "Copy this link and send it:", viewing: "{name}'s money", sentAt: "Sent {d} · read only", closeView: "Close",
+      lastReport: "Last report from {name}", openReport: "Open",
+      newEntry: "New entry", close: "Close", hoursWorked: "Hours worked", hoursEx: "e.g. 4", amount: "Amount", balanceShown: "Balance shown in your app",
+      earned: "Earned", account: "Account", date: "Date", noteOpt: "Note (optional)", noteEx: "e.g. Kebab with friends", saveEntry: "Save entry",
+      whichDebt: "Which debt?", typeAmount: "Type an amount first", balUpdated: "Balance updated", savedLog: "Saved to your log",
+      entryDeleted: "Entry deleted", deletePaymentsFirst: "Delete the payments for this debt first",
+      h_allowance: "Your monthly CHF {n}.", h_job: "Type the hours, the app counts CHF {r} per hour.", h_gas: "Budget this month: CHF {n}.",
+      h_parking: "Your parking space costs CHF {n} per month.", h_debt: "CHF {n} still open.",
+      h_balance: "Open your bank app and copy the exact number. The difference gets logged.", h_income: "Birthday money, selling something…", h_spend: ""
+    },
+    de: {
+      appName: "Sackgeld", tab_home: "Start", tab_log: "Verlauf", tab_plan: "Plan", tab_setup: "Setup", addEntry: "Eintrag hinzufügen",
+      allMoney: "Mein ganzes Geld", tapUpdate: "Tippen, um den Stand aus der App einzutragen",
+      startHere: "<b>So startest du:</b> Öffne deine {a}- und {b}-App und tippe oben auf jedes Konto, um den Kontostand einzutragen.",
+      qa_allowance: "Sackgeld", qa_job: "Arbeit", qa_gas: "Benzin", qa_debt: "Abzahlen",
+      debts: "Schulden", debtFree: "Schuldenfrei", open: "offen", stillToPay: "noch zu zahlen", ofTotal: "von CHF {n}",
+      hoursOfWork: "Das sind <b>{h} Stunden</b> Arbeit à CHF {r}/h.", addDebt: "Schuld hinzufügen", noDebts: "Keine Schulden. Bleib dran!",
+      leftOf: "noch CHF {l} von {t}", perMonthShort: "CHF {n}/Monat",
+      whereGoes: "Wohin die {n} gehen", eachMonth: "pro Monat", parkingSpace: "Parkplatz", gasBudget: "Benzin (Budget)",
+      debtPayments: "Abzahlungen", leftOver: "Zum Ausgeben oder Sparen", missing: "Fehlt",
+      thisMonth: "Dieser Monat bisher", moneyIn: "Einnahmen", spent: "Ausgaben", jobHours: "Arbeitsstunden",
+      over: "CHF {n} drüber", left: "CHF {n} übrig", paid: "Bezahlt", notPaid: "Noch offen", toGo: "noch CHF {n}", done: "Erledigt",
+      logParking: "Parkplatz CHF {n} eintragen", otherSpending: "Andere Ausgaben",
+      latest: "Letzte Einträge", seeAll: "Alle", nothingYet: "Noch nichts eingetragen. Jeder Eintrag erscheint hier mit Datum.",
+      notSaving: "Dieser Browser speichert gerade nichts (privater Modus?). Die Einträge gehen beim Schliessen verloren.",
+      ty_allowance: "Sackgeld", ty_job: "Job", ty_income: "Anderes Geld rein", ty_gas: "Benzin", ty_parking: "Parkplatz",
+      ty_debt: "Abzahlung", ty_spend: "Andere Ausgabe", ty_balance: "Kontostand", ty_newdebt: "Neue Schuld",
+      log: "Verlauf", entries: "{n} Einträge", noEntries: "Noch keine Einträge.",
+      noEntriesHint: "Tippe auf das gelbe +, um Geld einzutragen, das du bekommen oder ausgegeben hast. Die App speichert jeden Eintrag mit Datum.",
+      inOut: "rein {a} · raus {b}", set: "neu", del: "Eintrag löschen", delQ: "Löschen?",
+      plan: "Was wäre, wenn…", perMonth: "pro Monat",
+      planIntro: "Verschieb die Regler und schau, wie schnell deine Schulden weg sind und wann du dein Ziel erreichst. Dein Sackgeld von CHF {a} und der Parkplatz für CHF {p} sind eingerechnet.",
+      sl_hours: "Arbeitsstunden pro Monat", sl_gas: "Benzin", sl_debt: "Abzahlungen (alle Schulden)", sl_other: "Andere Ausgaben (Essen, Games, Ausgang)",
+      moneyOut: "Ausgaben", saved: "Gespart",
+      overspend: "Du gibst jeden Monat <b>CHF {n}</b> mehr aus, als du bekommst. Arbeite etwa <b>{h} Stunden mehr</b> oder gib weniger aus.",
+      noDebtLeft: "<b>Keine Schulden mehr.</b> Stark.", noPay: "Ohne Abzahlung bleiben die CHF {n} für immer.",
+      debtFreeIn: "Schuldenfrei in <b>{m}</b>, im {d}.", tooLong: "In diesem Tempo dauern die Schulden über 5 Jahre.",
+      goalHave: "Du hast schon genug für <b>{g}</b> (CHF {n}).", goalIn: "<b>{g}</b> (CHF {n}) erreicht in <b>{m}</b>.",
+      goalNo: "<b>{g}</b> (CHF {n}) ist mit diesen Zahlen nicht erreichbar.", month1: "1 Monat", months: "{n} Monaten",
+      next12: "Nächste 12 Monate", myMoney: "Mein Geld", debtLeftLbl: "Schulden", now: "Jetzt",
+      useBudget: "Diese Zahlen als Monatsbudget übernehmen", budgetUpdated: "Budget gespeichert", chartLabel: "Verlauf von Geld und Schulden über 12 Monate",
+      setup: "Einstellungen", monthlyMoney: "Geld pro Monat", f_allowance: "Sackgeld (CHF)", f_parking: "Parkplatz (CHF)", f_gas: "Benzin-Budget (CHF)",
+      f_other: "Andere Ausgaben (CHF)", f_rate: "Lohn pro Stunde (CHF)", f_hours: "Übliche Arbeitsstunden", f_name: "Dein Vorname",
+      savingsGoal: "Sparziel", defaultGoal: "Sparziel", whatFor: "Wofür?", amountChf: "Betrag (CHF)", accounts: "Konten",
+      accountName: "Kontoname", saveSetup: "Speichern", setupSaved: "Gespeichert", language: "Sprache", you: "Du",
+      debtName: "Wofür?", debtTotal: "Schuld total (CHF)", debtMonthly: "Abzahlung pro Monat (CHF)", debtAlready: "Schon bezahlt (CHF)",
+      paidSoFar: "Bisher bezahlt: CHF {n}", removeDebt: "Entfernen", removeQ: "Diese Schuld entfernen?", yesRemove: "Ja, entfernen", cancel: "Abbrechen",
+      debtRemoved: "Schuld entfernt", debtAdded: "Schuld hinzugefügt", newDebtTitle: "Neue Schuld", saveDebt: "Schuld hinzufügen", debtNameEx: "z.B. Handy-Reparatur",
+      licence: "Führerschein", needName: "Gib der Schuld einen Namen",
+      backup: "Sicherung", backupHint: "Alles ist nur auf diesem Handy gespeichert. Kopiere den Sicherungscode und bewahre ihn auf (z.B. in einer Notiz), damit du alles auf einem neuen Handy wiederherstellen kannst.",
+      copyBackup: "Sicherungscode kopieren", restoreFrom: "Aus Code wiederherstellen", pasteBackup: "Sicherungscode einfügen", restore: "Wiederherstellen",
+      backupCopied: "Sicherungscode kopiert", selectCopy: "Markiere und kopiere den Code unten", backupRestored: "Sicherung wiederhergestellt", badCode: "Dieser Code stimmt nicht",
+      startOver: "Neu anfangen", startOverHint: "Löscht alle Einträge und Kontostände auf diesem Handy.", deleteAll: "Alles löschen",
+      reallyDelete: "Wirklich alles löschen?", yesDelete: "Ja, löschen", allDeleted: "Alles gelöscht",
+      parentTitle: "Für Eltern", parentHint: "Schick einen Link mit all deinen Einträgen. Deine Eltern sehen alles, können aber nichts ändern. Schick einfach einen neuen, wenn du den aktuellen Stand zeigen willst.",
+      sendParent: "An Eltern senden", linkCopied: "Link kopiert. Füge ihn in WhatsApp ein.", shareText: "{name}: CHF {total} auf den Konten, noch CHF {debt} Schulden. Alle Einträge:",
+      linkHere: "Kopiere diesen Link und schick ihn:", viewing: "Geld von {name}", sentAt: "Gesendet {d} · nur ansehen", closeView: "Schliessen",
+      lastReport: "Letzter Bericht von {name}", openReport: "Öffnen",
+      newEntry: "Neuer Eintrag", close: "Schliessen", hoursWorked: "Gearbeitete Stunden", hoursEx: "z.B. 4", amount: "Betrag", balanceShown: "Kontostand in deiner App",
+      earned: "Verdient", account: "Konto", date: "Datum", noteOpt: "Notiz (optional)", noteEx: "z.B. Kebab mit Kollegen", saveEntry: "Eintrag speichern",
+      whichDebt: "Welche Schuld?", typeAmount: "Gib zuerst einen Betrag ein", balUpdated: "Kontostand aktualisiert", savedLog: "Im Verlauf gespeichert",
+      entryDeleted: "Eintrag gelöscht", deletePaymentsFirst: "Lösche zuerst die Abzahlungen dieser Schuld",
+      h_allowance: "Dein Sackgeld pro Monat: CHF {n}.", h_job: "Gib die Stunden ein, die App rechnet CHF {r} pro Stunde.", h_gas: "Budget diesen Monat: CHF {n}.",
+      h_parking: "Dein Parkplatz kostet CHF {n} pro Monat.", h_debt: "Noch CHF {n} offen.",
+      h_balance: "Öffne deine Bank-App und übernimm die genaue Zahl. Die Differenz wird eingetragen.", h_income: "Geburtstagsgeld, etwas verkauft…", h_spend: ""
+    }
+  };
+  var lang = "en";
+  function t(k, v) {
+    var s = (L[lang] && L[lang][k]) != null ? L[lang][k] : (L.en[k] != null ? L.en[k] : k);
+    if (v) s = s.replace(/\{(\w+)\}/g, function (_, n) { return v[n] != null ? v[n] : ""; });
+    return s;
+  }
+  function loc() { return lang === "de" ? "de-CH" : "en-GB"; }
+  function monthsTxt(n) { return n === 1 ? t("month1") : t("months", { n: n }); }
+
   // ---------- icons ----------
   var IC = {
     allowance: '<path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>',
@@ -225,49 +366,72 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
     gas: '<path d="M3 22V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v17M2 22h14M15 12h2a2 2 0 0 1 2 2v3a1.5 1.5 0 0 0 3 0V9l-3-3M6 8h6"/>',
     parking: '<rect x="3" y="3" width="18" height="18" rx="4"/><path d="M9 17V7h4a3 3 0 0 1 0 6H9"/>',
     debt: '<path d="M4 7h16v12H4z"/><path d="M4 11h16M8 15h3"/>',
+    newdebt: '<path d="M4 7h16v12H4z"/><path d="M12 10v6M9 13h6"/>',
     spend: '<path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18M16 10a4 4 0 0 1-8 0"/>',
     balance: '<path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/>'
   };
   function icon(k) { return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + IC[k] + '</svg>'; }
 
   var TYPES = {
-    allowance: { name: "Allowance", color: "var(--good)", sign: 1 },
-    job:       { name: "Job", color: "var(--c-other)", sign: 1 },
-    income:    { name: "Other money in", color: "var(--good)", sign: 1 },
-    gas:       { name: "Scooter gas", color: "var(--c-gas)", sign: -1 },
-    parking:   { name: "Parking", color: "var(--c-park)", sign: -1 },
-    debt:      { name: "License debt", color: "var(--c-debt)", sign: -1 },
-    spend:     { name: "Other spending", color: "var(--c-other)", sign: -1 },
-    balance:   { name: "Balance check", color: "var(--muted)", sign: 0 }
+    allowance: { color: "var(--good)", sign: 1 },
+    job:       { color: "var(--c-other)", sign: 1 },
+    income:    { color: "var(--good)", sign: 1 },
+    gas:       { color: "var(--c-gas)", sign: -1 },
+    parking:   { color: "var(--c-park)", sign: -1 },
+    debt:      { color: "var(--c-debt)", sign: -1 },
+    spend:     { color: "var(--c-other)", sign: -1 },
+    balance:   { color: "var(--muted)", sign: 0 },
+    newdebt:   { color: "var(--c-debt)", sign: 0 }
   };
 
   // ---------- state ----------
+  function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
   function defaults() {
     return {
+      v: 2, lang: null, name: "",
       accounts: [
         { id: "pf", name: "PostFinance", balance: 0, color: "#ffcc00" },
         { id: "rv", name: "Revolut", balance: 0, color: "#3b8fd9" }
       ],
-      s: { allowance: 200, parking: 20, gas: 40, debtTotal: 600, debtPayment: 50, rate: 15, hours: 8, other: 30, goalName: "Savings goal", goalAmount: 500 },
-      debtPaid: 0,
+      s: { allowance: 200, parking: 20, gas: 40, rate: 15, hours: 8, other: 30, goalName: "", goalAmount: 500 },
+      debts: [{ id: "lic", name: "", total: 600, monthly: 50, paid: 0 }],
       entries: []
     };
   }
+  function normalize(st) {
+    var d0 = defaults();
+    st = st || d0;
+    st.s = Object.assign({}, d0.s, st.s || {});
+    if (!st.accounts || !st.accounts.length) st.accounts = d0.accounts;
+    if (!st.entries) st.entries = [];
+    if (!st.debts) {
+      // migrate v1: one licence debt
+      st.debts = [{ id: "lic", name: "", total: st.s.debtTotal != null ? st.s.debtTotal : 600, monthly: st.s.debtPayment != null ? st.s.debtPayment : 50, paid: st.debtPaid || 0 }];
+      st.entries.forEach(function (e) { if (e.type === "debt" && !e.debtId) e.debtId = "lic"; });
+      delete st.s.debtTotal; delete st.s.debtPayment; delete st.debtPaid;
+    }
+    if (st.s.goalName === "Savings goal") st.s.goalName = "";
+    st.v = 2;
+    return st;
+  }
   var state;
-  try { state = JSON.parse(localStorage.getItem(KEY)) || defaults(); } catch (e) { state = defaults(); }
-  var d0 = defaults();
-  state.s = Object.assign({}, d0.s, state.s || {});
-  if (!state.accounts || !state.accounts.length) state.accounts = d0.accounts;
-  if (!state.entries) state.entries = [];
-  if (typeof state.debtPaid !== "number") state.debtPaid = 0;
+  try { state = normalize(JSON.parse(localStorage.getItem(KEY))); } catch (e) { state = normalize(null); }
+  var own = state; // the son's own data; `state` may point at a parent report while viewing
 
   var storageOk = true;
   function save() {
-    try { localStorage.setItem(KEY, JSON.stringify(state)); storageOk = true; } catch (e) { storageOk = false; }
+    if (ui.viewing) return;
+    try { localStorage.setItem(KEY, JSON.stringify(own)); storageOk = true; } catch (e) { storageOk = false; }
   }
-
-  var ui = { tab: "home", sim: null };
-  try { var t = sessionStorage.getItem(KEY + "-tab"); if (t) ui.tab = t; } catch (e) {}
+  var ui = { tab: "home", sim: null, viewing: null };
+  try { var tb = sessionStorage.getItem(KEY + "-tab"); if (tb) ui.tab = tb; } catch (e) {}
+  function setLang() {
+    lang = own.lang || ((navigator.language || "").toLowerCase().indexOf("de") === 0 ? "de" : "en");
+    document.documentElement.lang = lang;
+    document.title = t("appName");
+    document.querySelectorAll("[data-t]").forEach(function (el) { el.textContent = t(el.dataset.t); });
+    document.getElementById("addBtn").setAttribute("aria-label", t("addEntry"));
+  }
 
   // ---------- helpers ----------
   function r2(n) { return Math.round(n * 100) / 100; }
@@ -280,65 +444,85 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
   function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
   function today() { var d = new Date(); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); }
   function monthKey(iso) { return iso.slice(0, 7); }
-  function monthName(offset) {
-    var d = new Date(); d.setDate(1); d.setMonth(d.getMonth() + (offset || 0));
-    return d.toLocaleDateString("en-GB", { month: "long", year: "numeric" });
-  }
-  function shortMonth(offset) { var d = new Date(); d.setDate(1); d.setMonth(d.getMonth() + offset); return d.toLocaleDateString("en-GB", { month: "short" }); }
+  function monthName(offset) { var d = new Date(); d.setDate(1); d.setMonth(d.getMonth() + (offset || 0)); return d.toLocaleDateString(loc(), { month: "long", year: "numeric" }); }
+  function shortMonth(offset) { var d = new Date(); d.setDate(1); d.setMonth(d.getMonth() + offset); return d.toLocaleDateString(loc(), { month: "short" }); }
   function acct(id) { return state.accounts.find(function (a) { return a.id === id; }) || state.accounts[0]; }
+  function debtById(id) { return state.debts.find(function (d) { return d.id === id; }); }
+  function debtName(d) { return d.name || t("licence"); }
+  function debtLeftOf(d) { return Math.max(0, r2(d.total - d.paid)); }
+  function openDebts() { return state.debts.filter(function (d) { return debtLeftOf(d) > 0; }); }
   function total() { return state.accounts.reduce(function (s, a) { return s + a.balance; }, 0); }
-  function debtLeft() { return Math.max(0, r2(state.s.debtTotal - state.debtPaid)); }
-  function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+  function debtLeft() { return r2(state.debts.reduce(function (s, d) { return s + debtLeftOf(d); }, 0)); }
+  function debtTotalAll() { return state.debts.reduce(function (s, d) { return s + d.total; }, 0); }
+  function debtPaidAll() { return state.debts.reduce(function (s, d) { return s + Math.min(d.paid, d.total); }, 0); }
+  function monthlyDebtDue() { return r2(state.debts.reduce(function (s, d) { return s + Math.min(d.monthly, debtLeftOf(d)); }, 0)); }
+  function goalName() { return state.s.goalName || t("defaultGoal"); }
+  function personName() { return state.name || t("you"); }
 
   // ---------- entries ----------
   function addEntry(e) {
-    var a = acct(e.account);
-    var delta;
+    var a = acct(e.account), delta = 0;
     if (e.type === "balance") { delta = r2(e.amount - a.balance); e.prev = a.balance; }
     else delta = r2(TYPES[e.type].sign * e.amount);
     a.balance = r2(a.balance + delta);
-    e.delta = delta;
-    e.id = uid();
-    if (e.type === "debt") state.debtPaid = r2(state.debtPaid + e.amount);
+    e.delta = delta; e.id = uid(); e.ts = Date.now();
+    if (e.type === "debt") { var d = debtById(e.debtId); if (d) { d.paid = r2(d.paid + e.amount); e.debtName = debtName(d); } }
     state.entries.push(e);
     save();
   }
   function removeEntry(id) {
     var i = state.entries.findIndex(function (x) { return x.id === id; });
-    if (i < 0) return;
+    if (i < 0) return true;
     var e = state.entries[i];
-    var a = acct(e.account);
-    a.balance = r2(a.balance - e.delta);
-    if (e.type === "debt") state.debtPaid = Math.max(0, r2(state.debtPaid - e.amount));
+    if (e.type === "newdebt") {
+      var hasPay = state.entries.some(function (x) { return x.type === "debt" && x.debtId === e.debtId; });
+      if (hasPay) return false;
+      state.debts = state.debts.filter(function (d) { return d.id !== e.debtId; });
+    } else {
+      var a = acct(e.account);
+      a.balance = r2(a.balance - (e.delta || 0));
+      if (e.type === "debt") { var d = debtById(e.debtId); if (d) d.paid = Math.max(0, r2(d.paid - e.amount)); }
+    }
     state.entries.splice(i, 1);
+    save();
+    return true;
+  }
+  function addDebt(name, totalAmt, monthly, alreadyPaid, date) {
+    var d = { id: uid(), name: name, total: r2(totalAmt), monthly: r2(monthly), paid: r2(Math.min(alreadyPaid || 0, totalAmt)) };
+    state.debts.push(d);
+    state.entries.push({ id: uid(), ts: Date.now(), type: "newdebt", debtId: d.id, debtName: name, amount: d.total, delta: 0, account: state.accounts[0].id, date: date || today(), note: name });
     save();
   }
   function sortedEntries() {
-    return state.entries.slice().sort(function (a, b) { return a.date < b.date ? 1 : a.date > b.date ? -1 : (a.id < b.id ? 1 : -1); });
+    return state.entries.slice().sort(function (a, b) {
+      if (a.date !== b.date) return a.date < b.date ? 1 : -1;
+      return (b.ts || 0) - (a.ts || 0);
+    });
   }
   function monthTotals(key) {
-    var t = { in: 0, gas: 0, parking: 0, debt: 0, spend: 0, job: 0, hours: 0 };
+    var r = { in: 0, gas: 0, parking: 0, debt: 0, spend: 0, job: 0, hours: 0 };
     state.entries.forEach(function (e) {
-      if (monthKey(e.date) !== key || e.type === "balance") return;
-      if (TYPES[e.type].sign > 0) t.in += e.amount;
-      if (e.type === "job") { t.job += e.amount; t.hours += e.hours || 0; }
-      if (t[e.type] !== undefined && TYPES[e.type].sign < 0) t[e.type] += e.amount;
+      if (monthKey(e.date) !== key || !TYPES[e.type] || TYPES[e.type].sign === 0) return;
+      if (TYPES[e.type].sign > 0) r.in += e.amount;
+      if (e.type === "job") { r.job += e.amount; r.hours += e.hours || 0; }
+      if (r[e.type] !== undefined && TYPES[e.type].sign < 0) r[e.type] += e.amount;
     });
-    return t;
+    return r;
   }
 
   // ---------- simulation ----------
   function simulate(p, months) {
-    var savings = total(), debt = debtLeft(), rows = [], debtFree = debt <= 0 ? 0 : null, goalAt = savings >= p.goal ? 0 : null;
-    rows.push({ m: 0, savings: savings, debt: debt });
+    var savings = total(), debts = openDebts().map(function (d) { return debtLeftOf(d); });
+    var sumDebt = function () { return debts.reduce(function (s, x) { return s + x; }, 0); };
+    var rows = [{ m: 0, savings: savings, debt: sumDebt() }];
+    var debtFree = sumDebt() <= 0 ? 0 : null, goalAt = savings >= p.goal ? 0 : null;
     for (var m = 1; m <= months; m++) {
-      var inc = p.allowance + p.hours * p.rate;
-      var pay = Math.min(p.debtPayment, debt);
-      var out = p.parking + p.gas + p.other + pay;
-      savings += inc - out; debt -= pay;
-      if (debt <= 0.001 && debtFree === null) debtFree = m;
+      var budget = p.debtPayment, paid = 0;
+      for (var i = 0; i < debts.length && budget > 0; i++) { var x = Math.min(budget, debts[i]); debts[i] -= x; budget -= x; paid += x; }
+      savings += p.allowance + p.hours * p.rate - (p.parking + p.gas + p.other + paid);
+      if (sumDebt() <= 0.001 && debtFree === null) debtFree = m;
       if (savings >= p.goal && goalAt === null) goalAt = m;
-      rows.push({ m: m, savings: savings, debt: Math.max(0, debt) });
+      rows.push({ m: m, savings: savings, debt: Math.max(0, sumDebt()) });
     }
     return { rows: rows, debtFree: debtFree, goalAt: goalAt };
   }
@@ -346,90 +530,116 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
   // ---------- render ----------
   var app = document.getElementById("app");
   function render() {
-    document.querySelectorAll(".tab").forEach(function (b) { b.setAttribute("aria-current", b.dataset.tab === ui.tab ? "page" : "false"); });
-    if (ui.tab === "log") app.innerHTML = viewLog();
-    else if (ui.tab === "plan") { app.innerHTML = viewPlan(); updatePlan(); }
-    else if (ui.tab === "settings") app.innerHTML = viewSettings();
-    else app.innerHTML = viewHome();
+    setLang();
+    document.querySelector(".tab-add").hidden = !!ui.viewing;
+    document.querySelectorAll(".tab").forEach(function (b) { b.setAttribute("aria-current", b.dataset.tab === ui.tab ? "page" : "false"); b.hidden = !!ui.viewing && b.dataset.tab === "settings"; });
+    if (ui.viewing && ui.tab === "settings") ui.tab = "home";
+    var html;
+    if (ui.tab === "log") html = viewLog();
+    else if (ui.tab === "plan") html = viewPlan();
+    else if (ui.tab === "settings") html = viewSettings();
+    else html = viewHome();
+    app.innerHTML = viewBanner() + html;
+    if (ui.tab === "plan") updatePlan();
   }
-
+  function viewBanner() {
+    if (!ui.viewing) return "";
+    var d = new Date(ui.viewing.at);
+    return '<div class="viewbar"><div><b>' + esc(t("viewing", { name: ui.viewing.name || "?" })) + '</b><small>' + esc(t("sentAt", { d: d.toLocaleString(loc(), { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }) })) + '</small></div><button class="btn small" id="view-close">' + t("closeView") + '</button></div>';
+  }
+  function langToggle() {
+    return '<div class="lang" role="group" aria-label="' + t("language") + '"><button data-lang="de" aria-pressed="' + (lang === "de") + '">DE</button><button data-lang="en" aria-pressed="' + (lang === "en") + '">EN</button></div>';
+  }
   function header(title, right) {
-    return '<div class="topbar"><h1>' + title + '</h1>' + (right || "") + '</div>';
+    return '<div class="topbar"><h1>' + title + '</h1><div class="top-right">' + (right || "") + langToggle() + '</div></div>';
   }
 
   function viewHome() {
-    var s = state.s, mk = monthKey(today()), mt = monthTotals(mk), dl = debtLeft();
-    var paidPct = s.debtTotal > 0 ? Math.min(100, state.debtPaid / s.debtTotal * 100) : 100;
+    var s = state.s, mt = monthTotals(monthKey(today())), dl = debtLeft(), ro = !!ui.viewing;
     var hasBalance = state.entries.some(function (e) { return e.type === "balance"; });
-
     var accts = state.accounts.map(function (a) {
-      return '<button class="acct" data-act="balance" data-acct="' + a.id + '"><span class="acct-name"><span class="acct-dot" style="background:' + a.color + '"></span>' + esc(a.name) + '</span><span class="acct-bal num">' + chf(a.balance) + '</span><span class="acct-hint">Tap to update from your app</span></button>';
+      return '<button class="acct" data-act="balance" data-acct="' + a.id + '"' + (ro ? " disabled" : "") + '><span class="acct-name"><span class="acct-dot" style="background:' + a.color + '"></span>' + esc(a.name) + '</span><span class="acct-bal num">' + chf(a.balance) + '</span>' + (ro ? "" : '<span class="acct-hint">' + t("tapUpdate") + '</span>') + '</button>';
     }).join("");
 
-    var pay = Math.min(s.debtPayment, dl);
+    var pay = monthlyDebtDue();
     var free = s.allowance - s.parking - s.gas - pay;
     var parts = [
-      { n: "Parking space", v: s.parking, c: "var(--c-park)" },
-      { n: "Scooter gas (budget)", v: s.gas, c: "var(--c-gas)" },
-      { n: "License debt payment", v: pay, c: "var(--c-debt)" },
-      { n: free >= 0 ? "Left to spend or save" : "Missing", v: Math.abs(free), c: free >= 0 ? "var(--c-free)" : "var(--bad)" }
+      { n: t("parkingSpace"), v: s.parking, c: "var(--c-park)" },
+      { n: t("gasBudget"), v: s.gas, c: "var(--c-gas)" },
+      { n: t("debtPayments"), v: pay, c: "var(--c-debt)" },
+      { n: free >= 0 ? t("leftOver") : t("missing"), v: Math.abs(free), c: free >= 0 ? "var(--c-free)" : "var(--bad)" }
     ];
-    var totalBar = Math.max(s.allowance, s.parking + s.gas + pay);
+    var totalBar = Math.max(s.allowance, s.parking + s.gas + pay) || 1;
     var bar = parts.filter(function (p) { return p.v > 0; }).map(function (p) { return '<span style="width:' + (p.v / totalBar * 100) + '%;background:' + p.c + '"></span>'; }).join("");
     var legend = parts.map(function (p) { return '<div class="legend-row"><span class="sw" style="background:' + p.c + '"></span>' + p.n + '<span class="amt num">CHF ' + chf(p.v) + '</span></div>'; }).join("");
 
     var spent = mt.gas + mt.parking + mt.debt + mt.spend;
-    var gasTag = mt.gas > s.gas ? '<span class="tag bad">CHF ' + chf(mt.gas - s.gas) + ' over</span>' : '<span class="tag good">CHF ' + chf(s.gas - mt.gas) + ' left</span>';
-    var parkTag = mt.parking >= s.parking ? '<span class="tag good">Paid</span>' : '<span class="tag warn">Not paid yet</span>';
-    var debtTag = dl <= 0 ? '<span class="tag good">Done</span>' : (mt.debt >= pay ? '<span class="tag good">Paid</span>' : '<span class="tag warn">CHF ' + chf(pay - mt.debt) + ' to go</span>');
+    var gasTag = mt.gas > s.gas ? '<span class="tag bad">' + t("over", { n: chf(mt.gas - s.gas) }) + '</span>' : '<span class="tag good">' + t("left", { n: chf(s.gas - mt.gas) }) + '</span>';
+    var parkTag = mt.parking >= s.parking ? '<span class="tag good">' + t("paid") + '</span>' : '<span class="tag warn">' + t("notPaid") + '</span>';
+    var debtTag = dl <= 0 ? '<span class="tag good">' + t("done") + '</span>' : (mt.debt >= pay ? '<span class="tag good">' + t("paid") + '</span>' : '<span class="tag warn">' + t("toGo", { n: chf(pay - mt.debt) }) + '</span>');
 
-    var recent = sortedEntries().slice(0, 4);
+    var debtRows = state.debts.map(function (d) {
+      var left = debtLeftOf(d), pct = d.total > 0 ? Math.min(100, d.paid / d.total * 100) : 100;
+      return '<div class="debt-row"><div class="row"><span class="debt-name">' + esc(debtName(d)) + '</span>' + (left <= 0 ? '<span class="tag good">' + t("done") + '</span>' : '<span class="muted num" style="font-size:13px">' + t("leftOf", { l: chf(left), t: chf0(d.total) }) + '</span>') + '</div>' +
+        '<div class="bar"><span style="width:' + pct + '%;background:var(--good)"></span></div>' +
+        (left > 0 ? '<div class="muted" style="font-size:12px">' + t("perMonthShort", { n: chf0(d.monthly) }) + '</div>' : "") + '</div>';
+    }).join("");
+    var allPct = debtTotalAll() > 0 ? Math.round(debtPaidAll() / debtTotalAll() * 100) : 100;
 
-    return header("Pocket Money", '<span class="month-pill">' + monthName(0) + '</span>') +
-      '<section class="hero" aria-label="Your money"><div><div class="label">All my money</div><div class="hero-total num"><small>CHF</small>' + chf(total()) + '</div></div><div class="accounts">' + accts + '</div></section>' +
-      (!hasBalance ? '<div class="callout"><b>Start here:</b> open your PostFinance and Revolut apps and tap each account above to type in what you see.</div>' : "") +
-      '<div class="quick">' +
-        qa("allowance", "Allowance", "var(--good)") + qa("job", "Job hours", "var(--c-other)") + qa("gas", "Gas", "var(--c-gas)") + qa("debt", "Pay debt", "var(--c-debt)") +
-      '</div>' +
-      '<section class="card"><div class="row between"><h2>License debt</h2>' + (dl <= 0 ? '<span class="tag good">Debt free</span>' : '<span class="tag bad">open</span>') + '</div>' +
-        '<div class="row between" style="align-items:flex-end"><div><div class="debt-big num">CHF ' + chf(dl) + '</div><div class="muted" style="font-size:13px">still to pay of CHF ' + chf0(s.debtTotal) + '</div></div><div style="text-align:right"><div class="label">Paid</div><div class="num" style="font-weight:700">' + Math.round(paidPct) + '%</div></div></div>' +
-        '<div class="bar"><span style="width:' + paidPct + '%;background:var(--good)"></span></div>' +
-        (dl > 0 ? '<p class="muted" style="font-size:13px">That is <b style="color:var(--ink)">' + (Math.ceil(dl / s.rate * 10) / 10) + ' hours</b> of work at CHF ' + s.rate + '/h.</p>' : "") +
+    var recent = sortedEntries().slice(0, 5);
+
+    return header(t("appName"), '<span class="month-pill">' + monthName(0) + '</span>') +
+      '<section class="hero" aria-label="' + t("allMoney") + '"><div><div class="label">' + t("allMoney") + '</div><div class="hero-total num"><small>CHF</small>' + chf(total()) + '</div></div><div class="accounts">' + accts + '</div></section>' +
+      (!hasBalance && !ro ? '<div class="callout">' + t("startHere", { a: esc(state.accounts[0].name), b: esc(state.accounts[1] ? state.accounts[1].name : "") }) + '</div>' : "") +
+      (ro ? "" : '<div class="quick">' + qa("allowance", t("qa_allowance"), "var(--good)") + qa("job", t("qa_job"), "var(--c-other)") + qa("gas", t("qa_gas"), "var(--c-gas)") + qa("debt", t("qa_debt"), "var(--c-debt)") + '</div>') +
+      '<section class="card"><div class="row between"><h2>' + t("debts") + '</h2>' + (dl <= 0 ? '<span class="tag good">' + t("debtFree") + '</span>' : '<span class="tag bad">' + t("open") + '</span>') + '</div>' +
+        (state.debts.length ?
+          '<div class="row between" style="align-items:flex-end"><div><div class="debt-big num">CHF ' + chf(dl) + '</div><div class="muted" style="font-size:13px">' + t("stillToPay") + ' ' + t("ofTotal", { n: chf0(debtTotalAll()) }) + '</div></div><div style="text-align:right"><div class="label">' + t("paid") + '</div><div class="num" style="font-weight:700">' + allPct + '%</div></div></div>' +
+          (dl > 0 ? '<p class="muted" style="font-size:13px">' + t("hoursOfWork", { h: Math.ceil(dl / state.s.rate * 10) / 10, r: state.s.rate }) + '</p>' : "") +
+          '<div class="debt-list">' + debtRows + '</div>'
+          : '<p class="muted">' + t("noDebts") + '</p>') +
+        (ro ? "" : '<button class="btn ghost small" id="debt-add" style="align-self:flex-start">+ ' + t("addDebt") + '</button>') +
       '</section>' +
-      '<section class="card"><div class="row between"><h2>Where the ' + chf0(s.allowance) + ' goes</h2><span class="label">each month</span></div><div class="bar">' + bar + '</div><div class="legend">' + legend + '</div></section>' +
-      '<section class="card"><div class="row between"><h2>This month so far</h2></div>' +
-        '<div class="stats"><div class="stat"><span>Money in</span><b class="num" style="color:var(--good)">' + chf0(mt.in) + '</b></div><div class="stat"><span>Spent</span><b class="num">' + chf0(spent) + '</b></div><div class="stat"><span>Job hours</span><b class="num">' + (Math.round(mt.hours * 10) / 10) + '</b></div></div>' +
+      '<section class="card"><div class="row between"><h2>' + t("whereGoes", { n: chf0(s.allowance) }) + '</h2><span class="label">' + t("eachMonth") + '</span></div><div class="bar">' + bar + '</div><div class="legend">' + legend + '</div></section>' +
+      '<section class="card"><h2>' + t("thisMonth") + '</h2>' +
+        '<div class="stats"><div class="stat"><span>' + t("moneyIn") + '</span><b class="num" style="color:var(--good)">' + chf0(mt.in) + '</b></div><div class="stat"><span>' + t("spent") + '</span><b class="num">' + chf0(spent) + '</b></div><div class="stat"><span>' + t("jobHours") + '</span><b class="num">' + (Math.round(mt.hours * 10) / 10) + '</b></div></div>' +
         '<div class="legend">' +
-          '<div class="legend-row"><span class="sw" style="background:var(--c-gas)"></span>Scooter gas <span class="amt num">CHF ' + chf(mt.gas) + '</span>' + gasTag + '</div>' +
-          '<div class="legend-row"><span class="sw" style="background:var(--c-park)"></span>Parking <span class="amt num">CHF ' + chf(mt.parking) + '</span>' + parkTag + '</div>' +
-          '<div class="legend-row"><span class="sw" style="background:var(--c-debt)"></span>Debt payment <span class="amt num">CHF ' + chf(mt.debt) + '</span>' + debtTag + '</div>' +
-          '<div class="legend-row"><span class="sw" style="background:var(--c-other)"></span>Other spending <span class="amt num">CHF ' + chf(mt.spend) + '</span></div>' +
+          '<div class="legend-row"><span class="sw" style="background:var(--c-gas)"></span>' + t("ty_gas") + ' <span class="amt num">CHF ' + chf(mt.gas) + '</span>' + gasTag + '</div>' +
+          '<div class="legend-row"><span class="sw" style="background:var(--c-park)"></span>' + t("ty_parking") + ' <span class="amt num">CHF ' + chf(mt.parking) + '</span>' + parkTag + '</div>' +
+          '<div class="legend-row"><span class="sw" style="background:var(--c-debt)"></span>' + t("debtPayments") + ' <span class="amt num">CHF ' + chf(mt.debt) + '</span>' + debtTag + '</div>' +
+          '<div class="legend-row"><span class="sw" style="background:var(--c-other)"></span>' + t("otherSpending") + ' <span class="amt num">CHF ' + chf(mt.spend) + '</span></div>' +
         '</div>' +
-        (mt.parking < s.parking ? '<button class="btn ghost small" data-quick="parking" style="align-self:flex-start">Log parking CHF ' + chf0(s.parking) + '</button>' : "") +
+        (mt.parking < s.parking && !ro ? '<button class="btn ghost small" data-quick="parking" style="align-self:flex-start">' + t("logParking", { n: chf0(s.parking) }) + '</button>' : "") +
       '</section>' +
-      '<section class="card"><div class="row between"><h2>Latest entries</h2><button class="btn ghost small" data-go="log">See all</button></div>' +
-        (recent.length ? '<div class="list">' + recent.map(itemHtml).join("") + '</div>' : '<div class="empty">Nothing logged yet. Every entry you add shows up here with the date.</div>') +
+      '<section class="card"><div class="row between"><h2>' + t("latest") + '</h2><button class="btn ghost small" data-go="log">' + t("seeAll") + '</button></div>' +
+        (recent.length ? '<div class="list">' + recent.map(itemHtml).join("") + '</div>' : '<div class="empty">' + t("nothingYet") + '</div>') +
       '</section>' +
-      (!storageOk ? '<p class="preview-note">This browser is not saving data right now (private mode?). Entries will be lost when you close it.</p>' : "");
+      (!storageOk ? '<p class="preview-note">' + t("notSaving") + '</p>' : "");
   }
   function qa(type, label, color) {
     return '<button class="qa" data-quick="' + type + '"><span class="qa-ic" style="background:color-mix(in srgb,' + color + ' 16%,transparent);color:' + color + '">' + icon(type) + '</span>' + label + '</button>';
   }
   function itemHtml(e) {
-    var T = TYPES[e.type], a = acct(e.account);
-    var title = e.note ? esc(e.note) : T.name;
-    var sub = (e.note ? T.name + " · " : "") + esc(a.name) + (e.type === "job" && e.hours ? " · " + e.hours + " h" : "");
-    var amt = e.type === "balance" ? 'set ' + chf(e.amount) + '<div class="item-sub">' + chf(e.delta, true) + '</div>' : chf(e.delta, true);
-    var cls = e.delta > 0 && e.type !== "balance" ? "plus" : "";
+    var T = TYPES[e.type] || TYPES.spend, a = acct(e.account), tn = t("ty_" + e.type);
+    var title, sub, amt, cls = "";
+    if (e.type === "newdebt") {
+      title = esc(e.debtName || e.note || tn); sub = tn; amt = "CHF " + chf(e.amount);
+    } else {
+      var extra = e.type === "debt" ? (e.debtName || (debtById(e.debtId) ? debtName(debtById(e.debtId)) : "")) : "";
+      title = e.note ? esc(e.note) : (extra ? esc(extra) : tn);
+      sub = ((e.note || extra) ? tn + " · " : "") + esc(a.name) + (e.type === "job" && e.hours ? " · " + e.hours + " h" : "");
+      amt = e.type === "balance" ? t("set") + ' ' + chf(e.amount) + '<div class="item-sub">' + chf(e.delta, true) + '</div>' : chf(e.delta, true);
+      cls = e.delta > 0 && e.type !== "balance" ? "plus" : "";
+    }
     return '<div class="item"><span class="item-ic" style="background:color-mix(in srgb,' + T.color + ' 16%,transparent);color:' + T.color + '">' + icon(e.type) + '</span>' +
       '<div class="item-main"><div class="item-title">' + title + '</div><div class="item-sub">' + sub + '</div></div>' +
       '<div class="item-amt num ' + cls + '">' + amt + '</div>' +
-      '<button class="del" data-del="' + e.id + '" aria-label="Delete entry">×</button></div>';
+      (ui.viewing ? "" : '<button class="del" data-del="' + e.id + '" aria-label="' + t("del") + '">×</button>') + '</div>';
   }
 
   function viewLog() {
     var list = sortedEntries();
-    if (!list.length) return header("Money log") + '<section class="card"><div class="empty"><p>No entries yet.</p><p>Tap the yellow + to log money you got or spent. The app keeps every entry with its date.</p></div></section>';
+    if (!list.length) return header(t("log")) + '<section class="card"><div class="empty"><p>' + t("noEntries") + '</p><p>' + t("noEntriesHint") + '</p></div></section>';
     var html = "", lastMonth = null, lastDay = null;
     list.forEach(function (e) {
       var mk = monthKey(e.date);
@@ -437,38 +647,38 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
         if (lastMonth) html += '</div></section>';
         var mt = monthTotals(mk);
         var d = new Date(mk + "-01T12:00:00");
-        html += '<section class="card"><div class="row between"><h2>' + d.toLocaleDateString("en-GB", { month: "long", year: "numeric" }) + '</h2><span class="muted num" style="font-size:13px">in ' + chf0(mt.in) + ' · out ' + chf0(mt.gas + mt.parking + mt.debt + mt.spend) + '</span></div><div class="list">';
+        html += '<section class="card"><div class="row between"><h2>' + d.toLocaleDateString(loc(), { month: "long", year: "numeric" }) + '</h2><span class="muted num" style="font-size:13px">' + t("inOut", { a: chf0(mt.in), b: chf0(mt.gas + mt.parking + mt.debt + mt.spend) }) + '</span></div><div class="list">';
         lastMonth = mk; lastDay = null;
       }
       if (e.date !== lastDay) {
-        html += '<div class="day-head">' + new Date(e.date + "T12:00:00").toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" }) + '</div>';
+        html += '<div class="day-head">' + new Date(e.date + "T12:00:00").toLocaleDateString(loc(), { weekday: "short", day: "numeric", month: "short" }) + '</div>';
         lastDay = e.date;
       }
       html += itemHtml(e);
     });
     html += '</div></section>';
-    return header("Money log", '<span class="month-pill num">' + list.length + ' entries</span>') + html;
+    return header(t("log"), '<span class="month-pill num">' + t("entries", { n: list.length }) + '</span>') + html;
   }
 
   function viewPlan() {
     var s = state.s;
-    if (!ui.sim) ui.sim = { hours: s.hours, gas: s.gas, debtPayment: s.debtPayment, other: s.other };
+    if (!ui.sim) ui.sim = { hours: s.hours, gas: s.gas, debtPayment: monthlyDebtDue(), other: s.other };
     var p = ui.sim;
     function sl(id, label, min, max, step, val, unit) {
       return '<div class="slider"><div class="slider-top"><label for="' + id + '">' + label + '</label><b class="num" id="' + id + '-v"></b></div><input type="range" id="' + id + '" min="' + min + '" max="' + max + '" step="' + step + '" value="' + val + '" data-unit="' + unit + '"></div>';
     }
-    return header("What if…", '<span class="month-pill">per month</span>') +
-      '<section class="card"><p class="muted" style="font-size:14px">Move the sliders to see how fast the debt is gone and when you reach your goal. Your allowance of CHF ' + chf0(s.allowance) + ' and parking of CHF ' + chf0(s.parking) + ' are included.</p>' +
-        sl("sim-hours", "Job hours per month", 0, 60, 1, p.hours, "h") +
-        sl("sim-gas", "Scooter gas", 0, 150, 5, p.gas, "chf") +
-        sl("sim-debt", "Debt payment", 0, 300, 10, p.debtPayment, "chf") +
-        sl("sim-other", "Other spending (food, games, going out)", 0, 300, 5, p.other, "chf") +
+    return header(t("plan")) +
+      '<section class="card"><p class="muted" style="font-size:14px">' + t("planIntro", { a: chf0(s.allowance), p: chf0(s.parking) }) + '</p>' +
+        sl("sim-hours", t("sl_hours"), 0, 60, 1, p.hours, "h") +
+        sl("sim-gas", t("sl_gas"), 0, 150, 5, p.gas, "chf") +
+        sl("sim-debt", t("sl_debt"), 0, 500, 10, p.debtPayment, "chf") +
+        sl("sim-other", t("sl_other"), 0, 300, 5, p.other, "chf") +
       '</section>' +
       '<section class="card" id="sim-out"></section>' +
-      '<section class="card"><div class="row between"><h2>Next 12 months</h2></div><div id="sim-chart"></div>' +
-        '<div class="row" style="gap:16px;font-size:13px"><span class="row" style="gap:6px"><span class="sw" style="width:10px;height:10px;border-radius:3px;background:var(--good)"></span>My money</span><span class="row" style="gap:6px"><span class="sw" style="width:10px;height:10px;border-radius:3px;background:var(--bad)"></span>Debt left</span><span class="row" style="gap:6px"><span style="width:14px;border-top:2px dashed var(--warn)"></span>' + esc(s.goalName) + '</span></div>' +
+      '<section class="card"><h2>' + t("next12") + '</h2><div id="sim-chart"></div>' +
+        '<div class="row" style="gap:16px;font-size:13px;flex-wrap:wrap"><span class="row" style="gap:6px"><span style="width:10px;height:10px;border-radius:3px;background:var(--good)"></span>' + t("myMoney") + '</span><span class="row" style="gap:6px"><span style="width:10px;height:10px;border-radius:3px;background:var(--bad)"></span>' + t("debtLeftLbl") + '</span><span class="row" style="gap:6px"><span style="width:14px;border-top:2px dashed var(--warn)"></span>' + esc(goalName()) + '</span></div>' +
       '</section>' +
-      '<button class="btn ghost" id="sim-save">Use these numbers as my monthly budget</button>';
+      (ui.viewing ? "" : '<button class="btn ghost" id="sim-save">' + t("useBudget") + '</button>');
   }
   function readSim() {
     var g = function (id) { return Number(document.getElementById(id).value); };
@@ -486,44 +696,35 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
     var out = s.parking + p.gas + p.other + pay;
     var left = inc - out;
     var sim = simulate({ allowance: s.allowance, rate: s.rate, parking: s.parking, gas: p.gas, other: p.other, debtPayment: p.debtPayment, hours: p.hours, goal: s.goalAmount }, 60);
-
-    var debtLine;
-    if (dl <= 0) debtLine = '<b>No debt left.</b> Nice.';
-    else if (p.debtPayment <= 0) debtLine = 'With no debt payment, the CHF ' + chf0(dl) + ' never goes away.';
-    else if (sim.debtFree !== null) debtLine = 'Debt free in <b>' + sim.debtFree + (sim.debtFree === 1 ? ' month' : ' months') + '</b>, in ' + monthName(sim.debtFree) + '.';
-    else debtLine = 'At this pace the debt takes more than 5 years.';
-    var goalLine;
-    if (sim.goalAt === 0) goalLine = 'You already have enough for <b>' + esc(s.goalName) + '</b> (CHF ' + chf0(s.goalAmount) + ').';
-    else if (sim.goalAt !== null) goalLine = '<b>' + esc(s.goalName) + '</b> (CHF ' + chf0(s.goalAmount) + ') reached in <b>' + sim.goalAt + (sim.goalAt === 1 ? ' month' : ' months') + '</b>.';
-    else goalLine = '<b>' + esc(s.goalName) + '</b> (CHF ' + chf0(s.goalAmount) + ') is out of reach with these numbers.';
-
+    var g = esc(goalName()), gn = chf0(s.goalAmount);
+    var debtLine = dl <= 0 ? t("noDebtLeft") : p.debtPayment <= 0 ? t("noPay", { n: chf0(dl) }) : sim.debtFree !== null ? t("debtFreeIn", { m: monthsTxt(sim.debtFree), d: monthName(sim.debtFree) }) : t("tooLong");
+    var goalLine = sim.goalAt === 0 ? t("goalHave", { g: g, n: gn }) : sim.goalAt !== null ? t("goalIn", { g: g, n: gn, m: monthsTxt(sim.goalAt) }) : t("goalNo", { g: g, n: gn });
     document.getElementById("sim-out").innerHTML =
-      '<div class="stats"><div class="stat"><span>Money in</span><b class="num" style="color:var(--good)">' + chf0(inc) + '</b></div><div class="stat"><span>Money out</span><b class="num">' + chf0(out) + '</b></div><div class="stat"><span>' + (left >= 0 ? 'Saved' : 'Missing') + '</span><b class="num" style="color:' + (left >= 0 ? 'var(--good)' : 'var(--bad)') + '">' + chf0(Math.abs(left)) + '</b></div></div>' +
-      (left < 0 ? '<div class="callout" style="background:color-mix(in srgb,var(--bad) 16%,var(--surface))">You spend <b>CHF ' + chf0(-left) + '</b> more than you get each month. Work about <b>' + Math.ceil(-left / s.rate) + ' more hours</b> or spend less.</div>' : "") +
+      '<div class="stats"><div class="stat"><span>' + t("moneyIn") + '</span><b class="num" style="color:var(--good)">' + chf0(inc) + '</b></div><div class="stat"><span>' + t("moneyOut") + '</span><b class="num">' + chf0(out) + '</b></div><div class="stat"><span>' + (left >= 0 ? t("saved") : t("missing")) + '</span><b class="num" style="color:' + (left >= 0 ? 'var(--good)' : 'var(--bad)') + '">' + chf0(Math.abs(left)) + '</b></div></div>' +
+      (left < 0 ? '<div class="callout" style="background:color-mix(in srgb,var(--bad) 16%,var(--surface))">' + t("overspend", { n: chf0(-left), h: Math.ceil(-left / s.rate) }) + '</div>' : "") +
       '<div class="plan-lines"><p>' + debtLine + '</p><p>' + goalLine + '</p></div>';
-
     document.getElementById("sim-chart").innerHTML = chartSvg(sim.rows.slice(0, 13), s.goalAmount);
   }
   function chartSvg(rows, goal) {
-    var W = 340, H = 190, L = 40, R = 10, T = 12, B = 24;
+    var W = 340, H = 190, Lm = 40, R = 10, T = 12, B = 24;
     var vals = rows.map(function (r) { return r.savings; }).concat(rows.map(function (r) { return r.debt; }), [goal, 0]);
     var min = Math.min.apply(null, vals), max = Math.max.apply(null, vals);
     var step = niceStep((max - min) / 4);
     min = Math.floor(min / step) * step; max = Math.ceil(max / step) * step;
     if (max === min) max = min + step;
-    var x = function (i) { return L + i * (W - L - R) / (rows.length - 1); };
+    var x = function (i) { return Lm + i * (W - Lm - R) / (rows.length - 1); };
     var y = function (v) { return T + (max - v) / (max - min) * (H - T - B); };
     var g = "";
     for (var v = min; v <= max + 0.001; v += step) {
-      g += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + y(v) + '" y2="' + y(v) + '" stroke="var(--line)" stroke-width="1"/>';
-      g += '<text x="' + (L - 6) + '" y="' + (y(v) + 3) + '" text-anchor="end">' + chf0(v) + '</text>';
+      g += '<line x1="' + Lm + '" x2="' + (W - R) + '" y1="' + y(v) + '" y2="' + y(v) + '" stroke="var(--line)" stroke-width="1"/>';
+      g += '<text x="' + (Lm - 6) + '" y="' + (y(v) + 3) + '" text-anchor="end">' + chf0(v) + '</text>';
     }
-    rows.forEach(function (r, i) { if (i % 2 === 0) g += '<text x="' + x(i) + '" y="' + (H - 6) + '" text-anchor="middle">' + (i === 0 ? "Now" : shortMonth(i)) + '</text>'; });
+    rows.forEach(function (r, i) { if (i % 2 === 0) g += '<text x="' + x(i) + '" y="' + (H - 6) + '" text-anchor="middle">' + (i === 0 ? t("now") : shortMonth(i)) + '</text>'; });
     function path(key) { return rows.map(function (r, i) { return (i ? "L" : "M") + x(i).toFixed(1) + " " + y(r[key]).toFixed(1); }).join(" "); }
     var area = path("savings") + " L" + x(rows.length - 1) + " " + y(Math.max(min, 0)) + " L" + x(0) + " " + y(Math.max(min, 0)) + " Z";
     var last = rows[rows.length - 1];
-    return '<svg class="chart" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Projection of money and debt over 12 months">' + g +
-      (goal <= max ? '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + y(goal) + '" y2="' + y(goal) + '" stroke="var(--warn)" stroke-width="1.5" stroke-dasharray="4 4"/>' : "") +
+    return '<svg class="chart" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + t("chartLabel") + '">' + g +
+      (goal <= max ? '<line x1="' + Lm + '" x2="' + (W - R) + '" y1="' + y(goal) + '" y2="' + y(goal) + '" stroke="var(--warn)" stroke-width="1.5" stroke-dasharray="4 4"/>' : "") +
       '<path d="' + area + '" fill="var(--good)" fill-opacity=".12"/>' +
       '<path d="' + path("debt") + '" fill="none" stroke="var(--bad)" stroke-width="2.5" stroke-linejoin="round"/>' +
       '<path d="' + path("savings") + '" fill="none" stroke="var(--good)" stroke-width="2.5" stroke-linejoin="round"/>' +
@@ -540,87 +741,178 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
   function viewSettings() {
     var s = state.s;
     function nf(id, label, val, step) { return '<div class="field"><label for="' + id + '">' + label + '</label><input type="number" inputmode="decimal" id="' + id + '" value="' + val + '" step="' + (step || 1) + '" min="0"></div>'; }
-    return header("Setup") +
-      '<section class="card"><h2>Monthly money</h2><div class="grid2">' +
-        nf("set-allowance", "Allowance (CHF)", s.allowance) + nf("set-parking", "Parking space (CHF)", s.parking) +
-        nf("set-gas", "Gas budget (CHF)", s.gas) + nf("set-other", "Other spending (CHF)", s.other) +
-        nf("set-rate", "Job pay per hour (CHF)", s.rate, 0.5) + nf("set-hours", "Usual job hours", s.hours) +
+    var debts = state.debts.map(function (d) {
+      return '<div class="setup-debt" data-debt="' + d.id + '"><div class="field"><label for="dn-' + d.id + '">' + t("debtName") + '</label><input type="text" id="dn-' + d.id + '" value="' + esc(debtName(d)) + '" maxlength="30"></div>' +
+        '<div class="grid3">' + nf("dt-" + d.id, t("debtTotal"), d.total) + nf("dm-" + d.id, t("debtMonthly"), d.monthly) + '</div>' +
+        '<div class="row between" style="flex-wrap:wrap"><span class="muted" style="font-size:13px">' + t("paidSoFar", { n: chf(d.paid) }) + '</span><span class="rm-zone"><button class="btn danger small" data-rm="' + d.id + '">' + t("removeDebt") + '</button></span></div></div>';
+    }).join("");
+    var report = null;
+    try { report = JSON.parse(localStorage.getItem(KEY + "-report")); } catch (e) {}
+    return header(t("setup")) +
+      (report ? '<section class="card"><div class="row between"><h3>' + esc(t("lastReport", { name: report.name || "?" })) + '</h3><button class="btn small" id="report-open">' + t("openReport") + '</button></div><p class="muted" style="font-size:13px">' + new Date(report.at).toLocaleString(loc(), { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }) + '</p></section>' : "") +
+      '<section class="card"><h2>' + t("parentTitle") + '</h2><p class="muted" style="font-size:13px">' + t("parentHint") + '</p>' +
+        '<div class="field"><label for="set-name">' + t("f_name") + '</label><input type="text" id="set-name" value="' + esc(state.name || "") + '" maxlength="20"></div>' +
+        '<button class="btn" id="share-parent">' + t("sendParent") + '</button><div id="share-fallback" hidden><div class="field"><label for="share-text">' + t("linkHere") + '</label><textarea id="share-text" readonly></textarea></div></div></section>' +
+      '<section class="card"><h2>' + t("monthlyMoney") + '</h2><div class="grid2">' +
+        nf("set-allowance", t("f_allowance"), s.allowance) + nf("set-parking", t("f_parking"), s.parking) +
+        nf("set-gas", t("f_gas"), s.gas) + nf("set-other", t("f_other"), s.other) +
+        nf("set-rate", t("f_rate"), s.rate, 0.5) + nf("set-hours", t("f_hours"), s.hours) +
       '</div></section>' +
-      '<section class="card"><h2>License debt</h2><div class="grid2">' +
-        nf("set-debtTotal", "Total debt (CHF)", s.debtTotal) + nf("set-debtPayment", "Pay back per month", s.debtPayment) +
-      '</div><p class="muted" style="font-size:13px">Paid so far: CHF ' + chf(state.debtPaid) + ' (from your "Pay debt" entries).</p></section>' +
-      '<section class="card"><h2>Savings goal</h2><div class="grid2">' +
-        '<div class="field"><label for="set-goalName">What for?</label><input type="text" id="set-goalName" value="' + esc(s.goalName) + '" maxlength="30"></div>' + nf("set-goalAmount", "Amount (CHF)", s.goalAmount) +
+      '<section class="card"><div class="row between"><h2>' + t("debts") + '</h2><button class="btn ghost small" id="debt-add">+ ' + t("addDebt") + '</button></div>' + (debts || '<p class="muted">' + t("noDebts") + '</p>') + '</section>' +
+      '<section class="card"><h2>' + t("savingsGoal") + '</h2><div class="grid2">' +
+        '<div class="field"><label for="set-goalName">' + t("whatFor") + '</label><input type="text" id="set-goalName" value="' + esc(goalName()) + '" maxlength="30"></div>' + nf("set-goalAmount", t("amountChf"), s.goalAmount) +
       '</div></section>' +
-      '<section class="card"><h2>Accounts</h2><div class="grid2">' +
-        state.accounts.map(function (a) { return '<div class="field"><label for="set-acct-' + a.id + '">Account name</label><input type="text" id="set-acct-' + a.id + '" value="' + esc(a.name) + '" maxlength="20"></div>'; }).join("") +
+      '<section class="card"><h2>' + t("accounts") + '</h2><div class="grid2">' +
+        state.accounts.map(function (a) { return '<div class="field"><label for="set-acct-' + a.id + '">' + t("accountName") + '</label><input type="text" id="set-acct-' + a.id + '" value="' + esc(a.name) + '" maxlength="20"></div>'; }).join("") +
       '</div></section>' +
-      '<button class="btn" id="set-save">Save setup</button>' +
-      '<section class="card"><h2>Backup</h2><p class="muted" style="font-size:13px">Everything is saved on this phone only. Copy the backup code and keep it somewhere (for example in a note), so you can restore it on a new phone.</p>' +
-        '<div class="row" style="flex-wrap:wrap"><button class="btn ghost small" id="bk-copy">Copy backup code</button><button class="btn ghost small" id="bk-show">Restore from code</button></div>' +
-        '<div id="bk-area" hidden><div class="field"><label for="bk-text">Paste backup code</label><textarea id="bk-text"></textarea></div><button class="btn small" id="bk-restore">Restore</button></div>' +
+      '<button class="btn" id="set-save">' + t("saveSetup") + '</button>' +
+      '<section class="card"><h2>' + t("backup") + '</h2><p class="muted" style="font-size:13px">' + t("backupHint") + '</p>' +
+        '<div class="row" style="flex-wrap:wrap"><button class="btn ghost small" id="bk-copy">' + t("copyBackup") + '</button><button class="btn ghost small" id="bk-show">' + t("restoreFrom") + '</button></div>' +
+        '<div id="bk-area" hidden><div class="field"><label for="bk-text">' + t("pasteBackup") + '</label><textarea id="bk-text"></textarea></div><button class="btn small" id="bk-restore">' + t("restore") + '</button></div>' +
       '</section>' +
-      '<section class="card"><h2>Start over</h2><p class="muted" style="font-size:13px">Deletes all entries and balances on this phone.</p><div id="reset-zone"><button class="btn danger small" id="reset-ask">Delete everything</button></div></section>';
+      '<section class="card"><h2>' + t("startOver") + '</h2><p class="muted" style="font-size:13px">' + t("startOverHint") + '</p><div id="reset-zone"><button class="btn danger small" id="reset-ask">' + t("deleteAll") + '</button></div></section>';
+  }
+  function saveSettings(quiet) {
+    var el = function (id) { return document.getElementById(id); };
+    if (!el("set-allowance")) return;
+    var num = function (id, cur) { var v = Number(el(id).value); return el(id).value !== "" && v >= 0 ? v : cur; };
+    ["allowance", "parking", "gas", "other", "rate", "hours", "goalAmount"].forEach(function (k) { state.s[k] = num("set-" + k, state.s[k]); });
+    var gname = el("set-goalName").value.trim();
+    state.s.goalName = gname === t("defaultGoal") ? "" : gname;
+    state.name = el("set-name").value.trim();
+    state.accounts.forEach(function (a) { var v = el("set-acct-" + a.id).value.trim(); if (v) a.name = v; });
+    state.debts.forEach(function (d) {
+      var n = el("dn-" + d.id); if (!n) return;
+      var nv = n.value.trim(); d.name = (nv === t("licence") && !d.name) ? "" : nv;
+      d.total = num("dt-" + d.id, d.total); d.monthly = num("dm-" + d.id, d.monthly);
+    });
+    ui.sim = null; save(); if (!quiet) toast(t("setupSaved"));
   }
 
-  // ---------- add sheet ----------
+  // ---------- share with parent ----------
+  function b64u(bytes) { var s = ""; for (var i = 0; i < bytes.length; i++) s += String.fromCharCode(bytes[i]); return btoa(s).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, ""); }
+  function unb64u(str) { str = str.replace(/-/g, "+").replace(/_/g, "/"); var s = atob(str), b = new Uint8Array(s.length); for (var i = 0; i < s.length; i++) b[i] = s.charCodeAt(i); return b; }
+  function streamBytes(bytes, stream) { return new Response(new Blob([bytes]).stream().pipeThrough(stream)).arrayBuffer().then(function (b) { return new Uint8Array(b); }); }
+  function encodeReport(obj) {
+    var bytes = new TextEncoder().encode(JSON.stringify(obj));
+    if (typeof CompressionStream === "function") return streamBytes(bytes, new CompressionStream("deflate-raw")).then(function (z) { return "z" + b64u(z); });
+    return Promise.resolve("j" + b64u(bytes));
+  }
+  function decodeReport(code) {
+    var kind = code[0], bytes = unb64u(code.slice(1));
+    var p = kind === "z" ? streamBytes(bytes, new DecompressionStream("deflate-raw")) : Promise.resolve(bytes);
+    return p.then(function (b) { return JSON.parse(new TextDecoder().decode(b)); });
+  }
+  function shareParent() {
+    saveSettings(true);
+    var snap = { at: Date.now(), name: own.name || "", state: own };
+    encodeReport(snap).then(function (code) {
+      var url = location.href.split("#")[0] + "#view=" + code;
+      var text = t("shareText", { name: own.name || t("appName"), total: chf(total()), debt: chf(debtLeft()) });
+      var fallback = function () {
+        var box = document.getElementById("share-fallback"); if (!box) return;
+        box.hidden = false; var ta = document.getElementById("share-text"); ta.value = text + "\n" + url; ta.focus(); ta.select();
+      };
+      if (navigator.share) {
+        navigator.share({ title: t("appName"), text: text, url: url }).catch(function (e) { if (e && e.name !== "AbortError") fallback(); });
+      } else {
+        try { navigator.clipboard.writeText(text + "\n" + url).then(function () { toast(t("linkCopied")); }, fallback); } catch (e) { fallback(); }
+      }
+    });
+  }
+  function openReport(rep) {
+    ui.viewing = { at: rep.at, name: rep.name };
+    state = normalize(rep.state);
+    ui.tab = "home"; ui.sim = null; render(); window.scrollTo(0, 0);
+  }
+  function closeReport() { ui.viewing = null; state = own; ui.sim = null; ui.tab = "home"; render(); window.scrollTo(0, 0); }
+  function checkHash() {
+    var h = location.hash || "";
+    if (h.indexOf("#view=") !== 0) return false;
+    var code = h.slice(6);
+    try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {}
+    decodeReport(code).then(function (rep) {
+      try { localStorage.setItem(KEY + "-report", JSON.stringify(rep)); } catch (e) {}
+      openReport(rep);
+    }).catch(function () { toast(t("badCode")); });
+    return true;
+  }
+
+  // ---------- sheets ----------
   var layer = document.getElementById("layer");
+  function sheetShell(title, body) {
+    layer.innerHTML = '<div class="scrim" id="scrim"><form class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title" novalidate>' +
+      '<div class="grab"></div><div class="row between"><h2 id="sheet-title">' + title + '</h2><button type="button" class="btn ghost small" id="sheet-close">' + t("close") + '</button></div>' + body + '</form></div>';
+    document.getElementById("sheet-close").onclick = closeSheet;
+    document.getElementById("scrim").addEventListener("click", function (ev) { if (ev.target.id === "scrim") closeSheet(); });
+  }
   function openSheet(type, accountId) {
     type = type || "spend";
     var s = state.s;
-    var defAmt = { allowance: s.allowance, parking: s.parking, gas: "", debt: Math.min(s.debtPayment, debtLeft()) || "", job: "", income: "", spend: "", balance: "" };
     var order = ["allowance", "job", "income", "gas", "parking", "debt", "spend", "balance"];
-    var chips = order.map(function (k) { return '<button type="button" class="chip" data-type="' + k + '" aria-pressed="' + (k === type) + '"><span class="d" style="background:' + TYPES[k].color + '"></span>' + TYPES[k].name + '</button>'; }).join("");
+    if (type === "debt" && !openDebts().length) type = "spend";
+    var chips = order.filter(function (k) { return k !== "debt" || openDebts().length; }).map(function (k) { return '<button type="button" class="chip" data-type="' + k + '" aria-pressed="' + (k === type) + '"><span class="d" style="background:' + TYPES[k].color + '"></span>' + t("ty_" + k) + '</button>'; }).join("");
     var accOpts = state.accounts.map(function (a) { return '<option value="' + a.id + '"' + (a.id === (accountId || state.accounts[0].id) ? " selected" : "") + '>' + esc(a.name) + ' (CHF ' + chf(a.balance) + ')</option>'; }).join("");
-    layer.innerHTML = '<div class="scrim" id="scrim"><form class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title" novalidate>' +
-      '<div class="grab"></div><div class="row between"><h2 id="sheet-title">New entry</h2><button type="button" class="btn ghost small" id="sheet-close">Close</button></div>' +
+    var debtOpts = openDebts().map(function (d) { return '<option value="' + d.id + '">' + esc(debtName(d)) + ' (CHF ' + chf(debtLeftOf(d)) + ')</option>'; }).join("");
+    sheetShell(t("newEntry"),
       '<div class="chips" id="type-chips">' + chips + '</div>' +
-      '<div class="field" id="f-hours" hidden><label for="in-hours">Hours worked</label><input type="number" inputmode="decimal" id="in-hours" step="0.25" min="0" placeholder="e.g. 4"></div>' +
-      '<div class="field"><label for="in-amount" id="lbl-amount">Amount</label><div class="money-input"><span>CHF</span><input type="number" inputmode="decimal" id="in-amount" step="0.05" min="0" placeholder="0.00"></div></div>' +
-      '<div class="grid2"><div class="field"><label for="in-account">Account</label><select id="in-account">' + accOpts + '</select></div><div class="field"><label for="in-date">Date</label><input type="date" id="in-date" value="' + today() + '"></div></div>' +
-      '<div class="field" id="f-note"><label for="in-note">Note (optional)</label><input type="text" id="in-note" maxlength="40" placeholder="e.g. Kebab with friends"></div>' +
+      '<div class="field" id="f-debt" hidden><label for="in-debt">' + t("whichDebt") + '</label><select id="in-debt">' + debtOpts + '</select></div>' +
+      '<div class="field" id="f-hours" hidden><label for="in-hours">' + t("hoursWorked") + '</label><input type="number" inputmode="decimal" id="in-hours" step="0.25" min="0" placeholder="' + t("hoursEx") + '"></div>' +
+      '<div class="field"><label for="in-amount" id="lbl-amount">' + t("amount") + '</label><div class="money-input"><span>CHF</span><input type="number" inputmode="decimal" id="in-amount" step="0.05" min="0" placeholder="0.00"></div></div>' +
+      '<div class="grid2"><div class="field"><label for="in-account">' + t("account") + '</label><select id="in-account">' + accOpts + '</select></div><div class="field"><label for="in-date">' + t("date") + '</label><input type="date" id="in-date" value="' + today() + '"></div></div>' +
+      '<div class="field"><label for="in-note">' + t("noteOpt") + '</label><input type="text" id="in-note" maxlength="40" placeholder="' + t("noteEx") + '"></div>' +
       '<p class="muted" id="sheet-hint" style="font-size:13px"></p>' +
-      '<button class="btn" type="submit" id="sheet-save">Save entry</button>' +
-      '</form></div>';
+      '<button class="btn" type="submit">' + t("saveEntry") + '</button>');
     var cur = type;
-    var amt = document.getElementById("in-amount"), hrs = document.getElementById("in-hours");
+    var amt = document.getElementById("in-amount"), hrs = document.getElementById("in-hours"), dsel = document.getElementById("in-debt");
+    function debtDefault() { var d = debtById(dsel.value); return d ? Math.min(d.monthly, debtLeftOf(d)) || "" : ""; }
     function setType(k) {
       cur = k;
       document.querySelectorAll("#type-chips .chip").forEach(function (c) { c.setAttribute("aria-pressed", c.dataset.type === k); });
       document.getElementById("f-hours").hidden = k !== "job";
-      document.getElementById("lbl-amount").textContent = k === "balance" ? "Balance shown in your app" : k === "job" ? "Earned" : "Amount";
-      var hint = {
-        allowance: "Your monthly CHF " + chf0(s.allowance) + ".",
-        job: "Type the hours, the app counts CHF " + s.rate + " per hour.",
-        gas: "Budget this month: CHF " + chf0(s.gas) + ".",
-        parking: "Your parking space costs CHF " + chf0(s.parking) + " per month.",
-        debt: "CHF " + chf(debtLeft()) + " still open.",
-        balance: "Open your bank app and copy the exact number. The difference gets logged.",
-        spend: "", income: "Birthday money, selling something…"
-      }[k];
-      document.getElementById("sheet-hint").textContent = hint;
+      document.getElementById("f-debt").hidden = k !== "debt";
+      document.getElementById("lbl-amount").textContent = k === "balance" ? t("balanceShown") : k === "job" ? t("earned") : t("amount");
+      var d = debtById(dsel.value);
+      document.getElementById("sheet-hint").textContent = t("h_" + k, { n: k === "allowance" ? chf0(s.allowance) : k === "gas" ? chf0(s.gas) : k === "parking" ? chf0(s.parking) : k === "debt" && d ? chf(debtLeftOf(d)) : "", r: s.rate });
       if (k === "balance") amt.value = acct(document.getElementById("in-account").value).balance || "";
-      else amt.value = defAmt[k];
-      if (k === "job") { hrs.value = ""; }
+      else amt.value = { allowance: s.allowance, parking: s.parking, debt: debtDefault() }[k] || "";
+      if (k === "job") hrs.value = "";
     }
     setType(type);
     document.getElementById("type-chips").addEventListener("click", function (ev) { var c = ev.target.closest(".chip"); if (c) setType(c.dataset.type); });
     document.getElementById("in-account").addEventListener("change", function () { if (cur === "balance") amt.value = acct(this.value).balance || ""; });
+    dsel.addEventListener("change", function () { setType("debt"); });
     hrs.addEventListener("input", function () { var h = Number(hrs.value); amt.value = h > 0 ? r2(h * s.rate) : ""; });
-    document.getElementById("sheet-close").onclick = closeSheet;
-    document.getElementById("scrim").addEventListener("click", function (ev) { if (ev.target.id === "scrim") closeSheet(); });
     document.getElementById("sheet").addEventListener("submit", function (ev) {
       ev.preventDefault();
       var a = Number(amt.value);
-      if (!(a >= 0) || amt.value === "" || (a === 0 && cur !== "balance")) { amt.focus(); toast("Type an amount first"); return; }
+      if (!(a >= 0) || amt.value === "" || (a === 0 && cur !== "balance")) { amt.focus(); toast(t("typeAmount")); return; }
       var e = { type: cur, amount: r2(a), account: document.getElementById("in-account").value, date: document.getElementById("in-date").value || today(), note: document.getElementById("in-note").value.trim() };
       if (cur === "job") e.hours = Number(hrs.value) || r2(a / s.rate);
-      if (cur === "debt" && e.amount > debtLeft() + 0.001) e.amount = debtLeft();
+      if (cur === "debt") { var d = debtById(dsel.value); e.debtId = dsel.value; if (d && e.amount > debtLeftOf(d)) e.amount = debtLeftOf(d); }
       addEntry(e);
       closeSheet(); render();
-      toast(cur === "balance" ? "Balance updated" : "Saved to your log");
+      toast(cur === "balance" ? t("balUpdated") : t("savedLog"));
     });
     setTimeout(function () { (cur === "job" ? hrs : amt).focus(); }, 60);
+  }
+  function openDebtSheet() {
+    if (ui.tab === "settings") saveSettings(true);
+    sheetShell(t("newDebtTitle"),
+      '<div class="field"><label for="nd-name">' + t("debtName") + '</label><input type="text" id="nd-name" maxlength="30" placeholder="' + t("debtNameEx") + '"></div>' +
+      '<div class="field"><label for="nd-total">' + t("debtTotal") + '</label><div class="money-input"><span>CHF</span><input type="number" inputmode="decimal" id="nd-total" step="1" min="0" placeholder="0"></div></div>' +
+      '<div class="grid2"><div class="field"><label for="nd-monthly">' + t("debtMonthly") + '</label><input type="number" inputmode="decimal" id="nd-monthly" step="5" min="0" value="20"></div>' +
+      '<div class="field"><label for="nd-paid">' + t("debtAlready") + '</label><input type="number" inputmode="decimal" id="nd-paid" step="5" min="0" value="0"></div></div>' +
+      '<button class="btn" type="submit">' + t("saveDebt") + '</button>');
+    document.getElementById("sheet").addEventListener("submit", function (ev) {
+      ev.preventDefault();
+      var name = document.getElementById("nd-name").value.trim(), tot = Number(document.getElementById("nd-total").value);
+      if (!name) { document.getElementById("nd-name").focus(); toast(t("needName")); return; }
+      if (!(tot > 0)) { document.getElementById("nd-total").focus(); toast(t("typeAmount")); return; }
+      addDebt(name, tot, Number(document.getElementById("nd-monthly").value) || 0, Number(document.getElementById("nd-paid").value) || 0);
+      ui.sim = null; closeSheet(); render(); toast(t("debtAdded"));
+    });
+    setTimeout(function () { document.getElementById("nd-name").focus(); }, 60);
   }
   function closeSheet() { layer.innerHTML = ""; }
   document.addEventListener("keydown", function (e) { if (e.key === "Escape" && layer.innerHTML) closeSheet(); });
@@ -629,66 +921,82 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
   function toast(msg) {
     var el = document.querySelector(".toast"); if (el) el.remove();
     el = document.createElement("div"); el.className = "toast"; el.setAttribute("role", "status"); el.textContent = msg;
-    document.body.appendChild(el); clearTimeout(toastTimer); toastTimer = setTimeout(function () { el.remove(); }, 2200);
+    document.body.appendChild(el); clearTimeout(toastTimer); toastTimer = setTimeout(function () { el.remove(); }, 2400);
   }
 
   // ---------- events ----------
-  document.querySelector(".tabbar").addEventListener("click", function (ev) {
-    var t = ev.target.closest("[data-tab]");
-    if (t) { go(t.dataset.tab); }
-  });
+  document.querySelector(".tabbar").addEventListener("click", function (ev) { var b = ev.target.closest("[data-tab]"); if (b) go(b.dataset.tab); });
   function go(tab) { ui.tab = tab; try { sessionStorage.setItem(KEY + "-tab", tab); } catch (e) {} render(); window.scrollTo(0, 0); }
   document.getElementById("addBtn").onclick = function () { openSheet("spend"); };
 
   app.addEventListener("click", function (ev) {
-    var b;
+    var b, id = ev.target.id;
+    if ((b = ev.target.closest("[data-lang]"))) {
+      if (ui.tab === "settings") saveSettings(true);
+      own.lang = b.dataset.lang; if (ui.viewing) { try { localStorage.setItem(KEY, JSON.stringify(own)); } catch (e) {} } else save(); render(); return;
+    }
+    if (ui.viewing && id === "view-close") return closeReport();
+    if ((b = ev.target.closest("[data-go]"))) return go(b.dataset.go);
+    if (ui.viewing) return;
     if ((b = ev.target.closest("[data-quick]"))) return openSheet(b.dataset.quick);
     if ((b = ev.target.closest("[data-act=balance]"))) return openSheet("balance", b.dataset.acct);
-    if ((b = ev.target.closest("[data-go]"))) return go(b.dataset.go);
     if ((b = ev.target.closest("[data-del]"))) {
-      var id = b.dataset.del;
-      if (b.dataset.confirm) { removeEntry(id); render(); toast("Entry deleted"); }
-      else { b.dataset.confirm = "1"; b.textContent = "Delete?"; b.style.fontSize = "12px"; b.style.color = "var(--bad)"; setTimeout(function () { if (b.isConnected) { delete b.dataset.confirm; b.textContent = "×"; b.style.fontSize = ""; b.style.color = ""; } }, 3000); }
+      if (b.dataset.confirm) { if (removeEntry(b.dataset.del)) { render(); toast(t("entryDeleted")); } else toast(t("deletePaymentsFirst")); }
+      else { b.dataset.confirm = "1"; b.textContent = t("delQ"); b.style.fontSize = "12px"; b.style.color = "var(--bad)"; setTimeout(function () { if (b.isConnected) { delete b.dataset.confirm; b.textContent = "×"; b.style.fontSize = ""; b.style.color = ""; } }, 3000); }
       return;
     }
-    if (ev.target.id === "sim-save") {
-      Object.assign(state.s, ui.sim); save(); toast("Budget updated"); return;
-    }
-    if (ev.target.id === "set-save") {
-      var num = function (id) { var v = Number(document.getElementById("set-" + id).value); return v >= 0 ? v : state.s[id]; };
-      ["allowance", "parking", "gas", "other", "rate", "hours", "debtTotal", "debtPayment", "goalAmount"].forEach(function (k) { state.s[k] = num(k); });
-      state.s.goalName = document.getElementById("set-goalName").value.trim() || "Savings goal";
-      state.accounts.forEach(function (a) { var v = document.getElementById("set-acct-" + a.id).value.trim(); if (v) a.name = v; });
-      ui.sim = null; save(); toast("Setup saved"); return;
-    }
-    if (ev.target.id === "bk-copy") {
-      var code = btoa(unescape(encodeURIComponent(JSON.stringify(state))));
-      var ok = function () { toast("Backup code copied"); };
-      var fallback = function () { var a = document.getElementById("bk-area"); a.hidden = false; var t = document.getElementById("bk-text"); t.value = code; t.select(); toast("Select and copy the code below"); };
-      try { navigator.clipboard.writeText(code).then(ok, fallback); } catch (e) { fallback(); }
+    if ((b = ev.target.closest("[data-rm]"))) {
+      saveSettings(true);
+      b.parentNode.innerHTML = '<span class="row" style="gap:6px;flex-wrap:wrap"><button class="btn danger small" data-rm-yes="' + b.dataset.rm + '">' + t("yesRemove") + '</button><button class="btn ghost small" data-rm-no="1">' + t("cancel") + '</button></span>';
       return;
     }
-    if (ev.target.id === "bk-show") { document.getElementById("bk-area").hidden = false; document.getElementById("bk-text").focus(); return; }
-    if (ev.target.id === "bk-restore") {
+    if ((b = ev.target.closest("[data-rm-yes]"))) {
+      var did = b.dataset.rmYes;
+      state.debts = state.debts.filter(function (d) { return d.id !== did; });
+      state.entries = state.entries.filter(function (e) { return !(e.type === "newdebt" && e.debtId === did); });
+      ui.sim = null; save(); render(); toast(t("debtRemoved")); return;
+    }
+    if (ev.target.closest("[data-rm-no]")) { render(); return; }
+    if (id === "debt-add") return openDebtSheet();
+    if (id === "share-parent") return shareParent();
+    if (id === "report-open") { try { openReport(JSON.parse(localStorage.getItem(KEY + "-report"))); } catch (e) {} return; }
+    if (id === "sim-save") {
+      var p = ui.sim, due = monthlyDebtDue();
+      state.s.hours = p.hours; state.s.gas = p.gas; state.s.other = p.other;
+      if (due > 0 && Math.abs(p.debtPayment - due) > 0.01) {
+        var f = p.debtPayment / due;
+        openDebts().forEach(function (d) { d.monthly = Math.max(0, Math.round(d.monthly * f / 5) * 5); });
+      }
+      save(); toast(t("budgetUpdated")); return;
+    }
+    if (id === "set-save") return saveSettings();
+    if (id === "bk-copy") {
+      var code = btoa(unescape(encodeURIComponent(JSON.stringify(own))));
+      var fallback = function () { document.getElementById("bk-area").hidden = false; var ta = document.getElementById("bk-text"); ta.value = code; ta.select(); toast(t("selectCopy")); };
+      try { navigator.clipboard.writeText(code).then(function () { toast(t("backupCopied")); }, fallback); } catch (e) { fallback(); }
+      return;
+    }
+    if (id === "bk-show") { document.getElementById("bk-area").hidden = false; document.getElementById("bk-text").focus(); return; }
+    if (id === "bk-restore") {
       try {
         var data = JSON.parse(decodeURIComponent(escape(atob(document.getElementById("bk-text").value.trim()))));
         if (!data.accounts || !data.entries) throw 0;
-        state = data; state.s = Object.assign({}, defaults().s, state.s || {}); save(); ui.sim = null; go("home"); toast("Backup restored");
-      } catch (e) { toast("That code does not look right"); }
+        own = state = normalize(data); save(); ui.sim = null; go("home"); toast(t("backupRestored"));
+      } catch (e) { toast(t("badCode")); }
       return;
     }
-    if (ev.target.id === "reset-ask") {
-      document.getElementById("reset-zone").innerHTML = '<div class="row" style="flex-wrap:wrap"><span style="font-weight:600">Really delete everything?</span><button class="btn danger small" id="reset-yes">Yes, delete</button><button class="btn ghost small" id="reset-no">Cancel</button></div>';
+    if (id === "reset-ask") {
+      document.getElementById("reset-zone").innerHTML = '<div class="row" style="flex-wrap:wrap"><span style="font-weight:600">' + t("reallyDelete") + '</span><button class="btn danger small" id="reset-yes">' + t("yesDelete") + '</button><button class="btn ghost small" id="reset-no">' + t("cancel") + '</button></div>';
       return;
     }
-    if (ev.target.id === "reset-no") { render(); return; }
-    if (ev.target.id === "reset-yes") { state = defaults(); save(); ui.sim = null; go("home"); toast("Everything deleted"); return; }
+    if (id === "reset-no") { render(); return; }
+    if (id === "reset-yes") { var l = own.lang; own = state = normalize(null); own.lang = l; save(); ui.sim = null; go("home"); toast(t("allDeleted")); return; }
   });
-  app.addEventListener("input", function (ev) {
-    if (ev.target.id && ev.target.id.indexOf("sim-") === 0) { readSim(); updatePlan(); }
-  });
+  app.addEventListener("input", function (ev) { if (ev.target.id && ev.target.id.indexOf("sim-") === 0) { readSim(); updatePlan(); } });
+  window.addEventListener("hashchange", checkHash);
 
   render();
+  checkHash();
 })();
 </script>
 </body>
