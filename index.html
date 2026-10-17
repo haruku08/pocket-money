@@ -614,6 +614,7 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
       '<section class="card"><div class="row between"><h2>' + t("latest") + '</h2><button class="btn ghost small" data-go="log">' + t("seeAll") + '</button></div>' +
         (recent.length ? '<div class="list">' + recent.map(itemHtml).join("") + '</div>' : '<div class="empty">' + t("nothingYet") + '</div>') +
       '</section>' +
+      (ro ? "" : '<button class="btn ghost" id="share-parent">' + t("sendParent") + '</button><div id="share-fallback" hidden><div class="field"><label for="share-text">' + t("linkHere") + '</label><textarea id="share-text" readonly></textarea></div></div>') +
       (!storageOk ? '<p class="preview-note">' + t("notSaving") + '</p>' : "");
   }
   function qa(type, label, color) {
