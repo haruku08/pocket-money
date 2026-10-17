@@ -1,5 +1,5 @@
 // Keeps the app working offline. Network first, so updates show up right away when online.
-const CACHE = "pocket-money-v2";
+const CACHE = "pocket-money-v3";
 const FILES = ["./", "./index.html", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png", "./apple-touch-icon.png"];
 self.addEventListener("install", (e) => { e.waitUntil(caches.open(CACHE).then((c) => c.addAll(FILES))); self.skipWaiting(); });
 self.addEventListener("activate", (e) => { e.waitUntil(self.clients.claim()); });

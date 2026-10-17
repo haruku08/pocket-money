@@ -38,6 +38,7 @@
   --c-debt: #d9534f;
   --c-free: #1f9d6b;
   --c-other: #3b8fd9;
+  --c-save: #14907a;
   --shadow: 0 1px 2px rgba(15,37,36,.06), 0 6px 20px rgba(15,37,36,.06);
   --f-display: "Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
   --f-body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -47,13 +48,13 @@
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
   --bg: #0b1615; --surface: #13211f; --surface-2: #1b2d2a; --ink: #e6f2ef; --muted: #8fa7a2; --line: #253a37;
   --brand: #134a47; --brand-ink: #effaf7; --accent: #ffcc4d; --accent-ink: #2a1f00;
-  --good: #3cc58c; --bad: #f07470; --warn: #e3ac2b;
+  --good: #3cc58c; --c-save: #2fbfa2; --bad: #f07470; --warn: #e3ac2b;
   --shadow: 0 1px 2px rgba(0,0,0,.3), 0 6px 20px rgba(0,0,0,.25); color-scheme: dark;
 }}
 :root[data-theme="dark"] {
   --bg: #0b1615; --surface: #13211f; --surface-2: #1b2d2a; --ink: #e6f2ef; --muted: #8fa7a2; --line: #253a37;
   --brand: #134a47; --brand-ink: #effaf7; --accent: #ffcc4d; --accent-ink: #2a1f00;
-  --good: #3cc58c; --bad: #f07470; --warn: #e3ac2b;
+  --good: #3cc58c; --c-save: #2fbfa2; --bad: #f07470; --warn: #e3ac2b;
   --shadow: 0 1px 2px rgba(0,0,0,.3), 0 6px 20px rgba(0,0,0,.25); color-scheme: dark;
 }
 * { box-sizing: border-box; }
@@ -81,7 +82,10 @@ p { margin: 0; }
 .between { justify-content: space-between; }
 .card { background: var(--surface); border-radius: var(--r); padding: 16px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 12px; min-width: 0; }
 .topbar { display: flex; justify-content: space-between; align-items: center; }
-.topbar h1 { font-size: 22px; font-weight: 800; }
+.topbar { gap: 8px; }
+.topbar h1 { font-size: 22px; font-weight: 800; white-space: nowrap; min-width: 0; }
+.month-pill { white-space: nowrap; }
+@media (max-width: 385px) { .topbar .month-pill { display: none; } .topbar h1 { font-size: 20px; } }
 .month-pill { font-size: 13px; font-weight: 600; background: var(--surface-2); padding: 6px 12px; border-radius: 99px; }
 
 /* Hero balance */
@@ -221,6 +225,27 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
 .appr { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 4px; }
 .appr .tag { font-size: 11px; padding: 2px 8px; }
 .pnote { font-size: 12px; color: var(--ink); font-style: italic; }
+.save-slider { background: color-mix(in srgb, var(--c-save) 12%, transparent); border-radius: 14px; padding: 10px 12px; }
+.save-slider input[type=range] { accent-color: var(--c-save); }
+.flow { display: flex; flex-direction: column; gap: 6px; }
+.flow-row { display: flex; justify-content: space-between; font-size: 15px; }
+.flow-row b { font-family: var(--f-mono); font-size: 14px; }
+.flow-row.total { border-top: 1.5px solid var(--line); padding-top: 8px; font-weight: 700; }
+.flow-row.total b { font-family: var(--f-display); font-size: 20px; }
+.chart-key { display: flex; flex-wrap: wrap; gap: 14px; font-size: 13px; color: var(--muted); }
+.chart-key span { display: inline-flex; align-items: center; gap: 6px; }
+.chart-key i { display: inline-block; }
+.k-bar { width: 10px; height: 12px; border-radius: 2px; background: var(--c-save); }
+.k-line { width: 16px; height: 3px; border-radius: 2px; background: var(--bad); }
+.k-dash { width: 16px; border-top: 2px dashed var(--warn); }
+.ftable { display: flex; flex-direction: column; font-size: 13px; }
+.fr { display: grid; grid-template-columns: 1.1fr 1fr 1fr 1fr; gap: 6px; padding: 7px 0; border-bottom: 1px solid var(--line); text-align: right; }
+.fr span:first-child { text-align: left; color: var(--muted); }
+.fr:last-child { border-bottom: 0; }
+.fh { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+.brand { display: inline-flex; align-items: center; gap: 10px; }
+.brand-ic { width: 34px; height: 34px; border-radius: 10px; background: var(--brand); color: var(--accent); display: grid; place-items: center; flex: none; }
+.brand-ic svg { width: 20px; height: 20px; }
 .grid3 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 </style>
 </head>
@@ -294,7 +319,7 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
       sendParent: "Send to parent", linkCopied: "Link copied. Paste it in WhatsApp.", shareText: "{name}: CHF {total} on my accounts, CHF {debt} debts left. All my entries:",
       linkHere: "Copy this link and send it:", viewing: "{name}'s money", sentAt: "Sent {d} · read only", closeView: "Close",
       lastReport: "Last report from {name}", openReport: "Open",
-      syncTitle: "Live sync", syncHint: "Your parent set up a Google Sheet. Paste the sync link here once, and every entry is sent there automatically.", syncUrl: "Sync link", syncNow: "Send now", syncSaved: "Sync link saved", syncOff: "Not connected", syncOk: "Last sent {d}", syncFail: "Could not send (no internet?). It tries again with the next entry.", syncBad: "That does not look like a Google sync link", syncRemove: "Disconnect", syncConnected: "Live sync connected", syncShare: "Send link to other phone", syncShareText: "Tap this link once to connect the app to the Google Sheet:", approved: "Approved", approvedLocked: "Approved entries can't be deleted", debtsByParent: "Debts are managed by your parent in the Google Sheet.", syncSheet: "The Sheet did not answer. Ask your parent to check the script deployment.", syncUnknown: "Sent, but the Sheet did not confirm it.", syncError: "The Sheet reported a problem: {m}",
+      syncTitle: "Live sync", syncHint: "Your parent set up a Google Sheet. Paste the sync link here once, and every entry is sent there automatically.", syncUrl: "Sync link", syncNow: "Send now", syncSaved: "Sync link saved", syncOff: "Not connected", syncOk: "Last sent {d}", syncFail: "Could not send (no internet?). It tries again with the next entry.", syncBad: "That does not look like a Google sync link", syncRemove: "Disconnect", syncConnected: "Live sync connected", sl_save: "Put into savings", savingsPot: "Savings", toSavings: "Into savings", freeLeft: "Free to spend", allMoneyShort: "All money", debtFreeShort: "debt free", goalNoSave: "Move the savings slider to see when you reach <b>{g}</b>.", syncShare: "Send link to other phone", syncShareText: "Tap this link once to connect the app to the Google Sheet:", approved: "Approved", approvedLocked: "Approved entries can't be deleted", debtsByParent: "Debts are managed by your parent in the Google Sheet.", syncSheet: "The Sheet did not answer. Ask your parent to check the script deployment.", syncUnknown: "Sent, but the Sheet did not confirm it.", syncError: "The Sheet reported a problem: {m}",
       installTitle: "Install as app", installHint: "Put the app on your home screen. It opens like a normal app and also works without internet.", installBtn: "Install app", installIos: "Tap the Share button at the bottom of Safari, then \"Add to Home Screen\".", installOther: "Open the browser menu (⋮) and tap \"Install app\" or \"Add to Home screen\".", installLater: "Later",
       newEntry: "New entry", close: "Close", hoursWorked: "Hours worked", hoursEx: "e.g. 4", amount: "Amount", balanceShown: "Balance shown in your app",
       earned: "Earned", account: "Account", date: "Date", noteOpt: "Note (optional)", noteEx: "e.g. Kebab with friends", saveEntry: "Save entry",
@@ -352,7 +377,7 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
       sendParent: "An Eltern senden", linkCopied: "Link kopiert. Füge ihn in WhatsApp ein.", shareText: "{name}: CHF {total} auf den Konten, noch CHF {debt} Schulden. Alle Einträge:",
       linkHere: "Kopiere diesen Link und schick ihn:", viewing: "Geld von {name}", sentAt: "Gesendet {d} · nur ansehen", closeView: "Schliessen",
       lastReport: "Letzter Bericht von {name}", openReport: "Öffnen",
-      syncTitle: "Live-Sync", syncHint: "Deine Eltern haben ein Google Sheet eingerichtet. Füge den Sync-Link einmal hier ein, dann wird jeder Eintrag automatisch dorthin geschickt.", syncUrl: "Sync-Link", syncNow: "Jetzt senden", syncSaved: "Sync-Link gespeichert", syncOff: "Nicht verbunden", syncOk: "Zuletzt gesendet {d}", syncFail: "Senden ging nicht (kein Internet?). Es klappt beim nächsten Eintrag wieder.", syncBad: "Das ist kein Google-Sync-Link", syncRemove: "Trennen", syncConnected: "Live-Sync verbunden", syncShare: "Link an anderes Handy senden", syncShareText: "Tippe einmal auf diesen Link, um die App mit dem Google Sheet zu verbinden:", approved: "Bestätigt", approvedLocked: "Bestätigte Einträge kann man nicht löschen", debtsByParent: "Schulden werden von deinen Eltern im Google Sheet verwaltet.", syncSheet: "Das Sheet hat nicht geantwortet. Deine Eltern sollen das Skript prüfen.", syncUnknown: "Gesendet, aber das Sheet hat es nicht bestätigt.", syncError: "Das Sheet meldet ein Problem: {m}",
+      syncTitle: "Live-Sync", syncHint: "Deine Eltern haben ein Google Sheet eingerichtet. Füge den Sync-Link einmal hier ein, dann wird jeder Eintrag automatisch dorthin geschickt.", syncUrl: "Sync-Link", syncNow: "Jetzt senden", syncSaved: "Sync-Link gespeichert", syncOff: "Nicht verbunden", syncOk: "Zuletzt gesendet {d}", syncFail: "Senden ging nicht (kein Internet?). Es klappt beim nächsten Eintrag wieder.", syncBad: "Das ist kein Google-Sync-Link", syncRemove: "Trennen", syncConnected: "Live-Sync verbunden", sl_save: "Auf die Seite legen (Sparen)", savingsPot: "Erspartes", toSavings: "Ins Sparen", freeLeft: "Frei zum Ausgeben", allMoneyShort: "Ganzes Geld", debtFreeShort: "schuldenfrei", goalNoSave: "Schieb den Spar-Regler, um zu sehen, wann du <b>{g}</b> erreichst.", syncShare: "Link an anderes Handy senden", syncShareText: "Tippe einmal auf diesen Link, um die App mit dem Google Sheet zu verbinden:", approved: "Bestätigt", approvedLocked: "Bestätigte Einträge kann man nicht löschen", debtsByParent: "Schulden werden von deinen Eltern im Google Sheet verwaltet.", syncSheet: "Das Sheet hat nicht geantwortet. Deine Eltern sollen das Skript prüfen.", syncUnknown: "Gesendet, aber das Sheet hat es nicht bestätigt.", syncError: "Das Sheet meldet ein Problem: {m}",
       installTitle: "Als App installieren", installHint: "Leg die App auf deinen Homescreen. Sie öffnet sich wie eine normale App und funktioniert auch ohne Internet.", installBtn: "App installieren", installIos: "Tippe in Safari unten auf Teilen und dann auf \"Zum Home-Bildschirm\".", installOther: "Öffne das Browser-Menü (⋮) und tippe auf \"App installieren\" oder \"Zum Startbildschirm hinzufügen\".", installLater: "Später",
       newEntry: "Neuer Eintrag", close: "Schliessen", hoursWorked: "Gearbeitete Stunden", hoursEx: "z.B. 4", amount: "Betrag", balanceShown: "Kontostand in deiner App",
       earned: "Verdient", account: "Konto", date: "Datum", noteOpt: "Notiz (optional)", noteEx: "z.B. Kebab mit Kollegen", saveEntry: "Eintrag speichern",
@@ -407,7 +432,7 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
         { id: "pf", name: "PostFinance", balance: 0, color: "#ffcc00" },
         { id: "rv", name: "Revolut", balance: 0, color: "#3b8fd9" }
       ],
-      s: { allowance: 200, parking: 20, gas: 40, rate: 15, hours: 8, other: 30, goalName: "", goalAmount: 500 },
+      s: { allowance: 200, parking: 20, gas: 40, rate: 15, hours: 8, other: 30, save: 50, goalName: "", goalAmount: 500 },
       debts: [{ id: "lic", name: "", total: 600, monthly: 50, paid: 0 }],
       entries: []
     };
@@ -626,17 +651,18 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
 
   // ---------- simulation ----------
   function simulate(p, months) {
-    var savings = total(), debts = openDebts().map(function (d) { return debtLeftOf(d); });
+    var all = total(), pot = 0, debts = openDebts().map(function (d) { return debtLeftOf(d); });
     var sumDebt = function () { return debts.reduce(function (s, x) { return s + x; }, 0); };
-    var rows = [{ m: 0, savings: savings, debt: sumDebt() }];
-    var debtFree = sumDebt() <= 0 ? 0 : null, goalAt = savings >= p.goal ? 0 : null;
+    var rows = [{ m: 0, pot: 0, total: all, debt: sumDebt() }];
+    var debtFree = sumDebt() <= 0 ? 0 : null, goalAt = null;
     for (var m = 1; m <= months; m++) {
       var budget = p.debtPayment, paid = 0;
       for (var i = 0; i < debts.length && budget > 0; i++) { var x = Math.min(budget, debts[i]); debts[i] -= x; budget -= x; paid += x; }
-      savings += p.allowance + p.hours * p.rate - (p.parking + p.gas + p.other + paid);
+      all += p.allowance + p.hours * p.rate - (p.parking + p.gas + p.other + paid);
+      pot += p.save;
       if (sumDebt() <= 0.001 && debtFree === null) debtFree = m;
-      if (savings >= p.goal && goalAt === null) goalAt = m;
-      rows.push({ m: m, savings: savings, debt: Math.max(0, sumDebt()) });
+      if (p.save > 0 && pot >= p.goal && goalAt === null) goalAt = m;
+      rows.push({ m: m, pot: pot, total: all, debt: Math.max(0, sumDebt()) });
     }
     return { rows: rows, debtFree: debtFree, goalAt: goalAt };
   }
@@ -702,7 +728,7 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
 
     var recent = sortedEntries().slice(0, 5);
 
-    return header(t("appName"), '<span class="month-pill">' + monthName(0) + '</span>') +
+    return header('<span class="brand"><span class="brand-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></svg></span>' + t("appName") + '</span>', '<span class="month-pill">' + new Date().toLocaleDateString(loc(), { month: "short", year: "numeric" }) + '</span>') +
       '<section class="hero" aria-label="' + t("allMoney") + '"><div><div class="label">' + t("allMoney") + '</div><div class="hero-total num"><small>CHF</small>' + chf(total()) + '</div></div><div class="accounts">' + accts + '</div></section>' +
       (!hasBalance && !ro ? '<div class="callout">' + t("startHere", { a: esc(state.accounts[0].name), b: esc(state.accounts[1] ? state.accounts[1].name : "") }) + '</div>' : "") +
       (ro || own.installLater ? "" : installBlock(true)) +
@@ -779,7 +805,7 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
 
   function viewPlan() {
     var s = state.s;
-    if (!ui.sim) ui.sim = { hours: s.hours, gas: s.gas, debtPayment: monthlyDebtDue(), other: s.other };
+    if (!ui.sim) ui.sim = { hours: s.hours, gas: s.gas, debtPayment: monthlyDebtDue(), other: s.other, save: s.save };
     var p = ui.sim;
     function sl(id, label, min, max, step, val, unit) {
       return '<div class="slider"><div class="slider-top"><label for="' + id + '">' + label + '</label><b class="num" id="' + id + '-v"></b></div><input type="range" id="' + id + '" min="' + min + '" max="' + max + '" step="' + step + '" value="' + val + '" data-unit="' + unit + '"></div>';
@@ -790,20 +816,22 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
         sl("sim-gas", t("sl_gas"), 0, 150, 5, p.gas, "chf") +
         sl("sim-debt", t("sl_debt"), 0, 500, 10, p.debtPayment, "chf") +
         sl("sim-other", t("sl_other"), 0, 300, 5, p.other, "chf") +
+        '<div class="save-slider">' + sl("sim-save", t("sl_save"), 0, 400, 5, p.save, "chf") + '</div>' +
       '</section>' +
       '<section class="card" id="sim-out"></section>' +
-      '<section class="card"><h2>' + t("next12") + '</h2><div id="sim-chart"></div>' +
-        '<div class="row" style="gap:16px;font-size:13px;flex-wrap:wrap"><span class="row" style="gap:6px"><span style="width:10px;height:10px;border-radius:3px;background:var(--good)"></span>' + t("myMoney") + '</span><span class="row" style="gap:6px"><span style="width:10px;height:10px;border-radius:3px;background:var(--bad)"></span>' + t("debtLeftLbl") + '</span><span class="row" style="gap:6px"><span style="width:14px;border-top:2px dashed var(--warn)"></span>' + esc(goalName()) + '</span></div>' +
+      '<section class="card"><div class="row between"><h2>' + t("next12") + '</h2></div>' +
+        '<div class="chart-key"><span><i class="k-bar"></i>' + t("savingsPot") + '</span><span><i class="k-line"></i>' + t("debtLeftLbl") + '</span><span><i class="k-dash"></i>' + esc(goalName()) + '</span></div>' +
+        '<div id="sim-chart"></div><div id="sim-table"></div>' +
       '</section>' +
-      (ui.viewing ? "" : '<button class="btn ghost" id="sim-save">' + t("useBudget") + '</button>');
+      (ui.viewing ? "" : '<button class="btn ghost" id="sim-save-btn">' + t("useBudget") + '</button>');
   }
   function readSim() {
     var g = function (id) { return Number(document.getElementById(id).value); };
-    ui.sim = { hours: g("sim-hours"), gas: g("sim-gas"), debtPayment: g("sim-debt"), other: g("sim-other") };
+    ui.sim = { hours: g("sim-hours"), gas: g("sim-gas"), debtPayment: g("sim-debt"), other: g("sim-other"), save: g("sim-save") };
   }
   function updatePlan() {
     var s = state.s, p = ui.sim;
-    ["sim-hours", "sim-gas", "sim-debt", "sim-other"].forEach(function (id) {
+    ["sim-hours", "sim-gas", "sim-debt", "sim-other", "sim-save"].forEach(function (id) {
       var el = document.getElementById(id);
       document.getElementById(id + "-v").textContent = el.dataset.unit === "h" ? el.value + " h = CHF " + chf0(el.value * s.rate) : "CHF " + el.value;
     });
@@ -811,43 +839,56 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
     var inc = s.allowance + p.hours * s.rate;
     var pay = Math.min(p.debtPayment, dl);
     var out = s.parking + p.gas + p.other + pay;
-    var left = inc - out;
-    var sim = simulate({ allowance: s.allowance, rate: s.rate, parking: s.parking, gas: p.gas, other: p.other, debtPayment: p.debtPayment, hours: p.hours, goal: s.goalAmount }, 60);
+    var free = inc - out - p.save;
+    var sim = simulate({ allowance: s.allowance, rate: s.rate, parking: s.parking, gas: p.gas, other: p.other, debtPayment: p.debtPayment, hours: p.hours, save: p.save, goal: s.goalAmount }, 60);
     var g = esc(goalName()), gn = chf0(s.goalAmount);
     var debtLine = dl <= 0 ? t("noDebtLeft") : p.debtPayment <= 0 ? t("noPay", { n: chf0(dl) }) : sim.debtFree !== null ? t("debtFreeIn", { m: monthsTxt(sim.debtFree), d: monthName(sim.debtFree) }) : t("tooLong");
-    var goalLine = sim.goalAt === 0 ? t("goalHave", { g: g, n: gn }) : sim.goalAt !== null ? t("goalIn", { g: g, n: gn, m: monthsTxt(sim.goalAt) }) : t("goalNo", { g: g, n: gn });
+    var goalLine = p.save <= 0 ? t("goalNoSave", { g: g }) : sim.goalAt !== null ? t("goalIn", { g: g, n: gn, m: monthsTxt(sim.goalAt) }) : t("goalNo", { g: g, n: gn });
     document.getElementById("sim-out").innerHTML =
-      '<div class="stats"><div class="stat"><span>' + t("moneyIn") + '</span><b class="num" style="color:var(--good)">' + chf0(inc) + '</b></div><div class="stat"><span>' + t("moneyOut") + '</span><b class="num">' + chf0(out) + '</b></div><div class="stat"><span>' + (left >= 0 ? t("saved") : t("missing")) + '</span><b class="num" style="color:' + (left >= 0 ? 'var(--good)' : 'var(--bad)') + '">' + chf0(Math.abs(left)) + '</b></div></div>' +
-      (left < 0 ? '<div class="callout" style="background:color-mix(in srgb,var(--bad) 16%,var(--surface))">' + t("overspend", { n: chf0(-left), h: Math.ceil(-left / s.rate) }) + '</div>' : "") +
+      '<div class="flow">' +
+        flowRow(t("moneyIn"), inc, "var(--good)", "+") +
+        flowRow(t("moneyOut"), out, "var(--ink)", "−") +
+        flowRow(t("toSavings"), p.save, "var(--c-save)", "−") +
+        '<div class="flow-row total"><span>' + (free >= 0 ? t("freeLeft") : t("missing")) + '</span><b class="num" style="color:' + (free >= 0 ? "var(--good)" : "var(--bad)") + '">CHF ' + chf0(Math.abs(free)) + '</b></div>' +
+      '</div>' +
+      (free < 0 ? '<div class="callout" style="background:color-mix(in srgb,var(--bad) 16%,var(--surface))">' + t("overspend", { n: chf0(-free), h: Math.ceil(-free / s.rate) }) + '</div>' : "") +
       '<div class="plan-lines"><p>' + debtLine + '</p><p>' + goalLine + '</p></div>';
-    document.getElementById("sim-chart").innerHTML = chartSvg(sim.rows.slice(0, 13), s.goalAmount);
+    var rows = sim.rows.slice(0, 13);
+    document.getElementById("sim-chart").innerHTML = chartSvg(rows, s.goalAmount, sim);
+    var pick = [3, 6, 9, 12];
+    document.getElementById("sim-table").innerHTML = '<div class="ftable"><div class="fr fh"><span></span><span>' + t("savingsPot") + '</span><span>' + t("debtLeftLbl") + '</span><span>' + t("allMoneyShort") + '</span></div>' +
+      pick.map(function (m) { var r = rows[m]; return '<div class="fr"><span>' + shortMonth(m) + ' ' + monthYear(m) + '</span><b class="num" style="color:var(--c-save)">' + chf0(r.pot) + '</b><b class="num" style="color:var(--bad)">' + chf0(r.debt) + '</b><b class="num">' + chf0(r.total) + '</b></div>'; }).join("") + '</div>';
   }
-  function chartSvg(rows, goal) {
-    var W = 340, H = 190, Lm = 40, R = 10, T = 12, B = 24;
-    var vals = rows.map(function (r) { return r.savings; }).concat(rows.map(function (r) { return r.debt; }), [goal, 0]);
-    var min = Math.min.apply(null, vals), max = Math.max.apply(null, vals);
-    var step = niceStep((max - min) / 4);
-    min = Math.floor(min / step) * step; max = Math.ceil(max / step) * step;
-    if (max === min) max = min + step;
-    var x = function (i) { return Lm + i * (W - Lm - R) / (rows.length - 1); };
-    var y = function (v) { return T + (max - v) / (max - min) * (H - T - B); };
+  function flowRow(label, v, color, sign) { return '<div class="flow-row"><span>' + label + '</span><b class="num" style="color:' + color + '">' + sign + ' CHF ' + chf0(v) + '</b></div>'; }
+  function monthYear(offset) { var d = new Date(); d.setDate(1); d.setMonth(d.getMonth() + offset); return String(d.getFullYear()).slice(2); }
+  function chartSvg(rows, goal, sim) {
+    var W = 340, H = 210, Lm = 38, R = 8, T = 18, B = 24;
+    var vals = rows.map(function (r) { return r.pot; }).concat(rows.map(function (r) { return r.debt; }), [goal, 0]);
+    var max = Math.max.apply(null, vals), step = niceStep(max / 4);
+    max = Math.ceil(max / step) * step || step;
+    var n = rows.length, slot = (W - Lm - R) / n;
+    var cx = function (i) { return Lm + slot * i + slot / 2; };
+    var y = function (v) { return T + (max - v) / max * (H - T - B); };
     var g = "";
-    for (var v = min; v <= max + 0.001; v += step) {
+    for (var v = 0; v <= max + 0.001; v += step) {
       g += '<line x1="' + Lm + '" x2="' + (W - R) + '" y1="' + y(v) + '" y2="' + y(v) + '" stroke="var(--line)" stroke-width="1"/>';
       g += '<text x="' + (Lm - 6) + '" y="' + (y(v) + 3) + '" text-anchor="end">' + chf0(v) + '</text>';
     }
-    rows.forEach(function (r, i) { if (i % 2 === 0) g += '<text x="' + x(i) + '" y="' + (H - 6) + '" text-anchor="middle">' + (i === 0 ? t("now") : shortMonth(i)) + '</text>'; });
-    function path(key) { return rows.map(function (r, i) { return (i ? "L" : "M") + x(i).toFixed(1) + " " + y(r[key]).toFixed(1); }).join(" "); }
-    var area = path("savings") + " L" + x(rows.length - 1) + " " + y(Math.max(min, 0)) + " L" + x(0) + " " + y(Math.max(min, 0)) + " Z";
-    var last = rows[rows.length - 1];
-    return '<svg class="chart" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + t("chartLabel") + '">' + g +
-      (goal <= max ? '<line x1="' + Lm + '" x2="' + (W - R) + '" y1="' + y(goal) + '" y2="' + y(goal) + '" stroke="var(--warn)" stroke-width="1.5" stroke-dasharray="4 4"/>' : "") +
-      '<path d="' + area + '" fill="var(--good)" fill-opacity=".12"/>' +
-      '<path d="' + path("debt") + '" fill="none" stroke="var(--bad)" stroke-width="2.5" stroke-linejoin="round"/>' +
-      '<path d="' + path("savings") + '" fill="none" stroke="var(--good)" stroke-width="2.5" stroke-linejoin="round"/>' +
-      '<circle cx="' + x(rows.length - 1) + '" cy="' + y(last.savings) + '" r="4" fill="var(--good)"/>' +
-      '<text x="' + (x(rows.length - 1) - 6) + '" y="' + (y(last.savings) - 8) + '" text-anchor="end" style="fill:var(--ink);font-weight:700">' + chf0(last.savings) + '</text>' +
-      '</svg>';
+    var bw = Math.max(6, slot * 0.62);
+    rows.forEach(function (r, i) {
+      var top = y(r.pot), h = y(0) - top;
+      if (h > 0.5) g += '<rect x="' + (cx(i) - bw / 2) + '" y="' + top + '" width="' + bw + '" height="' + h + '" rx="3" fill="var(--c-save)"' + (sim.goalAt !== null && i >= sim.goalAt ? '' : ' fill-opacity=".75"') + '/>';
+      if (i % 3 === 0 || i === n - 1) g += '<text x="' + cx(i) + '" y="' + (H - 7) + '" text-anchor="middle">' + (i === 0 ? t("now") : shortMonth(i)) + '</text>';
+    });
+    if (goal <= max) g += '<line x1="' + Lm + '" x2="' + (W - R) + '" y1="' + y(goal) + '" y2="' + y(goal) + '" stroke="var(--warn)" stroke-width="1.5" stroke-dasharray="5 4"/><text x="' + (Lm + 4) + '" y="' + (y(goal) - 5) + '" text-anchor="start" style="fill:var(--warn);font-weight:700">' + chf0(goal) + '</text>';
+    var hasDebt = rows.some(function (r) { return r.debt > 0; });
+    if (hasDebt) {
+      g += '<path d="' + rows.map(function (r, i) { return (i ? "L" : "M") + cx(i).toFixed(1) + " " + y(r.debt).toFixed(1); }).join(" ") + '" fill="none" stroke="var(--bad)" stroke-width="2.5" stroke-linejoin="round"/>';
+      rows.forEach(function (r, i) { if (r.debt > 0 || i === sim.debtFree) g += '<circle cx="' + cx(i) + '" cy="' + y(r.debt) + '" r="2.6" fill="var(--bad)"/>'; });
+    }
+    var last = rows[n - 1];
+    if (last.pot > 0) g += '<text x="' + cx(n - 1) + '" y="' + (y(last.pot) - 5) + '" text-anchor="end" style="fill:var(--ink);font-weight:700">' + chf0(last.pot) + '</text>';
+    return '<svg class="chart" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + t("chartLabel") + '">' + g + '</svg>';
   }
   function niceStep(raw) {
     if (raw <= 0) return 50;
@@ -1103,13 +1144,9 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
     if (id === "sync-remove") { own.syncUrl = ""; own.syncAt = 0; persist(); render(); return; }
     if (id === "share-parent") return shareParent();
     if (id === "report-open") { try { openReport(JSON.parse(localStorage.getItem(KEY + "-report"))); } catch (e) {} return; }
-    if (id === "sim-save") {
-      var p = ui.sim, due = monthlyDebtDue();
-      state.s.hours = p.hours; state.s.gas = p.gas; state.s.other = p.other;
-      if (due > 0 && Math.abs(p.debtPayment - due) > 0.01) {
-        var f = p.debtPayment / due;
-        openDebts().forEach(function (d) { d.monthly = Math.max(0, Math.round(d.monthly * f / 5) * 5); });
-      }
+    if (id === "sim-save-btn") {
+      var p = ui.sim;
+      state.s.hours = p.hours; state.s.gas = p.gas; state.s.other = p.other; state.s.save = p.save;
       save(); toast(t("budgetUpdated")); return;
     }
     if (id === "set-save") return saveSettings();
