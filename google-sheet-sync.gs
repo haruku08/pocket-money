@@ -12,9 +12,9 @@
  */
 
 var COLS = ['ID', 'Date', 'Type', 'What / note', 'Account', 'Amount (CHF)', 'Balance change', 'Hours', 'Logged at', 'Status', 'Approved', 'Parent note'];
-var DATA_COLS = 10;   // ID .. Status are written by the app
-var APPROVED_COL = 11;
-var NOTE_COL = 12;
+var dataCols = 10;   // ID .. Status are written by the app
+var approvedCol = 11;
+var noteCol = 12;
 
 function doPost(e) {
   var data = JSON.parse(e.postData.contents);
@@ -88,7 +88,7 @@ function writeEntries(sh, d) {
     var vals = [id, r[1], r[2], r[3], r[4], r[5], r[6], r[7], r[8] ? new Date(r[8]) : '', r[9]];
     if (rowOf[id] !== undefined) {
       var cur = existing[rowOf[id]];
-      for (var c = 0; c < DATA_COLS; c++) cur[c] = vals[c];
+      for (var c = 0; c < dataCols; c++) cur[c] = vals[c];
     } else {
       toAppend.push(vals.concat([false, '']));
     }
@@ -100,14 +100,14 @@ function writeEntries(sh, d) {
     }
   });
 
-  if (existing.length) sh.getRange(2, 1, existing.length, DATA_COLS).setValues(existing.map(function (r) { return r.slice(0, DATA_COLS); }));
+  if (existing.length) sh.getRange(2, 1, existing.length, dataCols).setValues(existing.map(function (r) { return r.slice(0, dataCols); }));
   if (toAppend.length) sh.getRange(last + 1, 1, toAppend.length, COLS.length).setValues(toAppend);
 
   var n = sh.getLastRow() - 1;
   if (n > 0) {
     var body = sh.getRange(2, 1, n, COLS.length);
     body.sort([{ column: 2, ascending: false }, { column: 9, ascending: false }]);
-    sh.getRange(2, APPROVED_COL, n, 1).insertCheckboxes();
+    sh.getRange(2, approvedCol, n, 1).insertCheckboxes();
     sh.getRange(2, 6, n, 2).setNumberFormat('+#,##0.00;-#,##0.00;0.00');
     sh.getRange(2, 9, n, 1).setNumberFormat('dd.mm.yyyy hh:mm');
     var all = body.getValues();
@@ -124,7 +124,7 @@ function writeEntries(sh, d) {
   var out = {};
   if (n > 0) {
     sh.getRange(2, 1, n, COLS.length).getValues().forEach(function (r) {
-      if (r[0] && (r[APPROVED_COL - 1] === true || r[NOTE_COL - 1])) out[r[0]] = { a: r[APPROVED_COL - 1] === true, n: String(r[NOTE_COL - 1] || '') };
+      if (r[0] && (r[approvedCol - 1] === true || r[noteCol - 1])) out[r[0]] = { a: r[approvedCol - 1] === true, n: String(r[noteCol - 1] || '') };
     });
   }
   return out;
