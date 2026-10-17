@@ -1,5 +1,5 @@
 /**
- * Pocket Money → Google Sheet live sync (version 2).
+ * Pocket Money → Google Sheet live sync (version 3).
  *
  * Paste this into Extensions → Apps Script of your Google Sheet,
  * then Deploy → Manage deployments → edit → Version: New version → Deploy
@@ -17,23 +17,32 @@ var approvedCol = 11;
 var noteCol = 12;
 
 function doPost(e) {
-  var data = JSON.parse(e.postData.contents);
   var lock = LockService.getScriptLock();
-  lock.waitLock(10000);
-  var approvals;
   try {
+    lock.waitLock(10000);
+    var data = JSON.parse(e.postData.contents);
     var ss = SpreadsheetApp.getActiveSpreadsheet();
     writeSummary(getSheet(ss, 'Summary'), data);
-    approvals = writeEntries(getSheet(ss, 'Entries'), data);
+    var approvals = writeEntries(getSheet(ss, 'Entries'), data);
+    return json({ ok: true, approvals: approvals });
+  } catch (err) {
+    // Write the problem into a "Sync log" tab so it is easy to see what went wrong
+    try {
+      var log = getSheet(SpreadsheetApp.getActiveSpreadsheet(), 'Sync log');
+      log.appendRow([new Date(), String(err && err.message || err), String(err && err.stack || '')]);
+    } catch (ignore) {}
+    return json({ ok: false, error: String(err && err.message || err) });
   } finally {
-    lock.releaseLock();
+    try { lock.releaseLock(); } catch (ignore) {}
   }
-  return ContentService.createTextOutput(JSON.stringify({ ok: true, approvals: approvals }))
-    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function json(obj) {
+  return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
 }
 
 function doGet() {
-  return ContentService.createTextOutput('Pocket Money sync is running (v2).');
+  return ContentService.createTextOutput('Pocket Money sync is running (v3).');
 }
 
 function getSheet(ss, name) {
@@ -83,6 +92,7 @@ function writeEntries(sh, d) {
   var seen = {};
   var toAppend = [];
   d.entries.forEach(function (r) {
+    if (!r || r.length < 10) return; // skip data from an old app version
     var id = r[0];
     seen[id] = true;
     var vals = [id, r[1], r[2], r[3], r[4], r[5], r[6], r[7], r[8] ? new Date(r[8]) : '', r[9]];

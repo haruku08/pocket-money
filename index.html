@@ -294,7 +294,7 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
       sendParent: "Send to parent", linkCopied: "Link copied. Paste it in WhatsApp.", shareText: "{name}: CHF {total} on my accounts, CHF {debt} debts left. All my entries:",
       linkHere: "Copy this link and send it:", viewing: "{name}'s money", sentAt: "Sent {d} · read only", closeView: "Close",
       lastReport: "Last report from {name}", openReport: "Open",
-      syncTitle: "Live sync", syncHint: "Your parent set up a Google Sheet. Paste the sync link here once, and every entry is sent there automatically.", syncUrl: "Sync link", syncNow: "Send now", syncSaved: "Sync link saved", syncOff: "Not connected", syncOk: "Last sent {d}", syncFail: "Could not send (no internet?). It tries again with the next entry.", syncBad: "That does not look like a Google sync link", syncRemove: "Disconnect", syncConnected: "Live sync connected", approved: "Approved", approvedLocked: "Approved entries can't be deleted", syncSheet: "The Sheet did not answer. Ask your parent to check the script deployment.", syncUnknown: "Sent, but the Sheet did not confirm it.",
+      syncTitle: "Live sync", syncHint: "Your parent set up a Google Sheet. Paste the sync link here once, and every entry is sent there automatically.", syncUrl: "Sync link", syncNow: "Send now", syncSaved: "Sync link saved", syncOff: "Not connected", syncOk: "Last sent {d}", syncFail: "Could not send (no internet?). It tries again with the next entry.", syncBad: "That does not look like a Google sync link", syncRemove: "Disconnect", syncConnected: "Live sync connected", approved: "Approved", approvedLocked: "Approved entries can't be deleted", syncSheet: "The Sheet did not answer. Ask your parent to check the script deployment.", syncUnknown: "Sent, but the Sheet did not confirm it.", syncError: "The Sheet reported a problem: {m}",
       installTitle: "Install as app", installHint: "Put the app on your home screen. It opens like a normal app and also works without internet.", installBtn: "Install app", installIos: "Tap the Share button at the bottom of Safari, then \"Add to Home Screen\".", installOther: "Open the browser menu (⋮) and tap \"Install app\" or \"Add to Home screen\".", installLater: "Later",
       newEntry: "New entry", close: "Close", hoursWorked: "Hours worked", hoursEx: "e.g. 4", amount: "Amount", balanceShown: "Balance shown in your app",
       earned: "Earned", account: "Account", date: "Date", noteOpt: "Note (optional)", noteEx: "e.g. Kebab with friends", saveEntry: "Save entry",
@@ -352,7 +352,7 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
       sendParent: "An Eltern senden", linkCopied: "Link kopiert. Füge ihn in WhatsApp ein.", shareText: "{name}: CHF {total} auf den Konten, noch CHF {debt} Schulden. Alle Einträge:",
       linkHere: "Kopiere diesen Link und schick ihn:", viewing: "Geld von {name}", sentAt: "Gesendet {d} · nur ansehen", closeView: "Schliessen",
       lastReport: "Letzter Bericht von {name}", openReport: "Öffnen",
-      syncTitle: "Live-Sync", syncHint: "Deine Eltern haben ein Google Sheet eingerichtet. Füge den Sync-Link einmal hier ein, dann wird jeder Eintrag automatisch dorthin geschickt.", syncUrl: "Sync-Link", syncNow: "Jetzt senden", syncSaved: "Sync-Link gespeichert", syncOff: "Nicht verbunden", syncOk: "Zuletzt gesendet {d}", syncFail: "Senden ging nicht (kein Internet?). Es klappt beim nächsten Eintrag wieder.", syncBad: "Das ist kein Google-Sync-Link", syncRemove: "Trennen", syncConnected: "Live-Sync verbunden", approved: "Bestätigt", approvedLocked: "Bestätigte Einträge kann man nicht löschen", syncSheet: "Das Sheet hat nicht geantwortet. Deine Eltern sollen das Skript prüfen.", syncUnknown: "Gesendet, aber das Sheet hat es nicht bestätigt.",
+      syncTitle: "Live-Sync", syncHint: "Deine Eltern haben ein Google Sheet eingerichtet. Füge den Sync-Link einmal hier ein, dann wird jeder Eintrag automatisch dorthin geschickt.", syncUrl: "Sync-Link", syncNow: "Jetzt senden", syncSaved: "Sync-Link gespeichert", syncOff: "Nicht verbunden", syncOk: "Zuletzt gesendet {d}", syncFail: "Senden ging nicht (kein Internet?). Es klappt beim nächsten Eintrag wieder.", syncBad: "Das ist kein Google-Sync-Link", syncRemove: "Trennen", syncConnected: "Live-Sync verbunden", approved: "Bestätigt", approvedLocked: "Bestätigte Einträge kann man nicht löschen", syncSheet: "Das Sheet hat nicht geantwortet. Deine Eltern sollen das Skript prüfen.", syncUnknown: "Gesendet, aber das Sheet hat es nicht bestätigt.", syncError: "Das Sheet meldet ein Problem: {m}",
       installTitle: "Als App installieren", installHint: "Leg die App auf deinen Homescreen. Sie öffnet sich wie eine normale App und funktioniert auch ohne Internet.", installBtn: "App installieren", installIos: "Tippe in Safari unten auf Teilen und dann auf \"Zum Home-Bildschirm\".", installOther: "Öffne das Browser-Menü (⋮) und tippe auf \"App installieren\" oder \"Zum Startbildschirm hinzufügen\".", installLater: "Später",
       newEntry: "Neuer Eintrag", close: "Schliessen", hoursWorked: "Gearbeitete Stunden", hoursEx: "z.B. 4", amount: "Betrag", balanceShown: "Kontostand in deiner App",
       earned: "Verdient", account: "Konto", date: "Datum", noteOpt: "Notiz (optional)", noteEx: "z.B. Kebab mit Kollegen", saveEntry: "Eintrag speichern",
@@ -466,7 +466,7 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
     if (!own.syncUrl) return;
     var body = JSON.stringify(syncPayload());
     var ok = function () { own.syncAt = Date.now(); own.syncErr = false; persist(); if (manual) toast(t("syncOk", { d: fmtTime(own.syncAt) })); refreshSync(); };
-    var fail = function (kind) { own.syncErr = kind; persist(); if (manual) toast(kind === "sheet" ? t("syncSheet") : t("syncFail")); refreshSync(); };
+    var fail = function (kind) { own.syncErr = kind; persist(); if (manual) toast(kind === "sheet" ? t("syncSheet") : kind === "error" ? t("syncError", { m: own.syncErrMsg || "" }) : t("syncFail")); refreshSync(); };
     // Readable request first, so we know the Sheet really answered "ok"
     fetch(own.syncUrl, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: body })
       .then(function (r) { return r.text(); })
@@ -474,6 +474,7 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
         txt = String(txt).trim();
         if (txt === "ok") return ok();
         var res; try { res = JSON.parse(txt); } catch (e) { return fail("sheet"); }
+        if (res && res.ok === false && res.error) { own.syncErrMsg = String(res.error).slice(0, 160); return fail("error"); }
         if (!res || !res.ok) return fail("sheet");
         applyApprovals(res.approvals || {}); ok();
       })
@@ -494,7 +495,7 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
   }
   function persist() { try { localStorage.setItem(KEY, JSON.stringify(own)); } catch (e) {} }
   function fmtTime(ts) { return new Date(ts).toLocaleString(loc(), { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }); }
-  function syncStatus() { return !own.syncUrl ? t("syncOff") : own.syncErr === "sheet" ? t("syncSheet") : own.syncErr === "unknown" ? t("syncUnknown") : own.syncErr ? t("syncFail") : own.syncAt ? t("syncOk", { d: fmtTime(own.syncAt) }) : ""; }
+  function syncStatus() { return !own.syncUrl ? t("syncOff") : own.syncErr === "sheet" ? t("syncSheet") : own.syncErr === "error" ? t("syncError", { m: own.syncErrMsg || "" }) : own.syncErr === "unknown" ? t("syncUnknown") : own.syncErr ? t("syncFail") : own.syncAt ? t("syncOk", { d: fmtTime(own.syncAt) }) : ""; }
   // ---------- install as app ----------
   var installEvt = null;
   window.addEventListener("beforeinstallprompt", function (e) { e.preventDefault(); installEvt = e; if (!ui.viewing && (ui.tab === "home" || ui.tab === "settings")) render(); });
