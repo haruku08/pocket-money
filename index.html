@@ -294,7 +294,7 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
       sendParent: "Send to parent", linkCopied: "Link copied. Paste it in WhatsApp.", shareText: "{name}: CHF {total} on my accounts, CHF {debt} debts left. All my entries:",
       linkHere: "Copy this link and send it:", viewing: "{name}'s money", sentAt: "Sent {d} · read only", closeView: "Close",
       lastReport: "Last report from {name}", openReport: "Open",
-      syncTitle: "Live sync", syncHint: "Your parent set up a Google Sheet. Paste the sync link here once, and every entry is sent there automatically.", syncUrl: "Sync link", syncNow: "Send now", syncSaved: "Sync link saved", syncOff: "Not connected", syncOk: "Last sent {d}", syncFail: "Could not send (no internet?). It tries again with the next entry.", syncBad: "That does not look like a Google sync link", syncRemove: "Disconnect", syncConnected: "Live sync connected", approved: "Approved", approvedLocked: "Approved entries can't be deleted", syncSheet: "The Sheet did not answer. Ask your parent to check the script deployment.", syncUnknown: "Sent, but the Sheet did not confirm it.", syncError: "The Sheet reported a problem: {m}",
+      syncTitle: "Live sync", syncHint: "Your parent set up a Google Sheet. Paste the sync link here once, and every entry is sent there automatically.", syncUrl: "Sync link", syncNow: "Send now", syncSaved: "Sync link saved", syncOff: "Not connected", syncOk: "Last sent {d}", syncFail: "Could not send (no internet?). It tries again with the next entry.", syncBad: "That does not look like a Google sync link", syncRemove: "Disconnect", syncConnected: "Live sync connected", approved: "Approved", approvedLocked: "Approved entries can't be deleted", debtsByParent: "Debts are managed by your parent in the Google Sheet.", syncSheet: "The Sheet did not answer. Ask your parent to check the script deployment.", syncUnknown: "Sent, but the Sheet did not confirm it.", syncError: "The Sheet reported a problem: {m}",
       installTitle: "Install as app", installHint: "Put the app on your home screen. It opens like a normal app and also works without internet.", installBtn: "Install app", installIos: "Tap the Share button at the bottom of Safari, then \"Add to Home Screen\".", installOther: "Open the browser menu (⋮) and tap \"Install app\" or \"Add to Home screen\".", installLater: "Later",
       newEntry: "New entry", close: "Close", hoursWorked: "Hours worked", hoursEx: "e.g. 4", amount: "Amount", balanceShown: "Balance shown in your app",
       earned: "Earned", account: "Account", date: "Date", noteOpt: "Note (optional)", noteEx: "e.g. Kebab with friends", saveEntry: "Save entry",
@@ -352,7 +352,7 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
       sendParent: "An Eltern senden", linkCopied: "Link kopiert. Füge ihn in WhatsApp ein.", shareText: "{name}: CHF {total} auf den Konten, noch CHF {debt} Schulden. Alle Einträge:",
       linkHere: "Kopiere diesen Link und schick ihn:", viewing: "Geld von {name}", sentAt: "Gesendet {d} · nur ansehen", closeView: "Schliessen",
       lastReport: "Letzter Bericht von {name}", openReport: "Öffnen",
-      syncTitle: "Live-Sync", syncHint: "Deine Eltern haben ein Google Sheet eingerichtet. Füge den Sync-Link einmal hier ein, dann wird jeder Eintrag automatisch dorthin geschickt.", syncUrl: "Sync-Link", syncNow: "Jetzt senden", syncSaved: "Sync-Link gespeichert", syncOff: "Nicht verbunden", syncOk: "Zuletzt gesendet {d}", syncFail: "Senden ging nicht (kein Internet?). Es klappt beim nächsten Eintrag wieder.", syncBad: "Das ist kein Google-Sync-Link", syncRemove: "Trennen", syncConnected: "Live-Sync verbunden", approved: "Bestätigt", approvedLocked: "Bestätigte Einträge kann man nicht löschen", syncSheet: "Das Sheet hat nicht geantwortet. Deine Eltern sollen das Skript prüfen.", syncUnknown: "Gesendet, aber das Sheet hat es nicht bestätigt.", syncError: "Das Sheet meldet ein Problem: {m}",
+      syncTitle: "Live-Sync", syncHint: "Deine Eltern haben ein Google Sheet eingerichtet. Füge den Sync-Link einmal hier ein, dann wird jeder Eintrag automatisch dorthin geschickt.", syncUrl: "Sync-Link", syncNow: "Jetzt senden", syncSaved: "Sync-Link gespeichert", syncOff: "Nicht verbunden", syncOk: "Zuletzt gesendet {d}", syncFail: "Senden ging nicht (kein Internet?). Es klappt beim nächsten Eintrag wieder.", syncBad: "Das ist kein Google-Sync-Link", syncRemove: "Trennen", syncConnected: "Live-Sync verbunden", approved: "Bestätigt", approvedLocked: "Bestätigte Einträge kann man nicht löschen", debtsByParent: "Schulden werden von deinen Eltern im Google Sheet verwaltet.", syncSheet: "Das Sheet hat nicht geantwortet. Deine Eltern sollen das Skript prüfen.", syncUnknown: "Gesendet, aber das Sheet hat es nicht bestätigt.", syncError: "Das Sheet meldet ein Problem: {m}",
       installTitle: "Als App installieren", installHint: "Leg die App auf deinen Homescreen. Sie öffnet sich wie eine normale App und funktioniert auch ohne Internet.", installBtn: "App installieren", installIos: "Tippe in Safari unten auf Teilen und dann auf \"Zum Home-Bildschirm\".", installOther: "Öffne das Browser-Menü (⋮) und tippe auf \"App installieren\" oder \"Zum Startbildschirm hinzufügen\".", installLater: "Später",
       newEntry: "Neuer Eintrag", close: "Schliessen", hoursWorked: "Gearbeitete Stunden", hoursEx: "z.B. 4", amount: "Betrag", balanceShown: "Kontostand in deiner App",
       earned: "Verdient", account: "Konto", date: "Datum", noteOpt: "Notiz (optional)", noteEx: "z.B. Kebab mit Kollegen", saveEntry: "Eintrag speichern",
@@ -458,6 +458,7 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
       total: st.accounts.reduce(function (x, a) { return x + a.balance; }, 0),
       accounts: st.accounts.map(function (a) { return [a.name, a.balance]; }),
       debts: st.debts.map(function (d) { return [dname(d), d.total, d.paid, Math.max(0, r2(d.total - d.paid)), d.monthly]; }),
+      debtList: st.debts.map(function (d) { return { id: d.id, name: dname(d), total: d.total, monthly: d.monthly, paid: d.paid }; }),
       budget: [["Allowance", st.s.allowance], ["Parking", st.s.parking], ["Gas budget", st.s.gas], ["Other spending budget", st.s.other], ["Pay per hour", st.s.rate]],
       entries: entries
     };
@@ -476,7 +477,9 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
         var res; try { res = JSON.parse(txt); } catch (e) { return fail("sheet"); }
         if (res && res.ok === false && res.error) { own.syncErrMsg = String(res.error).slice(0, 160); return fail("error"); }
         if (!res || !res.ok) return fail("sheet");
-        applyApprovals(res.approvals || {}); ok();
+        applyApprovals(res.approvals || {});
+        if (Array.isArray(res.debts)) applyDebts(res.debts);
+        ok();
       })
       .catch(function () {
         // Some browsers block reading the answer; send anyway without reading it
@@ -484,6 +487,27 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
           .then(function () { own.syncAt = Date.now(); own.syncErr = "unknown"; persist(); if (manual) toast(t("syncUnknown")); refreshSync(); })
           .catch(function () { fail("net"); });
       });
+  }
+  // Debts come from the parent's Google Sheet; the app keeps only how much was paid
+  function applyDebts(list) {
+    var byId = {}, changed = false, added = false;
+    own.debts.forEach(function (d) { byId[d.id] = d; });
+    var next = list.map(function (x) {
+      var cur = byId[x.id];
+      if (!cur) {
+        added = true;
+        own.entries.push({ id: uid(), ts: Date.now(), type: "newdebt", debtId: x.id, debtName: x.name, amount: r2(x.total), delta: 0, account: own.accounts[0].id, date: today(), note: x.name });
+        return { id: x.id, name: x.name, total: r2(x.total), monthly: r2(x.monthly), paid: 0 };
+      }
+      if (cur.name !== x.name || cur.total !== x.total || cur.monthly !== x.monthly) changed = true;
+      return { id: x.id, name: x.name, total: r2(x.total), monthly: r2(x.monthly), paid: cur.paid };
+    });
+    if (next.length !== own.debts.length) changed = true;
+    if (!changed && !added) return;
+    own.debts = next; if (!ui.viewing) state = own;
+    ui.sim = null; persist();
+    if (added) scheduleSync();
+    if (!ui.viewing && !layer.innerHTML) render();
   }
   function applyApprovals(map) {
     var changed = false;
@@ -561,6 +585,7 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
     if (i < 0) return true;
     var e = state.entries[i];
     if (e.approved) return "approved";
+    if (e.type === "newdebt") return "parent";
     if (e.type === "newdebt") {
       var hasPay = state.entries.some(function (x) { return x.type === "debt" && x.debtId === e.debtId; });
       if (hasPay) return false;
@@ -688,7 +713,7 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
           (dl > 0 ? '<p class="muted" style="font-size:13px">' + t("hoursOfWork", { h: Math.ceil(dl / state.s.rate * 10) / 10, r: state.s.rate }) + '</p>' : "") +
           '<div class="debt-list">' + debtRows + '</div>'
           : '<p class="muted">' + t("noDebts") + '</p>') +
-        (ro ? "" : '<button class="btn ghost small" id="debt-add" style="align-self:flex-start">+ ' + t("addDebt") + '</button>') +
+        '<p class="muted" style="font-size:12px">' + t("debtsByParent") + '</p>' +
       '</section>' +
       '<section class="card"><div class="row between"><h2>' + t("whereGoes", { n: chf0(s.allowance) }) + '</h2><span class="label">' + t("eachMonth") + '</span></div><div class="bar">' + bar + '</div><div class="legend">' + legend + '</div></section>' +
       '<section class="card"><h2>' + t("thisMonth") + '</h2>' +
@@ -726,7 +751,7 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
       '<div class="item-main"><div class="item-title">' + title + '</div><div class="item-sub">' + sub + '</div>' +
         (e.approved || e.parentNote ? '<div class="appr">' + (e.approved ? '<span class="tag good">✓ ' + t("approved") + '</span>' : "") + (e.parentNote ? '<span class="pnote">“' + esc(e.parentNote) + '”</span>' : "") + '</div>' : "") + '</div>' +
       '<div class="item-amt num ' + cls + '">' + amt + '</div>' +
-      (ui.viewing || e.approved ? "" : '<button class="del" data-del="' + e.id + '" aria-label="' + t("del") + '">×</button>') + '</div>';
+      (ui.viewing || e.approved || e.type === "newdebt" ? "" : '<button class="del" data-del="' + e.id + '" aria-label="' + t("del") + '">×</button>') + '</div>';
   }
 
   function viewLog() {
@@ -834,9 +859,7 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
     var s = state.s;
     function nf(id, label, val, step) { return '<div class="field"><label for="' + id + '">' + label + '</label><input type="number" inputmode="decimal" id="' + id + '" value="' + val + '" step="' + (step || 1) + '" min="0"></div>'; }
     var debts = state.debts.map(function (d) {
-      return '<div class="setup-debt" data-debt="' + d.id + '"><div class="field"><label for="dn-' + d.id + '">' + t("debtName") + '</label><input type="text" id="dn-' + d.id + '" value="' + esc(debtName(d)) + '" maxlength="30"></div>' +
-        '<div class="grid3">' + nf("dt-" + d.id, t("debtTotal"), d.total) + nf("dm-" + d.id, t("debtMonthly"), d.monthly) + '</div>' +
-        '<div class="row between" style="flex-wrap:wrap"><span class="muted" style="font-size:13px">' + t("paidSoFar", { n: chf(d.paid) }) + '</span><span class="rm-zone"><button class="btn danger small" data-rm="' + d.id + '">' + t("removeDebt") + '</button></span></div></div>';
+      return '<div class="legend-row"><span class="sw" style="background:var(--c-debt)"></span>' + esc(debtName(d)) + '<span class="amt num">' + t("leftOf", { l: chf(debtLeftOf(d)), t: chf0(d.total) }) + '</span></div>';
     }).join("");
     var report = null;
     try { report = JSON.parse(localStorage.getItem(KEY + "-report")); } catch (e) {}
@@ -855,7 +878,7 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
         nf("set-gas", t("f_gas"), s.gas) + nf("set-other", t("f_other"), s.other) +
         nf("set-rate", t("f_rate"), s.rate, 0.5) + nf("set-hours", t("f_hours"), s.hours) +
       '</div></section>' +
-      '<section class="card"><div class="row between"><h2>' + t("debts") + '</h2><button class="btn ghost small" id="debt-add">+ ' + t("addDebt") + '</button></div>' + (debts || '<p class="muted">' + t("noDebts") + '</p>') + '</section>' +
+      '<section class="card"><h2>' + t("debts") + '</h2>' + (debts ? '<div class="legend">' + debts + '</div>' : '<p class="muted">' + t("noDebts") + '</p>') + '<p class="muted" style="font-size:12px">' + t("debtsByParent") + '</p></section>' +
       '<section class="card"><h2>' + t("savingsGoal") + '</h2><div class="grid2">' +
         '<div class="field"><label for="set-goalName">' + t("whatFor") + '</label><input type="text" id="set-goalName" value="' + esc(goalName()) + '" maxlength="30"></div>' + nf("set-goalAmount", t("amountChf"), s.goalAmount) +
       '</div></section>' +
@@ -1045,7 +1068,7 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
     if ((b = ev.target.closest("[data-quick]"))) return openSheet(b.dataset.quick);
     if ((b = ev.target.closest("[data-act=balance]"))) return openSheet("balance", b.dataset.acct);
     if ((b = ev.target.closest("[data-del]"))) {
-      if (b.dataset.confirm) { var rr = removeEntry(b.dataset.del); if (rr === "approved") toast(t("approvedLocked")); else if (rr) { render(); toast(t("entryDeleted")); } else toast(t("deletePaymentsFirst")); }
+      if (b.dataset.confirm) { var rr = removeEntry(b.dataset.del); if (rr === "approved") toast(t("approvedLocked")); else if (rr === "parent") toast(t("debtsByParent")); else if (rr) { render(); toast(t("entryDeleted")); } else toast(t("deletePaymentsFirst")); }
       else { b.dataset.confirm = "1"; b.textContent = t("delQ"); b.style.fontSize = "12px"; b.style.color = "var(--bad)"; setTimeout(function () { if (b.isConnected) { delete b.dataset.confirm; b.textContent = "×"; b.style.fontSize = ""; b.style.color = ""; } }, 3000); }
       return;
     }

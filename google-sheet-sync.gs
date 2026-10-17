@@ -1,5 +1,5 @@
 /**
- * Pocket Money → Google Sheet live sync (version 3).
+ * Pocket Money → Google Sheet live sync (version 4).
  *
  * Paste this into Extensions → Apps Script of your Google Sheet,
  * then Deploy → Manage deployments → edit → Version: New version → Deploy
@@ -9,6 +9,10 @@
  * "Entries" keeps every entry ever logged, including deleted ones.
  * Tick "Approved" (and optionally write a "Parent note") and your son
  * sees it in his app the next time it syncs.
+ *
+ * "Debts" is managed by you: add a row (Debt, Total, Per month) and it
+ * appears in his app. Change Total or Per month any time. Delete a row
+ * to remove the debt. Paid and Left are filled in from his payments.
  */
 
 var COLS = ['ID', 'Date', 'Type', 'What / note', 'Account', 'Amount (CHF)', 'Balance change', 'Hours', 'Logged at', 'Status', 'Approved', 'Parent note'];
@@ -24,7 +28,8 @@ function doPost(e) {
     var ss = SpreadsheetApp.getActiveSpreadsheet();
     writeSummary(getSheet(ss, 'Summary'), data);
     var approvals = writeEntries(getSheet(ss, 'Entries'), data);
-    return json({ ok: true, approvals: approvals });
+    var debts = syncDebts(getSheet(ss, 'Debts'), data);
+    return json({ ok: true, approvals: approvals, debts: debts });
   } catch (err) {
     // Write the problem into a "Sync log" tab so it is easy to see what went wrong
     try {
@@ -42,7 +47,7 @@ function json(obj) {
 }
 
 function doGet() {
-  return ContentService.createTextOutput('Pocket Money sync is running (v3).');
+  return ContentService.createTextOutput('Pocket Money sync is running (v4).');
 }
 
 function getSheet(ss, name) {
@@ -137,5 +142,40 @@ function writeEntries(sh, d) {
       if (r[0] && (r[approvedCol - 1] === true || r[noteCol - 1])) out[r[0]] = { a: r[approvedCol - 1] === true, n: String(r[noteCol - 1] || '') };
     });
   }
+  return out;
+}
+
+// The parent manages debts here. Returns [{ id, name, total, monthly }] for the app.
+var DEBT_COLS = ['ID', 'Debt', 'Total (CHF)', 'Per month (CHF)', 'Paid (CHF)', 'Left (CHF)'];
+function syncDebts(sh, d) {
+  var app = d.debtList || [];
+  var paidOf = {};
+  app.forEach(function (x) { paidOf[x.id] = x.paid; });
+  if (sh.getLastRow() < 1 || sh.getRange(1, 1).getValue() !== 'ID') {
+    // First time: start the tab with the debts the app already has
+    sh.clear();
+    sh.getRange(1, 1, 1, DEBT_COLS.length).setValues([DEBT_COLS]).setFontWeight('bold');
+    sh.setFrozenRows(1);
+    sh.hideColumns(1);
+    if (app.length) sh.getRange(2, 1, app.length, 4).setValues(app.map(function (x) { return [x.id, x.name, x.total, x.monthly]; }));
+  }
+  var n = sh.getLastRow() - 1;
+  var out = [];
+  if (n > 0) {
+    var rows = sh.getRange(2, 1, n, DEBT_COLS.length).getValues();
+    rows.forEach(function (r, i) {
+      var name = String(r[1] || '').trim();
+      var total = Number(r[2]) || 0;
+      if (!name || total <= 0) return;
+      if (!r[0]) r[0] = 'd' + new Date().getTime().toString(36) + i;
+      var paid = Number(paidOf[r[0]]) || 0;
+      r[4] = paid;
+      r[5] = Math.max(0, Math.round((total - paid) * 100) / 100);
+      out.push({ id: String(r[0]), name: name, total: total, monthly: Number(r[3]) || 0 });
+    });
+    sh.getRange(2, 1, n, DEBT_COLS.length).setValues(rows);
+    sh.getRange(2, 3, n, 4).setNumberFormat('#,##0.00');
+  }
+  sh.autoResizeColumns(2, DEBT_COLS.length - 1);
   return out;
 }
