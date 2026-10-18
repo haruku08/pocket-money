@@ -1,0 +1,13 @@
+name: Check app version
+on: [push, pull_request]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: index.html and version.json must name the same version
+        run: |
+          app=$(grep -oE 'APP_VERSION = "[0-9.]+"' index.html | grep -oE '[0-9.]+')
+          json=$(node -p "require('./version.json').version")
+          echo "index.html: $app  version.json: $json"
+          test -n "$app" && test "$app" = "$json"
