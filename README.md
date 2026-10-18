@@ -17,6 +17,16 @@ Open the link in Safari (iPhone) or Chrome (Android) and use **Add to Home Scree
 
 `google-sheet-sync.gs` is a small Google Apps Script. Paste it into the Sheet (Extensions → Apps Script), deploy it as a web app (Execute as: Me, Who has access: Anyone), and paste the web app link into the app under **Setup → Live sync**. Every entry then shows up in the Sheet (deleted ones stay, crossed out). Tick **Approved** or write a **Parent note** and it shows up in the app. Debts are managed only in the Sheet's **Debts** tab.
 
+## Family sync (Supabase)
+
+Setup → **Family sync** connects the phones through the Supabase project "Haruku Apps" (schema `pocket_money`, set up by `supabase/001_pocket_money.sql`).
+
+- The parent taps **Are you the parent? → Create family** on their own phone. That phone becomes the parent view and shows a one-time code for the child's phone.
+- The child types the code in Setup → Family sync. From then on every entry is saved online, approvals and notes come back, and debts come from the parent.
+- The parent view shows the child's app read-only, with **Approve** and **Note** on each entry, deleted entries at the bottom of the log, and the debt list under Setup.
+
+The database only answers the `pm_*` functions, and each one checks the phone's own secret key. The Google Sheet sync keeps working next to it.
+
 ## Releasing a new version
 
 1. Change the app in `index.html`.

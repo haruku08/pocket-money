@@ -1,8 +1,8 @@
 {
-  "version": "1.7.0",
+  "version": "1.8.0",
   "date": "2026-10-18",
   "notes": {
-    "en": ["New in Setup: see the app version and update with one tap.", "Your data is saved automatically before every update."],
-    "de": ["Neu im Setup: App-Version sehen und mit einem Tipp aktualisieren.", "Deine Daten werden vor jedem Update automatisch gesichert."]
+    "en": ["New: Family sync in Setup. Your entries are saved online, so nothing is lost with a new phone.", "Approvals and debts now come straight from your parent's app."],
+    "de": ["Neu: Familien-Sync im Setup. Deine Einträge werden online gesichert, so geht mit einem neuen Handy nichts verloren.", "Bestätigungen und Schulden kommen jetzt direkt aus der App deiner Eltern."]
   }
 }
