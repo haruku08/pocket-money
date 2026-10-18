@@ -1,0 +1,8 @@
+{
+  "version": "1.7.0",
+  "date": "2026-10-18",
+  "notes": {
+    "en": ["New in Setup: see the app version and update with one tap.", "Your data is saved automatically before every update."],
+    "de": ["Neu im Setup: App-Version sehen und mit einem Tipp aktualisieren.", "Deine Daten werden vor jedem Update automatisch gesichert."]
+  }
+}

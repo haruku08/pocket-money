@@ -78,6 +78,8 @@ p { margin: 0; }
 .num { font-variant-numeric: tabular-nums; }
 .label { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); }
 .muted { color: var(--muted); }
+.notes { margin: 0; padding-left: 18px; font-size: 14px; display: flex; flex-direction: column; gap: 4px; }
+.upd-card { border: 2px solid var(--accent); }
 .row { display: flex; align-items: center; gap: 12px; }
 .between { justify-content: space-between; }
 .card { background: var(--surface); border-radius: var(--r); padding: 16px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 12px; min-width: 0; }
@@ -320,6 +322,7 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
       linkHere: "Copy this link and send it:", viewing: "{name}'s money", sentAt: "Sent {d} · read only", closeView: "Close",
       lastReport: "Last report from {name}", openReport: "Open",
       syncTitle: "Live sync", syncHint: "Your parent set up a Google Sheet. Paste the sync link here once, and every entry is sent there automatically.", syncUrl: "Sync link", syncNow: "Send now", syncSaved: "Sync link saved", syncOff: "Not connected", syncOk: "Last sent {d}", syncFail: "Could not send (no internet?). It tries again with the next entry.", syncBad: "That does not look like a Google sync link", syncRemove: "Disconnect", syncConnected: "Live sync connected", sl_save: "Put into savings", savingsPot: "Savings", toSavings: "Into savings", freeLeft: "Free to spend", allMoneyShort: "All money", debtFreeShort: "debt free", goalNoSave: "Move the savings slider to see when you reach <b>{g}</b>.", syncShare: "Send link to other phone", syncShareText: "Tap this link once to connect the app to the Google Sheet:", approved: "Approved", approvedLocked: "Approved entries can't be deleted", debtsByParent: "Debts are managed by your parent in the Google Sheet.", syncSheet: "The Sheet did not answer. Ask your parent to check the script deployment.", syncUnknown: "Sent, but the Sheet did not confirm it.", syncError: "The Sheet reported a problem: {m}",
+      updTitle: "App version & updates", updVersion: "Version {v} · {d}", updCheck: "Check for updates", updChecking: "Checking…", updLatest: "You have the newest version.", updAvail: "Update available: {v}", updNow: "Update now", updKeeps: "Keeps all your entries.", updOffline: "Could not check (no internet?).", updNew: "What's new in {v}", updGotIt: "Got it", updUndo: "Undo: use the data from before the update", updUndoHint: "Saved automatically before the update to {v}.", updUndone: "Data from before the update restored", updBanner: "A new version of the app is ready.", updLoading: "Updating…",
       installTitle: "Install as app", installHint: "Put the app on your home screen. It opens like a normal app and also works without internet.", installBtn: "Install app", installIos: "Tap the Share button at the bottom of Safari, then \"Add to Home Screen\".", installOther: "Open the browser menu (⋮) and tap \"Install app\" or \"Add to Home screen\".", installLater: "Later",
       newEntry: "New entry", close: "Close", hoursWorked: "Hours worked", hoursEx: "e.g. 4", amount: "Amount", balanceShown: "Balance shown in your app",
       earned: "Earned", account: "Account", date: "Date", noteOpt: "Note (optional)", noteEx: "e.g. Kebab with friends", saveEntry: "Save entry",
@@ -378,6 +381,7 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
       linkHere: "Kopiere diesen Link und schick ihn:", viewing: "Geld von {name}", sentAt: "Gesendet {d} · nur ansehen", closeView: "Schliessen",
       lastReport: "Letzter Bericht von {name}", openReport: "Öffnen",
       syncTitle: "Live-Sync", syncHint: "Deine Eltern haben ein Google Sheet eingerichtet. Füge den Sync-Link einmal hier ein, dann wird jeder Eintrag automatisch dorthin geschickt.", syncUrl: "Sync-Link", syncNow: "Jetzt senden", syncSaved: "Sync-Link gespeichert", syncOff: "Nicht verbunden", syncOk: "Zuletzt gesendet {d}", syncFail: "Senden ging nicht (kein Internet?). Es klappt beim nächsten Eintrag wieder.", syncBad: "Das ist kein Google-Sync-Link", syncRemove: "Trennen", syncConnected: "Live-Sync verbunden", sl_save: "Auf die Seite legen (Sparen)", savingsPot: "Erspartes", toSavings: "Ins Sparen", freeLeft: "Frei zum Ausgeben", allMoneyShort: "Ganzes Geld", debtFreeShort: "schuldenfrei", goalNoSave: "Schieb den Spar-Regler, um zu sehen, wann du <b>{g}</b> erreichst.", syncShare: "Link an anderes Handy senden", syncShareText: "Tippe einmal auf diesen Link, um die App mit dem Google Sheet zu verbinden:", approved: "Bestätigt", approvedLocked: "Bestätigte Einträge kann man nicht löschen", debtsByParent: "Schulden werden von deinen Eltern im Google Sheet verwaltet.", syncSheet: "Das Sheet hat nicht geantwortet. Deine Eltern sollen das Skript prüfen.", syncUnknown: "Gesendet, aber das Sheet hat es nicht bestätigt.", syncError: "Das Sheet meldet ein Problem: {m}",
+      updTitle: "App-Version & Updates", updVersion: "Version {v} · {d}", updCheck: "Nach Updates suchen", updChecking: "Suche…", updLatest: "Du hast die neuste Version.", updAvail: "Update verfügbar: {v}", updNow: "Jetzt aktualisieren", updKeeps: "Alle deine Einträge bleiben.", updOffline: "Prüfen ging nicht (kein Internet?).", updNew: "Neu in {v}", updGotIt: "Alles klar", updUndo: "Rückgängig: Daten von vor dem Update", updUndoHint: "Automatisch gespeichert vor dem Update auf {v}.", updUndone: "Daten von vor dem Update wiederhergestellt", updBanner: "Eine neue Version der App ist bereit.", updLoading: "Wird aktualisiert…",
       installTitle: "Als App installieren", installHint: "Leg die App auf deinen Homescreen. Sie öffnet sich wie eine normale App und funktioniert auch ohne Internet.", installBtn: "App installieren", installIos: "Tippe in Safari unten auf Teilen und dann auf \"Zum Home-Bildschirm\".", installOther: "Öffne das Browser-Menü (⋮) und tippe auf \"App installieren\" oder \"Zum Startbildschirm hinzufügen\".", installLater: "Später",
       newEntry: "Neuer Eintrag", close: "Schliessen", hoursWorked: "Gearbeitete Stunden", hoursEx: "z.B. 4", amount: "Betrag", balanceShown: "Kontostand in deiner App",
       earned: "Verdient", account: "Konto", date: "Datum", noteOpt: "Notiz (optional)", noteEx: "z.B. Kebab mit Kollegen", saveEntry: "Eintrag speichern",
@@ -462,6 +466,68 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
     if (ui.viewing) return;
     try { localStorage.setItem(KEY, JSON.stringify(own)); storageOk = true; } catch (e) { storageOk = false; }
     scheduleSync();
+  }
+
+  // ---------- app version & updates ----------
+  // When releasing: bump APP_VERSION, APP_DATE and NOTES here AND in version.json (a GitHub check compares them).
+  var APP_VERSION = "1.7.0", APP_DATE = "2026-10-18";
+  var NOTES = {
+    en: ["New in Setup: see the app version and update with one tap.", "Your data is saved automatically before every update."],
+    de: ["Neu im Setup: App-Version sehen und mit einem Tipp aktualisieren.", "Deine Daten werden vor jedem Update automatisch gesichert."]
+  };
+  var upd = { state: "idle", info: null, at: 0 };
+  function cmpVer(a, b) {
+    var x = String(a).split(".").map(Number), y = String(b).split(".").map(Number);
+    for (var i = 0; i < 3; i++) { var d = (x[i] || 0) - (y[i] || 0); if (d) return d > 0 ? 1 : -1; }
+    return 0;
+  }
+  function updRefresh() { if (!ui.viewing && !layer.innerHTML && (ui.tab === "home" || ui.tab === "settings")) render(); }
+  function checkUpdate(manual) {
+    if (!/^https?:$/.test(location.protocol)) return;
+    upd.state = "checking"; upd.at = Date.now(); if (manual) updRefresh();
+    fetch("version.json?t=" + Date.now(), { cache: "no-store" })
+      .then(function (r) { if (!r.ok) throw 0; return r.json(); })
+      .then(function (j) { upd.info = j; upd.state = cmpVer(j.version, APP_VERSION) > 0 ? "avail" : "latest"; })
+      .catch(function () { upd.state = "offline"; })
+      .then(function () { if (manual || upd.state === "avail") updRefresh(); });
+  }
+  function doUpdate() {
+    try { localStorage.setItem(KEY + "-preupdate", JSON.stringify({ from: APP_VERSION, to: upd.info && upd.info.version, at: Date.now(), data: own })); } catch (e) {}
+    upd.state = "loading"; updRefresh();
+    var reload = function () { location.reload(); };
+    var steps = [];
+    try { if (window.caches) steps.push(caches.keys().then(function (ks) { return Promise.all(ks.map(function (k) { return caches.delete(k); })); })); } catch (e) {}
+    try { if (navigator.serviceWorker) steps.push(navigator.serviceWorker.getRegistration().then(function (r) { return r && r.update(); })); } catch (e) {}
+    Promise.all(steps).then(reload, reload);
+    setTimeout(reload, 4000);
+  }
+  function preUpdate() { try { return JSON.parse(localStorage.getItem(KEY + "-preupdate")); } catch (e) { return null; } }
+  function notesList(n) { var l = (n && (n[lang] || n.en)) || []; return '<ul class="notes">' + l.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + "</ul>"; }
+  function updateBanner() {
+    if (ui.viewing) return "";
+    if (upd.state === "avail" || upd.state === "loading") {
+      return '<section class="card upd-card"><b>' + t("updBanner") + '</b>' + (upd.info ? '<span class="muted" style="font-size:13px">' + esc(t("updAvail", { v: upd.info.version })) + '</span>' : "") +
+        '<button class="btn small" id="upd-now"' + (upd.state === "loading" ? " disabled" : "") + '>' + t(upd.state === "loading" ? "updLoading" : "updNow") + '</button></section>';
+    }
+    if (own.seenVersion !== APP_VERSION) {
+      return '<section class="card upd-card"><b>' + esc(t("updNew", { v: APP_VERSION })) + '</b>' + notesList(NOTES) + '<button class="btn ghost small" id="upd-seen" style="align-self:flex-start">' + t("updGotIt") + '</button></section>';
+    }
+    return "";
+  }
+  function updateCard() {
+    var st = upd.state, pre = preUpdate(), msg = "";
+    if (st === "checking") msg = t("updChecking");
+    else if (st === "latest") msg = t("updLatest");
+    else if (st === "offline") msg = t("updOffline");
+    var avail = st === "avail" || st === "loading";
+    return '<section class="card"><h2>' + t("updTitle") + '</h2>' +
+      '<p class="muted" style="font-size:13px;margin:0">' + esc(t("updVersion", { v: APP_VERSION, d: new Date(APP_DATE).toLocaleDateString(loc(), { day: "numeric", month: "short", year: "numeric" }) })) + '</p>' +
+      (avail && upd.info ? '<div class="callout"><div style="display:flex;flex-direction:column;gap:8px"><b>' + esc(t("updAvail", { v: upd.info.version })) + '</b>' + notesList(upd.info.notes) +
+        '<button class="btn small" id="upd-now" style="align-self:flex-start"' + (st === "loading" ? " disabled" : "") + '>' + t(st === "loading" ? "updLoading" : "updNow") + '</button><span class="muted" style="font-size:12px">' + t("updKeeps") + '</span></div></div>'
+        : '<button class="btn ghost small" id="upd-check" style="align-self:flex-start">' + t("updCheck") + '</button>') +
+      (msg ? '<p class="muted" style="font-size:13px;margin:0">' + esc(msg) + '</p>' : "") +
+      (pre && pre.data ? '<div><button class="btn ghost small" id="upd-undo">' + t("updUndo") + '</button><p class="muted" style="font-size:12px;margin:6px 0 0">' + esc(t("updUndoHint", { v: pre.to || APP_VERSION })) + '</p></div>' : "") +
+      '</section>';
   }
   // ---------- live sync to the parent's Google Sheet (Apps Script web app) ----------
   var syncTimer = null;
@@ -678,7 +744,7 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
     if (ui.tab === "log") html = viewLog();
     else if (ui.tab === "plan") html = viewPlan();
     else if (ui.tab === "settings") html = viewSettings();
-    else html = viewHome();
+    else html = updateBanner() + viewHome();
     app.innerHTML = viewBanner() + html;
     if (ui.tab === "plan") updatePlan();
   }
@@ -904,7 +970,7 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
     }).join("");
     var report = null;
     try { report = JSON.parse(localStorage.getItem(KEY + "-report")); } catch (e) {}
-    return header(t("setup")) +
+    return header(t("setup")) + updateCard() +
       (report ? '<section class="card"><div class="row between"><h3>' + esc(t("lastReport", { name: report.name || "?" })) + '</h3><button class="btn small" id="report-open">' + t("openReport") + '</button></div><p class="muted" style="font-size:13px">' + new Date(report.at).toLocaleString(loc(), { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }) + '</p></section>' : "") +
       installBlock(false) +
       '<section class="card"><h2>' + t("syncTitle") + '</h2><p class="muted" style="font-size:13px">' + t("syncHint") + '</p>' +
@@ -1125,6 +1191,14 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
       ui.sim = null; save(); render(); toast(t("debtRemoved")); return;
     }
     if (ev.target.closest("[data-rm-no]")) { render(); return; }
+    if (id === "upd-now") return doUpdate();
+    if (id === "upd-check") return checkUpdate(true);
+    if (id === "upd-seen") { own.seenVersion = APP_VERSION; persist(); render(); return; }
+    if (id === "upd-undo") {
+      var pu = preUpdate();
+      if (pu && pu.data) { var keepUrl = own.syncUrl; own = state = normalize(pu.data); if (!own.syncUrl) own.syncUrl = keepUrl; own.seenVersion = APP_VERSION; save(); try { localStorage.removeItem(KEY + "-preupdate"); } catch (e) {} ui.sim = null; render(); toast(t("updUndone")); }
+      return;
+    }
     if (id === "debt-add") return openDebtSheet();
     if (id === "sync-save") {
       var u = document.getElementById("sync-url").value.trim();
@@ -1170,18 +1244,20 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
       return;
     }
     if (id === "reset-no") { render(); return; }
-    if (id === "reset-yes") { var keep = { lang: own.lang, syncUrl: own.syncUrl, name: own.name, installLater: own.installLater }; own = state = Object.assign(normalize(null), keep); save(); ui.sim = null; go("home"); toast(t("allDeleted")); return; }
+    if (id === "reset-yes") { var keep = { lang: own.lang, syncUrl: own.syncUrl, name: own.name, installLater: own.installLater, seenVersion: own.seenVersion }; own = state = Object.assign(normalize(null), keep); save(); ui.sim = null; go("home"); toast(t("allDeleted")); return; }
   });
   app.addEventListener("input", function (ev) { if (ev.target.id && ev.target.id.indexOf("sim-") === 0) { readSim(); updatePlan(); } });
   window.addEventListener("hashchange", checkHash);
   var lastVisSync = 0;
   document.addEventListener("visibilitychange", function () {
     if (document.visibilityState === "visible" && own.syncUrl && Date.now() - lastVisSync > 30000) { lastVisSync = Date.now(); syncNow(); }
+    if (document.visibilityState === "visible" && Date.now() - upd.at > 10 * 60000) checkUpdate();
   });
 
   try { if ("serviceWorker" in navigator && canInstall()) navigator.serviceWorker.register("sw.js").catch(function () {}); } catch (e) {}
   render();
   if (!checkHash() && own.syncUrl) setTimeout(syncNow, 2500);
+  setTimeout(checkUpdate, 1200);
 })();
 </script>
 </body>
