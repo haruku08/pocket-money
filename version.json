@@ -1,16 +1,16 @@
 {
-  "version": "1.8.2",
+  "version": "1.9.0",
   "date": "2026-10-19",
   "notes": {
     "en": [
-      "Parent view: the Debts card now shows the debts you set, right after saving.",
-      "Parents can delete any log entry. It also goes away on the child's phone with the next sync.",
-      "Parents can now make a code for another parent phone."
+      "New on Home: a monthly breakdown with money in, what must be paid, spending by category, and what extra work hours would bring.",
+      "Other spending can have a category, like Food or Games. Add a new one right while logging. Parents manage the list in Setup.",
+      "Parents can delete any log entry, and the Debts card shows the parent's debts right away."
     ],
     "de": [
-      "Eltern-Ansicht: Die Schulden-Karte zeigt die Schulden, die du festlegst, gleich nach dem Speichern.",
-      "Eltern können jeden Eintrag im Verlauf löschen. Er verschwindet beim nächsten Sync auch auf dem Handy des Kindes.",
-      "Eltern können jetzt einen Code für ein anderes Eltern-Handy erstellen."
+      "Neu auf der Startseite: eine Monatsübersicht mit Einnahmen, was bezahlt werden muss, Ausgaben nach Kategorie und was zusätzliche Arbeitsstunden bringen.",
+      "Andere Ausgaben können eine Kategorie haben, zum Beispiel Essen oder Games. Neue kannst du direkt beim Eintragen hinzufügen. Eltern verwalten die Liste im Setup.",
+      "Eltern können jeden Eintrag löschen, und die Schulden-Karte zeigt die Schulden der Eltern sofort."
     ]
   }
 }
