@@ -126,7 +126,18 @@ p { margin: 0; }
 .legend { display: flex; flex-direction: column; gap: 8px; }
 .legend-row { display: flex; align-items: center; gap: 10px; font-size: 14px; }
 .legend-row .sw { width: 10px; height: 10px; border-radius: 3px; flex: none; }
-.legend-row .amt { margin-left: auto; font-weight: 600; }
+.legend-row .amt { margin-left: auto; font-weight: 600; white-space: nowrap; }
+.legend-row .tag { white-space: nowrap; }
+.bd-h { font-size: 13px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin: 6px 0 -2px; }
+.bd-tip { font-size: 12px; margin: 0; }
+.bd-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bd-nav { display: flex; align-items: center; gap: 6px; }
+.bd-nav .btn { padding: 4px 10px; min-width: 0; }
+.bd-nav .btn[disabled] { opacity: .35; }
+.cat-list { display: flex; flex-direction: column; gap: 8px; }
+.cat-row { gap: 8px; }
+.cat-row input { flex: 1; min-width: 0; }
+.cat-chips { display: flex; flex-wrap: wrap; gap: 6px; }
 .tag { font-size: 12px; font-weight: 600; padding: 3px 9px; border-radius: 99px; }
 .tag.good { background: color-mix(in srgb, var(--good) 16%, transparent); color: var(--good); }
 .tag.bad { background: color-mix(in srgb, var(--bad) 16%, transparent); color: var(--bad); }
@@ -331,7 +342,7 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
       lastReport: "Last report from {name}", openReport: "Open",
       syncTitle: "Live sync", syncHint: "Your parent set up a Google Sheet. Paste the sync link here once, and every entry is sent there automatically.", syncUrl: "Sync link", syncNow: "Send now", syncSaved: "Sync link saved", syncOff: "Not connected", syncOk: "Last sent {d}", syncFail: "Could not send (no internet?). It tries again with the next entry.", syncBad: "That does not look like a Google sync link", syncRemove: "Disconnect", syncConnected: "Live sync connected", sl_save: "Put into savings", savingsPot: "Savings", toSavings: "Into savings", freeLeft: "Free to spend", allMoneyShort: "All money", debtFreeShort: "debt free", goalNoSave: "Move the savings slider to see when you reach <b>{g}</b>.", syncShare: "Send link to other phone", syncShareText: "Tap this link once to connect the app to the Google Sheet:", approved: "Approved", approvedLocked: "Approved entries can only be deleted by your parent", debtsByParent: "Debts are managed by your parent in the Google Sheet.", syncSheet: "The Sheet did not answer. Ask your parent to check the script deployment.", syncUnknown: "Sent, but the Sheet did not confirm it.", syncError: "The Sheet reported a problem: {m}",
       fam_title: "Family sync", fam_hint: "Connect this phone with your family. Entries, approvals and debts then sync by themselves, and nothing is lost if the phone gets lost.", fam_code: "Code from your parent", fam_join: "Connect", fam_parentQ: "Are you the parent?", fam_parentHint: "Set up the family on your own phone. This phone then becomes the parent view, and you get a code for your child's phone.", fam_parentName: "Your name", fam_kidName: "Your child's name", fam_create: "Create family", fam_kidOk: "Connected with your family · last sync {d}", fam_kidNever: "Connected with your family · not synced yet", fam_fail: "Could not sync (no internet?). It tries again with the next entry.", fam_unpaired: "This phone is no longer connected. Ask your parent for a new code.", fam_badCode: "That code is not valid or was already used. Ask your parent for a new one.", fam_needNames: "Type both names first", fam_codeTitle: "Code for {name}'s phone", fam_codeHint: "On {name}'s phone, open the app from the home-screen icon, go to Setup → Family sync and type this code. It works once, for 7 days.", fam_share: "Send code", fam_newCode: "Make a code for {name}'s phone", fam_newCodeHint: "For a new phone, or if the app was deleted and added again.", fam_meCode: "Make a code for another parent phone", fam_meCodeHint: "Do this before you delete the app from your home screen, or for a second parent. Type the code in the new app to get the parent view back.", fam_meCodeTitle: "Code for a parent phone", fam_shareText: "Code for the Pocket Money app: {c}. Open the app → Setup → Family sync and type it in, or tap this link in the app:", fam_leave: "Disconnect this phone", fam_leaveQ: "Disconnect this phone from the family?", fam_left: "Disconnected", fam_joined: "Connected with your family", fam_created: "Family created", fam_safari: "This opened in Safari. Open the app from the home-screen icon instead and type the code there: {c}", fam_working: "One moment…", debtsByParentApp: "Debts are managed by your parent.", pv_manageDebts: "You change debts under Setup.",
-      pv_banner: "Parent view · {name}", pv_synced: "Last update from {name}: {d}", pv_waiting: "Waiting for {name}'s first sync. Ask {name} to open the app once.", pv_refresh: "Refresh", pv_pending: "<b>{n} entries</b> not approved yet.", pv_pendingGo: "Review", pv_approve: "✓ Approve", pv_unapprove: "Undo approval", pv_note: "Note", pv_noteTitle: "Note for {name}", pv_saveNote: "Save note", pv_saved: "Saved", pv_debtsTitle: "Debts for {name}", pv_debtsHint: "{name} sees changes after the next sync. \"Paid\" fills in from {name}'s payments.", pv_addDebt: "+ Add debt", pv_saveDebts: "Save debts", pv_debtsSaved: "Debts saved", pv_paid: "paid CHF {p}", pv_deleted: "Deleted entries", pv_fail: "Could not load (no internet?)", pv_kid: "your child", pv_delete: "Delete", pv_deleteQ: "Really delete?", pv_removed: "Deleted. It goes away on {name}'s phone with the next sync.", pv_removedKid: "Your parent deleted {n} entries", pv_byYou: "Deleted by the parent",
+      pv_banner: "Parent view · {name}", pv_synced: "Last update from {name}: {d}", pv_waiting: "Waiting for {name}'s first sync. Ask {name} to open the app once.", pv_refresh: "Refresh", pv_pending: "<b>{n} entries</b> not approved yet.", pv_pendingGo: "Review", pv_approve: "✓ Approve", pv_unapprove: "Undo approval", pv_note: "Note", pv_noteTitle: "Note for {name}", pv_saveNote: "Save note", pv_saved: "Saved", pv_debtsTitle: "Debts for {name}", pv_debtsHint: "{name} sees changes after the next sync. \"Paid\" fills in from {name}'s payments.", pv_addDebt: "+ Add debt", pv_saveDebts: "Save debts", pv_debtsSaved: "Debts saved", pv_paid: "paid CHF {p}", pv_deleted: "Deleted entries", pv_fail: "Could not load (no internet?)", pv_kid: "your child", bd_title: "Monthly breakdown", bd_in: "Money in", bd_must: "Must pay", bd_spend: "Spending", bd_received: "received", bd_notYet: "not yet", bd_job: "Job · {h} h", bd_jobTip: "Each hour of work brings CHF {r}. {h} hours a month would add CHF {x}.", bd_nothing: "Nothing spent this month.", bd_left: "Left", bd_noCat: "Other", bd_prev: "Previous month", bd_next: "Next month", bd_freePlan: "Of the CHF {a}, CHF {f} is free after parking, gas and debts.", bd_shortPlan: "Parking, gas and debts cost CHF {f} more than the CHF {a}.", cat_food: "Food", cat_out: "Going out", cat_clothes: "Clothes", cat_games: "Games", cat_phone: "Phone", cat_title: "Spending categories", cat_label: "Category", cat_hintParent: "{name} picks one when logging other spending, and can add new ones. Renamed or removed categories stay on old entries.", cat_hintKid: "Your parent manages this list. You can add a new one when you log an entry.", cat_hintSelf: "Pick one when you log other spending.", cat_add: "+ Add category", cat_save: "Save categories", cat_saved: "Categories saved", cat_new: "+ New", cat_newPh: "New category", pv_delete: "Delete", pv_deleteQ: "Really delete?", pv_removed: "Deleted. It goes away on {name}'s phone with the next sync.", pv_removedKid: "Your parent deleted {n} entries", pv_byYou: "Deleted by the parent",
       updTitle: "App version & updates", updVersion: "Version {v} · {d}", updCheck: "Check for updates", updChecking: "Checking…", updLatest: "You have the newest version.", updAvail: "Update available: {v}", updNow: "Update now", updKeeps: "Keeps all your entries.", updOffline: "Could not check (no internet?).", updNew: "What's new in {v}", updGotIt: "Got it", updUndo: "Undo: use the data from before the update", updUndoHint: "Saved automatically before the update to {v}.", updUndone: "Data from before the update restored", updBanner: "A new version of the app is ready.", updLoading: "Updating…",
       installTitle: "Install as app", installHint: "Put the app on your home screen. It opens like a normal app and also works without internet.", installBtn: "Install app", installIos: "Tap the Share button at the bottom of Safari, then \"Add to Home Screen\".", installOther: "Open the browser menu (⋮) and tap \"Install app\" or \"Add to Home screen\".", installLater: "Later",
       newEntry: "New entry", close: "Close", hoursWorked: "Hours worked", hoursEx: "e.g. 4", amount: "Amount", balanceShown: "Balance shown in your app",
@@ -392,7 +403,7 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
       lastReport: "Letzter Bericht von {name}", openReport: "Öffnen",
       syncTitle: "Live-Sync", syncHint: "Deine Eltern haben ein Google Sheet eingerichtet. Füge den Sync-Link einmal hier ein, dann wird jeder Eintrag automatisch dorthin geschickt.", syncUrl: "Sync-Link", syncNow: "Jetzt senden", syncSaved: "Sync-Link gespeichert", syncOff: "Nicht verbunden", syncOk: "Zuletzt gesendet {d}", syncFail: "Senden ging nicht (kein Internet?). Es klappt beim nächsten Eintrag wieder.", syncBad: "Das ist kein Google-Sync-Link", syncRemove: "Trennen", syncConnected: "Live-Sync verbunden", sl_save: "Auf die Seite legen (Sparen)", savingsPot: "Erspartes", toSavings: "Ins Sparen", freeLeft: "Frei zum Ausgeben", allMoneyShort: "Ganzes Geld", debtFreeShort: "schuldenfrei", goalNoSave: "Schieb den Spar-Regler, um zu sehen, wann du <b>{g}</b> erreichst.", syncShare: "Link an anderes Handy senden", syncShareText: "Tippe einmal auf diesen Link, um die App mit dem Google Sheet zu verbinden:", approved: "Bestätigt", approvedLocked: "Bestätigte Einträge können nur deine Eltern löschen", debtsByParent: "Schulden werden von deinen Eltern im Google Sheet verwaltet.", syncSheet: "Das Sheet hat nicht geantwortet. Deine Eltern sollen das Skript prüfen.", syncUnknown: "Gesendet, aber das Sheet hat es nicht bestätigt.", syncError: "Das Sheet meldet ein Problem: {m}",
       fam_title: "Familien-Sync", fam_hint: "Verbinde dieses Handy mit deiner Familie. Einträge, Bestätigungen und Schulden synchronisieren sich dann von selbst, und nichts geht verloren, wenn das Handy weg ist.", fam_code: "Code von deinen Eltern", fam_join: "Verbinden", fam_parentQ: "Bist du der Elternteil?", fam_parentHint: "Richte die Familie auf deinem eigenen Handy ein. Dieses Handy wird dann die Eltern-Ansicht, und du bekommst einen Code für das Handy deines Kindes.", fam_parentName: "Dein Name", fam_kidName: "Name deines Kindes", fam_create: "Familie erstellen", fam_kidOk: "Mit deiner Familie verbunden · zuletzt synchronisiert {d}", fam_kidNever: "Mit deiner Familie verbunden · noch nicht synchronisiert", fam_fail: "Sync ging nicht (kein Internet?). Es klappt beim nächsten Eintrag wieder.", fam_unpaired: "Dieses Handy ist nicht mehr verbunden. Frag deine Eltern nach einem neuen Code.", fam_badCode: "Der Code stimmt nicht oder wurde schon benutzt. Frag deine Eltern nach einem neuen.", fam_needNames: "Gib zuerst beide Namen ein", fam_codeTitle: "Code für {name}s Handy", fam_codeHint: "Öffne auf {name}s Handy die App über das Symbol auf dem Home-Bildschirm, geh zu Setup → Familien-Sync und gib diesen Code ein. Er gilt einmal, 7 Tage lang.", fam_share: "Code senden", fam_newCode: "Code für {name}s Handy erstellen", fam_newCodeHint: "Für ein neues Handy, oder wenn die App gelöscht und neu hinzugefügt wurde.", fam_meCode: "Code für ein anderes Eltern-Handy erstellen", fam_meCodeHint: "Mach das, bevor du die App vom Home-Bildschirm löschst, oder für einen zweiten Elternteil. Gib den Code in der neuen App ein, dann ist die Eltern-Ansicht wieder da.", fam_meCodeTitle: "Code für ein Eltern-Handy", fam_shareText: "Code für die Sackgeld-App: {c}. Öffne die App → Setup → Familien-Sync und gib ihn ein, oder tippe in der App auf diesen Link:", fam_leave: "Dieses Handy trennen", fam_leaveQ: "Dieses Handy von der Familie trennen?", fam_left: "Getrennt", fam_joined: "Mit deiner Familie verbunden", fam_created: "Familie erstellt", fam_safari: "Das hat sich in Safari geöffnet. Öffne die App stattdessen über das Symbol auf dem Home-Bildschirm und gib dort den Code ein: {c}", fam_working: "Einen Moment…", debtsByParentApp: "Schulden werden von deinen Eltern verwaltet.", pv_manageDebts: "Schulden änderst du im Setup.",
-      pv_banner: "Eltern-Ansicht · {name}", pv_synced: "Letztes Update von {name}: {d}", pv_waiting: "Warte auf den ersten Sync von {name}. {name} soll die App einmal öffnen.", pv_refresh: "Aktualisieren", pv_pending: "<b>{n} Einträge</b> noch nicht bestätigt.", pv_pendingGo: "Ansehen", pv_approve: "✓ Bestätigen", pv_unapprove: "Bestätigung aufheben", pv_note: "Notiz", pv_noteTitle: "Notiz für {name}", pv_saveNote: "Notiz speichern", pv_saved: "Gespeichert", pv_debtsTitle: "Schulden von {name}", pv_debtsHint: "{name} sieht Änderungen nach dem nächsten Sync. \"Bezahlt\" füllt sich durch die Zahlungen von {name}.", pv_addDebt: "+ Schuld hinzufügen", pv_saveDebts: "Schulden speichern", pv_debtsSaved: "Schulden gespeichert", pv_paid: "bezahlt CHF {p}", pv_deleted: "Gelöschte Einträge", pv_fail: "Laden ging nicht (kein Internet?)", pv_kid: "dein Kind", pv_delete: "Löschen", pv_deleteQ: "Wirklich löschen?", pv_removed: "Gelöscht. Auf dem Handy von {name} verschwindet es beim nächsten Sync.", pv_removedKid: "Deine Eltern haben {n} Einträge gelöscht", pv_byYou: "Von den Eltern gelöscht",
+      pv_banner: "Eltern-Ansicht · {name}", pv_synced: "Letztes Update von {name}: {d}", pv_waiting: "Warte auf den ersten Sync von {name}. {name} soll die App einmal öffnen.", pv_refresh: "Aktualisieren", pv_pending: "<b>{n} Einträge</b> noch nicht bestätigt.", pv_pendingGo: "Ansehen", pv_approve: "✓ Bestätigen", pv_unapprove: "Bestätigung aufheben", pv_note: "Notiz", pv_noteTitle: "Notiz für {name}", pv_saveNote: "Notiz speichern", pv_saved: "Gespeichert", pv_debtsTitle: "Schulden von {name}", pv_debtsHint: "{name} sieht Änderungen nach dem nächsten Sync. \"Bezahlt\" füllt sich durch die Zahlungen von {name}.", pv_addDebt: "+ Schuld hinzufügen", pv_saveDebts: "Schulden speichern", pv_debtsSaved: "Schulden gespeichert", pv_paid: "bezahlt CHF {p}", pv_deleted: "Gelöschte Einträge", pv_fail: "Laden ging nicht (kein Internet?)", pv_kid: "dein Kind", bd_title: "Monatsübersicht", bd_in: "Einnahmen", bd_must: "Muss bezahlt werden", bd_spend: "Ausgaben", bd_received: "erhalten", bd_notYet: "noch nicht", bd_job: "Job · {h} h", bd_jobTip: "Jede Stunde Arbeit bringt CHF {r}. {h} Stunden im Monat bringen CHF {x} dazu.", bd_nothing: "Diesen Monat noch nichts ausgegeben.", bd_left: "Übrig", bd_noCat: "Sonstiges", bd_prev: "Vorheriger Monat", bd_next: "Nächster Monat", bd_freePlan: "Von den CHF {a} sind nach Parkplatz, Benzin und Schulden CHF {f} frei.", bd_shortPlan: "Parkplatz, Benzin und Schulden kosten CHF {f} mehr als die CHF {a}.", cat_food: "Essen", cat_out: "Ausgang", cat_clothes: "Kleider", cat_games: "Games", cat_phone: "Handy", cat_title: "Ausgaben-Kategorien", cat_label: "Kategorie", cat_hintParent: "{name} wählt eine aus, wenn er andere Ausgaben einträgt, und kann neue hinzufügen. Umbenannte oder entfernte Kategorien bleiben bei alten Einträgen.", cat_hintKid: "Deine Eltern verwalten diese Liste. Neue kannst du beim Eintragen hinzufügen.", cat_hintSelf: "Wähle eine aus, wenn du andere Ausgaben einträgst.", cat_add: "+ Kategorie hinzufügen", cat_save: "Kategorien speichern", cat_saved: "Kategorien gespeichert", cat_new: "+ Neu", cat_newPh: "Neue Kategorie", pv_delete: "Löschen", pv_deleteQ: "Wirklich löschen?", pv_removed: "Gelöscht. Auf dem Handy von {name} verschwindet es beim nächsten Sync.", pv_removedKid: "Deine Eltern haben {n} Einträge gelöscht", pv_byYou: "Von den Eltern gelöscht",
       updTitle: "App-Version & Updates", updVersion: "Version {v} · {d}", updCheck: "Nach Updates suchen", updChecking: "Suche…", updLatest: "Du hast die neuste Version.", updAvail: "Update verfügbar: {v}", updNow: "Jetzt aktualisieren", updKeeps: "Alle deine Einträge bleiben.", updOffline: "Prüfen ging nicht (kein Internet?).", updNew: "Neu in {v}", updGotIt: "Alles klar", updUndo: "Rückgängig: Daten von vor dem Update", updUndoHint: "Automatisch gespeichert vor dem Update auf {v}.", updUndone: "Daten von vor dem Update wiederhergestellt", updBanner: "Eine neue Version der App ist bereit.", updLoading: "Wird aktualisiert…",
       installTitle: "Als App installieren", installHint: "Leg die App auf deinen Homescreen. Sie öffnet sich wie eine normale App und funktioniert auch ohne Internet.", installBtn: "App installieren", installIos: "Tippe in Safari unten auf Teilen und dann auf \"Zum Home-Bildschirm\".", installOther: "Öffne das Browser-Menü (⋮) und tippe auf \"App installieren\" oder \"Zum Startbildschirm hinzufügen\".", installLater: "Später",
       newEntry: "Neuer Eintrag", close: "Schliessen", hoursWorked: "Gearbeitete Stunden", hoursEx: "z.B. 4", amount: "Betrag", balanceShown: "Kontostand in deiner App",
@@ -450,15 +461,18 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
       ],
       s: { allowance: 200, parking: 20, gas: 40, rate: 15, hours: 8, other: 30, save: 50, goalName: "", goalAmount: 500 },
       debts: [{ id: "lic", name: "", total: 600, monthly: 50, paid: 0 }],
+      cats: DEFAULT_CATS.slice(),
       entries: []
     };
   }
+  var DEFAULT_CATS = ["@food", "@out", "@clothes", "@games", "@phone"];
   function normalize(st) {
     var d0 = defaults();
     st = st || d0;
     st.s = Object.assign({}, d0.s, st.s || {});
     if (!st.accounts || !st.accounts.length) st.accounts = d0.accounts;
     if (!st.entries) st.entries = [];
+    if (!Array.isArray(st.cats)) st.cats = DEFAULT_CATS.slice();
     if (!st.debts) {
       // migrate v1: one licence debt
       st.debts = [{ id: "lic", name: "", total: st.s.debtTotal != null ? st.s.debtTotal : 600, monthly: st.s.debtPayment != null ? st.s.debtPayment : 50, paid: st.debtPaid || 0 }];
@@ -482,11 +496,12 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
 
   // ---------- app version & updates ----------
   // When releasing: bump APP_VERSION, APP_DATE and NOTES here AND in version.json (a GitHub check compares them).
-  var APP_VERSION = "1.8.2", APP_DATE = "2026-10-19";
+  var APP_VERSION = "1.9.0", APP_DATE = "2026-10-19";
   var NOTES = {
-    en: ["Parent view: the Debts card now shows the debts you set, right after saving.", "Parents can delete any log entry. It also goes away on the child's phone with the next sync.", "Parents can now make a code for another parent phone."],
-    de: ["Eltern-Ansicht: Die Schulden-Karte zeigt die Schulden, die du festlegst, gleich nach dem Speichern.", "Eltern können jeden Eintrag im Verlauf löschen. Er verschwindet beim nächsten Sync auch auf dem Handy des Kindes.", "Eltern können jetzt einen Code für ein anderes Eltern-Handy erstellen."]
+    en: ["New on Home: a monthly breakdown with money in, what must be paid, spending by category, and what extra work hours would bring.", "Other spending can have a category, like Food or Games. Add a new one right while logging. Parents manage the list in Setup.", "Parents can delete any log entry, and the Debts card shows the parent's debts right away."],
+    de: ["Neu auf der Startseite: eine Monatsübersicht mit Einnahmen, was bezahlt werden muss, Ausgaben nach Kategorie und was zusätzliche Arbeitsstunden bringen.", "Andere Ausgaben können eine Kategorie haben, zum Beispiel Essen oder Games. Neue kannst du direkt beim Eintragen hinzufügen. Eltern verwalten die Liste im Setup.", "Eltern können jeden Eintrag löschen, und die Schulden-Karte zeigt die Schulden der Eltern sofort."]
   };
+
 
   var upd = { state: "idle", info: null, at: 0 };
   function cmpVer(a, b) {
@@ -577,6 +592,7 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
         applyApprovals(res.approvals || {});
         if (res.parent && Array.isArray(res.parent.debts)) applyDebts(res.parent.debts);
         if (res.parent && Array.isArray(res.parent.removed)) applyRemoved(res.parent.removed);
+        if (res.parent && (Array.isArray(res.parent.cats) || Array.isArray(res.parent.catsRemoved))) applyCats(res.parent);
         if (manual) toast(t("fam_kidOk", { d: fmtTime(own.cloud.at) }));
         refreshFam();
       })
@@ -651,6 +667,7 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
     st.entries = rows.filter(function (x) { return x.status === "active" && !gone[x.data && x.data.id]; }).map(withDecision);
     st.deleted = rows.filter(function (x) { return x.status !== "active" || gone[x.data && x.data.id]; }).map(withDecision)
       .map(function (e) { if (gone[e.id]) e.deletedBy = "parent"; return e; });
+    st.cats = mergeCats(doc, st.cats);
     // Debts: show the parent's list right away, with what the kid has paid so far
     if (Array.isArray(doc.debts)) {
       var paidOf = {};
@@ -686,6 +703,15 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
     rpc("pm_set_parent_doc", { p_token: own.cloud.token, p_member: k.id, p_data: doc })
       .then(function () { toast(t("pv_removed", { name: kidName() })); parentPull(); }).catch(function () { toast(t("pv_fail")); parentPull(); });
   }
+  function saveParentCats() {
+    var k = pvKid(); if (!k) return;
+    var r = readCatEditor(), doc = Object.assign({}, k.parent || {});
+    doc.cats = r.list;
+    doc.catsRemoved = uniqCats((Array.isArray(doc.catsRemoved) ? doc.catsRemoved : []).concat(r.gone)).filter(function (c) { return r.list.indexOf(c) < 0; });
+    k.parent = doc; enterParent(); render();
+    rpc("pm_set_parent_doc", { p_token: own.cloud.token, p_member: k.id, p_data: doc })
+      .then(function () { toast(t("cat_saved")); parentPull(); }).catch(function () { toast(t("pv_fail")); parentPull(); });
+  }
   function readPvDebts() {
     document.querySelectorAll("[data-pvd]").forEach(function (row) {
       var d = pv.debts[Number(row.dataset.pvd)]; if (!d) return;
@@ -715,6 +741,7 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
       (code ? '<section class="card upd-card"><h2>' + esc(own.cloud.codeMe ? t("fam_meCodeTitle") : t("fam_codeTitle", { name: name })) + '</h2><div class="code num">' + fmtCode(code) + '</div><p class="muted" style="font-size:13px;margin:0">' + esc(own.cloud.codeMe ? t("fam_meCodeHint") : t("fam_codeHint", { name: name })) + '</p><button class="btn small" id="fam-share" style="align-self:flex-start">' + t("fam_share") + '</button></section>' : "") +
       '<section class="card"><h2>' + esc(t("pv_debtsTitle", { name: name })) + '</h2><p class="muted" style="font-size:13px;margin:0">' + esc(t("pv_debtsHint", { name: name })) + '</p>' + (rows || '<p class="muted">' + t("noDebts") + '</p>') +
         '<div class="row" style="flex-wrap:wrap"><button class="btn ghost small" id="pvd-add">' + t("pv_addDebt") + '</button><button class="btn small" id="pvd-save">' + t("pv_saveDebts") + '</button></div></section>' +
+      catEditor(catList(), t("cat_hintParent", { name: name })) +
       '<section class="card"><h2>' + t("fam_title") + '</h2>' + (k ? '<button class="btn ghost small" id="fam-code" style="align-self:flex-start">' + esc(t("fam_newCode", { name: name })) + '</button><p class="muted" style="font-size:12px;margin:0">' + t("fam_newCodeHint") + '</p>' : "") +
         '<button class="btn ghost small" id="fam-code-me" style="align-self:flex-start">' + t("fam_meCode") + '</button><p class="muted" style="font-size:12px;margin:0">' + t("fam_meCodeHint") + '</p>' +
         '<div id="fam-leave-zone"><button class="btn danger small" id="fam-leave">' + t("fam_leave") + '</button></div></section>';
@@ -747,7 +774,7 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
     var pad = function (n) { return String(n).padStart(2, "0"); };
     var stamp = function (ts) { var d = new Date(ts); return pad(d.getDate()) + "." + pad(d.getMonth() + 1) + "." + d.getFullYear() + " " + pad(d.getHours()) + ":" + pad(d.getMinutes()); };
     var row = function (e, status) {
-      var what = e.type === "debt" || e.type === "newdebt" ? (e.debtName || "") : "";
+      var what = e.type === "debt" || e.type === "newdebt" ? (e.debtName || "") : e.type === "spend" && e.cat ? catLabel(e.cat) : "";
       return [e.id, e.date, tl("ty_" + e.type), [what, e.note].filter(Boolean).filter(function (v, i, a) { return a.indexOf(v) === i; }).join(" · "), e.type === "newdebt" ? "" : acc(e.account), e.type === "balance" ? e.amount : (e.type === "newdebt" ? e.amount : e.delta), e.type === "balance" ? e.delta : "", e.hours || "", e.ts ? new Date(e.ts).toISOString() : "", status];
     };
     var entries = st.entries.map(function (e) { return row(e, "Active"); })
@@ -832,6 +859,12 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
     toast(t("pv_removedKid", { n: n }));
     if (!ui.viewing && !layer.innerHTML) render();
   }
+  function applyCats(doc) {
+    var next = mergeCats(doc, own.cats);
+    if (JSON.stringify(next) === JSON.stringify(own.cats)) return;
+    own.cats = next; persist();
+    if (!ui.viewing && !layer.innerHTML) render();
+  }
   function applyApprovals(map) {
     var changed = false;
     own.entries.forEach(function (e) {
@@ -891,6 +924,40 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
   function monthlyDebtDue() { return r2(state.debts.reduce(function (s, d) { return s + Math.min(d.monthly, debtLeftOf(d)); }, 0)); }
   function goalName() { return state.s.goalName || t("defaultGoal"); }
   function personName() { return state.name || t("you"); }
+
+  // ---------- spending categories ----------
+  // Built-in ones are stored as "@key" so they show in the phone's language; own ones as plain text.
+  function catLabel(c) { return !c ? t("bd_noCat") : c.charAt(0) === "@" ? t("cat_" + c.slice(1)) : c; }
+  function uniqCats(list) {
+    var seen = {}, out = [];
+    list.forEach(function (c) { c = String(c || "").trim(); var k = catLabel(c).toLowerCase(); if (c && !seen[k]) { seen[k] = true; out.push(c); } });
+    return out;
+  }
+  function mergeCats(doc, mine) {
+    var gone = {};
+    (doc && Array.isArray(doc.catsRemoved) ? doc.catsRemoved : []).forEach(function (c) { gone[c] = true; });
+    return uniqCats(((doc && Array.isArray(doc.cats)) ? doc.cats : []).concat(mine || [])).filter(function (c) { return !gone[c]; });
+  }
+  function catEditor(list, hint) {
+    var rows = list.map(function (c) {
+      return '<div class="row cat-row" data-cat="' + esc(c) + '"><input type="text" maxlength="24" value="' + esc(catLabel(c)) + '" aria-label="' + t("cat_label") + '"><button class="btn ghost small" data-cat-rm="1">' + t("removeDebt") + '</button></div>';
+    }).join("");
+    return '<section class="card" id="cat-card"><h2>' + t("cat_title") + '</h2><p class="muted" style="font-size:13px;margin:0">' + esc(hint) + '</p><div class="cat-list">' + rows + '</div>' +
+      '<div class="row" style="flex-wrap:wrap"><button class="btn ghost small" id="cat-add">' + t("cat_add") + '</button><button class="btn small" id="cat-save">' + t("cat_save") + '</button></div></section>';
+  }
+  // Reads the editor: the new list, and the old names that are gone (renamed or removed)
+  function readCatEditor() {
+    var list = [], gone = JSON.parse(document.getElementById("cat-card").dataset.gone || "[]");
+    document.querySelectorAll("#cat-card .cat-row").forEach(function (row) {
+      var orig = row.dataset.cat || "", v = row.querySelector("input").value.trim();
+      if (!v) { if (orig) gone.push(orig); return; }
+      if (orig && v === catLabel(orig)) list.push(orig);
+      else { list.push(v); if (orig) gone.push(orig); }
+    });
+    list = uniqCats(list);
+    return { list: list, gone: gone.filter(function (c) { return list.indexOf(c) < 0; }) };
+  }
+  function catList() { return (state.cats && state.cats.length) ? state.cats : DEFAULT_CATS; }
 
   // ---------- entries ----------
   function addEntry(e) {
@@ -1049,22 +1116,63 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
           : '<p class="muted">' + t("noDebts") + '</p>') +
         '<p class="muted" style="font-size:12px">' + t(ui.viewing && ui.viewing.parent ? "pv_manageDebts" : isKidCloud() ? "debtsByParentApp" : "debtsByParent") + '</p>' +
       '</section>' +
-      '<section class="card"><div class="row between"><h2>' + t("whereGoes", { n: chf0(s.allowance) }) + '</h2><span class="label">' + t("eachMonth") + '</span></div><div class="bar">' + bar + '</div><div class="legend">' + legend + '</div></section>' +
-      '<section class="card"><h2>' + t("thisMonth") + '</h2>' +
-        '<div class="stats"><div class="stat"><span>' + t("moneyIn") + '</span><b class="num" style="color:var(--good)">' + chf0(mt.in) + '</b></div><div class="stat"><span>' + t("spent") + '</span><b class="num">' + chf0(spent) + '</b></div><div class="stat"><span>' + t("jobHours") + '</span><b class="num">' + (Math.round(mt.hours * 10) / 10) + '</b></div></div>' +
-        '<div class="legend">' +
-          '<div class="legend-row"><span class="sw" style="background:var(--c-gas)"></span>' + t("ty_gas") + ' <span class="amt num">CHF ' + chf(mt.gas) + '</span>' + gasTag + '</div>' +
-          '<div class="legend-row"><span class="sw" style="background:var(--c-park)"></span>' + t("ty_parking") + ' <span class="amt num">CHF ' + chf(mt.parking) + '</span>' + parkTag + '</div>' +
-          '<div class="legend-row"><span class="sw" style="background:var(--c-debt)"></span>' + t("debtPayments") + ' <span class="amt num">CHF ' + chf(mt.debt) + '</span>' + debtTag + '</div>' +
-          '<div class="legend-row"><span class="sw" style="background:var(--c-other)"></span>' + t("otherSpending") + ' <span class="amt num">CHF ' + chf(mt.spend) + '</span></div>' +
-        '</div>' +
-        (mt.parking < s.parking && !ro ? '<button class="btn ghost small" data-quick="parking" style="align-self:flex-start">' + t("logParking", { n: chf0(s.parking) }) + '</button>' : "") +
-      '</section>' +
+      breakdownCard() +
       '<section class="card"><div class="row between"><h2>' + t("latest") + '</h2><button class="btn ghost small" data-go="log">' + t("seeAll") + '</button></div>' +
         (recent.length ? '<div class="list">' + recent.map(itemHtml).join("") + '</div>' : '<div class="empty">' + t("nothingYet") + '</div>') +
       '</section>' +
       (ro ? "" : '<button class="btn ghost" id="share-parent">' + t("sendParent") + '</button><div id="share-fallback" hidden><div class="field"><label for="share-text">' + t("linkHere") + '</label><textarea id="share-text" readonly></textarea></div></div>') +
       (!storageOk ? '<p class="preview-note">' + t("notSaving") + '</p>' : "");
+  }
+  function shiftMonth(key, n) { var d = new Date(key + "-15T12:00:00"); d.setMonth(d.getMonth() + n); return d.toISOString().slice(0, 7); }
+  function breakdownCard() {
+    var s = state.s, ro = !!ui.viewing, key = shiftMonth(monthKey(today()), ui.bm || 0);
+    var m = { allowance: 0, job: 0, hours: 0, income: 0, parking: 0, gas: 0, debt: {}, debtAll: 0, cats: {}, spend: 0 };
+    state.entries.forEach(function (e) {
+      if (monthKey(e.date) !== key) return;
+      if (e.type === "allowance" || e.type === "income" || e.type === "parking" || e.type === "gas") m[e.type] += e.amount;
+      else if (e.type === "job") { m.job += e.amount; m.hours += e.hours || 0; }
+      else if (e.type === "debt") { m.debt[e.debtId] = (m.debt[e.debtId] || 0) + e.amount; m.debtAll += e.amount; }
+      else if (e.type === "spend") { var c = e.cat || ""; m.cats[c] = (m.cats[c] || 0) + e.amount; m.spend += e.amount; }
+    });
+    function row(color, name, amt, tag) { return '<div class="legend-row"><span class="sw" style="background:' + color + '"></span><span class="bd-name">' + name + '</span><span class="amt num">' + amt + '</span>' + (tag || "") + '</div>'; }
+    function tg(cls, txt) { return '<span class="tag ' + cls + '">' + txt + '</span>'; }
+
+    // Money in
+    var inRows = row("var(--good)", t("ty_allowance"), "CHF " + chf(m.allowance || s.allowance), m.allowance >= s.allowance ? tg("good", t("bd_received")) : tg("warn", t("bd_notYet"))) +
+      row("var(--c-other)", t("bd_job", { h: Math.round(m.hours * 10) / 10 }), "CHF " + chf(m.job)) +
+      (m.income ? row("var(--good)", t("ty_income"), "CHF " + chf(m.income)) : "");
+    var jobTip = '<p class="muted bd-tip">' + t("bd_jobTip", { r: chf0(s.rate), h: s.hours, x: chf0(s.hours * s.rate) }) + '</p>';
+
+    // Must pay
+    var debtRows = state.debts.filter(function (d) { return debtLeftOf(d) > 0 || m.debt[d.id]; }).map(function (d) {
+      var due = Math.min(d.monthly, debtLeftOf(d) + (m.debt[d.id] || 0)), got = m.debt[d.id] || 0;
+      return row("var(--c-debt)", esc(debtName(d)), "CHF " + chf(due), got >= due ? tg("good", t("paid")) : tg("warn", t("toGo", { n: chf(due - got) })));
+    }).join("");
+    var mustRows = row("var(--c-park)", t("parkingSpace"), "CHF " + chf(s.parking), m.parking >= s.parking ? tg("good", t("paid")) : tg("warn", t("notPaid"))) +
+      debtRows +
+      row("var(--c-gas)", t("gasBudget"), "CHF " + chf(m.gas), m.gas > s.gas ? tg("bad", t("over", { n: chf0(m.gas - s.gas) })) : tg("good", t("left", { n: chf0(s.gas - m.gas) })));
+
+    // Spending by category
+    var catKeys = Object.keys(m.cats).sort(function (x, y) { return m.cats[y] - m.cats[x]; });
+    var spendRows = catKeys.length ? catKeys.map(function (c) { return row("var(--c-other)", esc(catLabel(c)), "CHF " + chf(m.cats[c])); }).join("") : '<p class="muted bd-tip">' + t("bd_nothing") + '</p>';
+    var spendTag = s.other > 0 ? (m.spend > s.other ? tg("bad", t("over", { n: chf(m.spend - s.other) })) : tg("good", t("left", { n: chf(s.other - m.spend) }))) : "";
+
+    // Planned split of the allowance (bar)
+    var pay = monthlyDebtDue(), free = s.allowance - s.parking - s.gas - pay;
+    var parts = [{ v: s.parking, c: "var(--c-park)" }, { v: s.gas, c: "var(--c-gas)" }, { v: pay, c: "var(--c-debt)" }, { v: Math.abs(free), c: free >= 0 ? "var(--c-free)" : "var(--bad)" }];
+    var totalBar = Math.max(s.allowance, s.parking + s.gas + pay) || 1;
+    var bar = parts.filter(function (p) { return p.v > 0; }).map(function (p) { return '<span style="width:' + (p.v / totalBar * 100) + '%;background:' + p.c + '"></span>'; }).join("");
+
+    var inSum = m.allowance + m.job + m.income, outSum = m.parking + m.gas + m.debtAll + m.spend;
+    var label = new Date(key + "-15T12:00:00").toLocaleDateString(loc(), { month: "long", year: "numeric" });
+    return '<section class="card bd"><div class="row between"><h2>' + t("bd_title") + '</h2><div class="bd-nav"><button class="btn ghost small" data-bm="-1" aria-label="' + t("bd_prev") + '">‹</button><span class="label">' + label + '</span><button class="btn ghost small" data-bm="1" aria-label="' + t("bd_next") + '"' + (ui.bm ? "" : " disabled") + '>›</button></div></div>' +
+      '<div class="bar">' + bar + '</div><p class="muted bd-tip">' + (free >= 0 ? t("bd_freePlan", { a: chf0(s.allowance), f: chf0(free) }) : t("bd_shortPlan", { a: chf0(s.allowance), f: chf0(-free) })) + '</p>' +
+      '<h3 class="bd-h">' + t("bd_in") + '</h3><div class="legend">' + inRows + '</div>' + jobTip +
+      '<h3 class="bd-h">' + t("bd_must") + '</h3><div class="legend">' + mustRows + '</div>' +
+      (m.parking < s.parking && !ro && !ui.bm ? '<button class="btn ghost small" data-quick="parking" style="align-self:flex-start">' + t("logParking", { n: chf0(s.parking) }) + '</button>' : "") +
+      '<div class="row between"><h3 class="bd-h">' + t("bd_spend") + '</h3>' + spendTag + '</div><div class="legend">' + spendRows + '</div>' +
+      '<div class="stats"><div class="stat"><span>' + t("moneyIn") + '</span><b class="num" style="color:var(--good)">' + chf0(inSum) + '</b></div><div class="stat"><span>' + t("spent") + '</span><b class="num">' + chf0(outSum) + '</b></div><div class="stat"><span>' + t("bd_left") + '</span><b class="num"' + (inSum - outSum < 0 ? ' style="color:var(--bad)"' : "") + '>' + chf0(inSum - outSum) + '</b></div></div>' +
+      '</section>';
   }
   function qa(type, label, color) {
     return '<button class="qa" data-quick="' + type + '"><span class="qa-ic" style="background:color-mix(in srgb,' + color + ' 16%,transparent);color:' + color + '">' + icon(type) + '</span>' + label + '</button>';
@@ -1076,8 +1184,9 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
       title = esc(e.debtName || e.note || tn); sub = tn; amt = "CHF " + chf(e.amount);
     } else {
       var extra = e.type === "debt" ? (e.debtName || (debtById(e.debtId) ? debtName(debtById(e.debtId)) : "")) : "";
+      if (e.type === "spend" && e.cat) { extra = catLabel(e.cat); tn = extra; }
       title = e.note ? esc(e.note) : (extra ? esc(extra) : tn);
-      sub = ((e.note || extra) ? tn + " · " : "") + esc(a.name) + (e.type === "job" && e.hours ? " · " + e.hours + " h" : "");
+      sub = ((e.note || extra) && !(e.type === "spend" && e.cat && !e.note) ? tn + " · " : "") + esc(a.name) + (e.type === "job" && e.hours ? " · " + e.hours + " h" : "");
       amt = e.type === "balance" ? t("set") + ' ' + chf(e.amount) + '<div class="item-sub">' + chf(e.delta, true) + '</div>' : chf(e.delta, true);
       cls = e.delta > 0 && e.type !== "balance" ? "plus" : "";
     }
@@ -1233,6 +1342,9 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
         nf("set-rate", t("f_rate"), s.rate, 0.5) + nf("set-hours", t("f_hours"), s.hours) +
       '</div></section>' +
       '<section class="card"><h2>' + t("debts") + '</h2>' + (debts ? '<div class="legend">' + debts + '</div>' : '<p class="muted">' + t("noDebts") + '</p>') + '<p class="muted" style="font-size:12px">' + t(isKidCloud() ? "debtsByParentApp" : "debtsByParent") + '</p></section>' +
+      (isKidCloud()
+        ? '<section class="card"><h2>' + t("cat_title") + '</h2><div class="cat-chips">' + catList().map(function (c) { return '<span class="chip">' + esc(catLabel(c)) + '</span>'; }).join("") + '</div><p class="muted" style="font-size:12px;margin:0">' + t("cat_hintKid") + '</p></section>'
+        : catEditor(catList(), t("cat_hintSelf"))) +
       '<section class="card"><h2>' + t("savingsGoal") + '</h2><div class="grid2">' +
         '<div class="field"><label for="set-goalName">' + t("whatFor") + '</label><input type="text" id="set-goalName" value="' + esc(goalName()) + '" maxlength="30"></div>' + nf("set-goalAmount", t("amountChf"), s.goalAmount) +
       '</div></section>' +
@@ -1344,6 +1456,10 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
     sheetShell(t("newEntry"),
       '<div class="chips" id="type-chips">' + chips + '</div>' +
       '<div class="field" id="f-debt" hidden><label for="in-debt">' + t("whichDebt") + '</label><select id="in-debt">' + debtOpts + '</select></div>' +
+      '<div class="field" id="f-cat" hidden><label>' + t("cat_label") + '</label><div class="chips" id="cat-chips">' +
+        catList().map(function (c) { return '<button type="button" class="chip" data-cat="' + esc(c) + '" aria-pressed="false">' + esc(catLabel(c)) + '</button>'; }).join("") +
+        '<button type="button" class="chip" id="cat-new-btn">' + t("cat_new") + '</button></div>' +
+        '<input type="text" id="in-cat-new" maxlength="24" placeholder="' + t("cat_newPh") + '" hidden style="margin-top:8px"></div>' +
       '<div class="field" id="f-hours" hidden><label for="in-hours">' + t("hoursWorked") + '</label><input type="number" inputmode="decimal" id="in-hours" step="0.25" min="0" placeholder="' + t("hoursEx") + '"></div>' +
       '<div class="field"><label for="in-amount" id="lbl-amount">' + t("amount") + '</label><div class="money-input"><span>CHF</span><input type="number" inputmode="decimal" id="in-amount" step="0.05" min="0" placeholder="0.00"></div></div>' +
       '<div class="grid2"><div class="field"><label for="in-account">' + t("account") + '</label><select id="in-account">' + accOpts + '</select></div><div class="field"><label for="in-date">' + t("date") + '</label><input type="date" id="in-date" value="' + today() + '"></div></div>' +
@@ -1358,6 +1474,7 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
       document.querySelectorAll("#type-chips .chip").forEach(function (c) { c.setAttribute("aria-pressed", c.dataset.type === k); });
       document.getElementById("f-hours").hidden = k !== "job";
       document.getElementById("f-debt").hidden = k !== "debt";
+      document.getElementById("f-cat").hidden = k !== "spend";
       document.getElementById("lbl-amount").textContent = k === "balance" ? t("balanceShown") : k === "job" ? t("earned") : t("amount");
       var d = debtById(dsel.value);
       document.getElementById("sheet-hint").textContent = t("h_" + k, { n: k === "allowance" ? chf0(s.allowance) : k === "gas" ? chf0(s.gas) : k === "parking" ? chf0(s.parking) : k === "debt" && d ? chf(debtLeftOf(d)) : "", r: s.rate });
@@ -1369,6 +1486,15 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
     document.getElementById("type-chips").addEventListener("click", function (ev) { var c = ev.target.closest(".chip"); if (c) setType(c.dataset.type); });
     document.getElementById("in-account").addEventListener("change", function () { if (cur === "balance") amt.value = acct(this.value).balance || ""; });
     dsel.addEventListener("change", function () { setType("debt"); });
+    var pickedCat = "", newCat = document.getElementById("in-cat-new");
+    document.getElementById("cat-chips").addEventListener("click", function (ev) {
+      var c = ev.target.closest(".chip"); if (!c) return;
+      var isNew = c.id === "cat-new-btn", on = c.getAttribute("aria-pressed") !== "true";
+      document.querySelectorAll("#cat-chips .chip").forEach(function (x) { x.setAttribute("aria-pressed", "false"); });
+      if (on) c.setAttribute("aria-pressed", "true");
+      pickedCat = on && !isNew ? c.dataset.cat : "";
+      newCat.hidden = !(on && isNew); if (!newCat.hidden) newCat.focus();
+    });
     hrs.addEventListener("input", function () { var h = Number(hrs.value); amt.value = h > 0 ? r2(h * s.rate) : ""; });
     document.getElementById("sheet").addEventListener("submit", function (ev) {
       ev.preventDefault();
@@ -1376,6 +1502,14 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
       if (!(a >= 0) || amt.value === "" || (a === 0 && cur !== "balance")) { amt.focus(); toast(t("typeAmount")); return; }
       var e = { type: cur, amount: r2(a), account: document.getElementById("in-account").value, date: document.getElementById("in-date").value || today(), note: document.getElementById("in-note").value.trim() };
       if (cur === "job") e.hours = Number(hrs.value) || r2(a / s.rate);
+      if (cur === "spend") {
+        var nc = newCat.hidden ? "" : newCat.value.trim();
+        if (nc) {
+          var hit = catList().filter(function (c) { return catLabel(c).toLowerCase() === nc.toLowerCase(); })[0];
+          if (hit) nc = hit; else own.cats = uniqCats(catList().concat([nc]));
+        }
+        if (nc || pickedCat) e.cat = nc || pickedCat;
+      }
       if (cur === "debt") { var d = debtById(dsel.value); e.debtId = dsel.value; if (d && e.amount > debtLeftOf(d)) e.amount = debtLeftOf(d); }
       addEntry(e);
       closeSheet(); render();
@@ -1448,6 +1582,22 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
     if (id === "fam-leave-no") { render(); return; }
 
     if ((b = ev.target.closest("[data-go]"))) return go(b.dataset.go);
+    if ((b = ev.target.closest("[data-bm]"))) { ui.bm = Math.min(0, (ui.bm || 0) + Number(b.dataset.bm)); render(); return; }
+    if ((b = ev.target.closest("[data-cat-rm]"))) {
+      var cr = b.closest(".cat-row"), cc = document.getElementById("cat-card");
+      if (cr.dataset.cat) { var gl = JSON.parse(cc.dataset.gone || "[]"); gl.push(cr.dataset.cat); cc.dataset.gone = JSON.stringify(gl); }
+      cr.remove(); return;
+    }
+    if (id === "cat-add") {
+      var row = document.createElement("div"); row.className = "row cat-row"; row.dataset.cat = "";
+      row.innerHTML = '<input type="text" maxlength="24" placeholder="' + t("cat_newPh") + '" aria-label="' + t("cat_label") + '"><button class="btn ghost small" data-cat-rm="1">' + t("removeDebt") + '</button>';
+      document.querySelector("#cat-card .cat-list").appendChild(row); row.querySelector("input").focus(); return;
+    }
+    if (id === "cat-save") {
+      if (ui.viewing && ui.viewing.parent) return saveParentCats();
+      if (ui.viewing || isKidCloud()) return;
+      own.cats = readCatEditor().list; save(); render(); toast(t("cat_saved")); return;
+    }
     if (ui.viewing) return;
     if ((b = ev.target.closest("[data-quick]"))) return openSheet(b.dataset.quick);
     if ((b = ev.target.closest("[data-act=balance]"))) return openSheet("balance", b.dataset.acct);
