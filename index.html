@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style>
+<title>Pocket Money</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png?v=2">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=2">
@@ -11,196 +11,299 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Sackgeld">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<title>Pocket Money</title>
-<meta name="claude:viewport-fit-sides" content="cover">
-<meta name="theme-color" content="#0f3b3a">
+<meta name="theme-color" content="#eef2f0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121614" media="(prefers-color-scheme: dark)">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap">
 <style>
-/* Layout: one phone-width column, big balance card on top, bottom tab bar like a banking app */
+/* ---------- tokens ---------- */
 :root {
-  --bg: #eef3f1;
+  --bg: #eef2f0;
   --surface: #ffffff;
-  --surface-2: #e2ebe8;
-  --ink: #0f2524;
-  --muted: #5b716e;
-  --line: #d3dfdb;
-  --brand: #0f3b3a;      /* petrol, the hero card */
-  --brand-ink: #f2fbf8;
-  --accent: #ffc83d;     /* scooter yellow */
+  --surface-2: #e4ebe8;
+  --ink: #12201e;
+  --muted: #5e6f6b;
+  --line: #d6dfdb;
+  --brand: #123f3c;      /* petrol: hero card, active states */
+  --brand-ink: #f1faf7;
+  --accent: #ffc83d;     /* scooter yellow: main actions */
   --accent-ink: #2a1f00;
-  --good: #1f9d6b;
-  --bad: #d9534f;
-  --warn: #c98a00;
-  --c-gas: #f08a3c;
-  --c-park: #7b6cf6;
-  --c-debt: #d9534f;
-  --c-free: #1f9d6b;
-  --c-other: #3b8fd9;
-  --c-save: #14907a;
-  --shadow: 0 1px 2px rgba(15,37,36,.06), 0 6px 20px rgba(15,37,36,.06);
+  --good: #1b8f61;
+  --bad: #cf4b47;
+  --warn: #b97f00;
+  --c-gas: #ea7f33;
+  --c-park: #6f61ea;
+  --c-debt: #cf4b47;
+  --c-free: #1b8f61;
+  --c-other: #3384cf;
+  --c-save: #13897a;
+  --shadow: 0 1px 2px rgba(18,32,30,.05), 0 4px 16px rgba(18,32,30,.05);
+  --scrim: rgba(8,16,15,.45);
+
   --f-display: "Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
   --f-body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
   --f-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
-  --r: 18px;
+
+  /* one radius scale and one spacing scale for the whole app */
+  --r-sm: 10px;   /* tags inside rows, small buttons */
+  --r-md: 14px;   /* inputs, buttons, tiles */
+  --r-lg: 20px;   /* cards, sheets */
+  --r-pill: 999px;
+  --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px; --s-5: 24px;
 }
+/* Dark: warm charcoal with a hint of green, not pure black */
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
-  --bg: #0b1615; --surface: #13211f; --surface-2: #1b2d2a; --ink: #e6f2ef; --muted: #8fa7a2; --line: #253a37;
-  --brand: #134a47; --brand-ink: #effaf7; --accent: #ffcc4d; --accent-ink: #2a1f00;
-  --good: #3cc58c; --c-save: #2fbfa2; --bad: #f07470; --warn: #e3ac2b;
-  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 6px 20px rgba(0,0,0,.25); color-scheme: dark;
+  --bg: #121614; --surface: #1a1f1d; --surface-2: #232a27; --ink: #e8eeeb; --muted: #97a39f; --line: #2c3431;
+  --brand: #1c3f3b; --brand-ink: #eef7f4; --accent: #f2c14e; --accent-ink: #261c00;
+  --good: #4cc08f; --c-free: #4cc08f; --c-save: #3ab8a6; --bad: #ec7a75; --c-debt: #ec7a75; --warn: #dfae3f;
+  --c-gas: #f0965a; --c-park: #9488f2; --c-other: #62a5e4;
+  --shadow: 0 1px 0 rgba(255,255,255,.03) inset, 0 4px 18px rgba(0,0,0,.28); --scrim: rgba(0,0,0,.55);
+  color-scheme: dark;
 }}
 :root[data-theme="dark"] {
-  --bg: #0b1615; --surface: #13211f; --surface-2: #1b2d2a; --ink: #e6f2ef; --muted: #8fa7a2; --line: #253a37;
-  --brand: #134a47; --brand-ink: #effaf7; --accent: #ffcc4d; --accent-ink: #2a1f00;
-  --good: #3cc58c; --c-save: #2fbfa2; --bad: #f07470; --warn: #e3ac2b;
-  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 6px 20px rgba(0,0,0,.25); color-scheme: dark;
+  --bg: #121614; --surface: #1a1f1d; --surface-2: #232a27; --ink: #e8eeeb; --muted: #97a39f; --line: #2c3431;
+  --brand: #1c3f3b; --brand-ink: #eef7f4; --accent: #f2c14e; --accent-ink: #261c00;
+  --good: #4cc08f; --c-free: #4cc08f; --c-save: #3ab8a6; --bad: #ec7a75; --c-debt: #ec7a75; --warn: #dfae3f;
+  --c-gas: #f0965a; --c-park: #9488f2; --c-other: #62a5e4;
+  --shadow: 0 1px 0 rgba(255,255,255,.03) inset, 0 4px 18px rgba(0,0,0,.28); --scrim: rgba(0,0,0,.55);
+  color-scheme: dark;
 }
+
+/* ---------- base ---------- */
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 html, body { height: 100%; }
 body {
-  background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 15px; line-height: 1.45;
+  margin: 0; background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 15px; line-height: 1.45;
   -webkit-tap-highlight-color: transparent;
 }
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+h1, h2, h3 { font-family: var(--f-display); margin: 0; text-wrap: balance; letter-spacing: -.01em; }
+h1 { font-size: 24px; font-weight: 800; }
+h2 { font-size: 18px; font-weight: 800; }
+h3 { font-size: 15px; font-weight: 600; }
+p { margin: 0; }
+svg { flex: none; }
+.ic { width: 18px; height: 18px; }
+.num { font-variant-numeric: tabular-nums; }
+.muted { color: var(--muted); }
+.small-text { font-size: 13px; }
+.label { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); }
+
 .wrap {
   max-width: 520px; margin: 0 auto;
-  padding-left: max(16px, env(safe-area-inset-left, 0px));
-  padding-right: max(16px, env(safe-area-inset-right, 0px));
-  padding-block: 16px calc(96px + env(safe-area-inset-bottom, 0px));
-  display: flex; flex-direction: column; gap: 16px;
+  padding-left: max(var(--s-4), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--s-4), env(safe-area-inset-right, 0px));
+  padding-top: calc(var(--s-4) + env(safe-area-inset-top, 0px));
+  padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
+  display: flex; flex-direction: column; gap: var(--s-4);
 }
-h1, h2, h3 { font-family: var(--f-display); margin: 0; text-wrap: balance; letter-spacing: -.01em; }
-h2 { font-size: 20px; font-weight: 800; }
-h3 { font-size: 16px; font-weight: 600; }
-p { margin: 0; }
-.num { font-variant-numeric: tabular-nums; }
-.label { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); }
-.muted { color: var(--muted); }
-.notes { margin: 0; padding-left: 18px; font-size: 14px; display: flex; flex-direction: column; gap: 4px; }
-.upd-card { border: 2px solid var(--accent); }
-.pv-acts { display: flex; gap: 8px; padding: 0 0 10px 52px; border-bottom: 1px solid var(--line); margin-top: -4px; }
-.pv-acts .btn { padding: 7px 12px; font-size: 13px; }
-.item:has(+ .pv-acts) { border-bottom: 0; }
-.list.gone .item { opacity: .55; text-decoration: line-through; }
-.pvd { display: flex; flex-direction: column; gap: 8px; padding: 10px 0; border-bottom: 1px solid var(--line); }
-.code { font-size: 28px; font-weight: 800; letter-spacing: .08em; }
-.fam-parent summary { cursor: pointer; font-weight: 600; font-size: 14px; padding: 4px 0; }
-.fam-parent { display: flex; flex-direction: column; gap: 10px; }
-.row { display: flex; align-items: center; gap: 12px; }
+.row { display: flex; align-items: center; gap: var(--s-3); }
+.row.wrapping { flex-wrap: wrap; gap: var(--s-2); }
 .between { justify-content: space-between; }
-.card { background: var(--surface); border-radius: var(--r); padding: 16px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 12px; min-width: 0; }
-.topbar { display: flex; justify-content: space-between; align-items: center; }
-.topbar { gap: 8px; }
-.topbar h1 { font-size: 22px; font-weight: 800; white-space: nowrap; min-width: 0; }
-.month-pill { white-space: nowrap; }
-@media (max-width: 385px) { .topbar .month-pill { display: none; } .topbar h1 { font-size: 20px; } }
-.month-pill { font-size: 13px; font-weight: 600; background: var(--surface-2); padding: 6px 12px; border-radius: 99px; }
+.stack { display: flex; flex-direction: column; gap: var(--s-2); }
+.card { background: var(--surface); border-radius: var(--r-lg); padding: var(--s-4); box-shadow: var(--shadow); display: flex; flex-direction: column; gap: var(--s-3); min-width: 0; }
+.card.flat { box-shadow: none; border: 1px solid var(--line); }
+.card-head { display: flex; align-items: center; justify-content: space-between; gap: var(--s-2); min-width: 0; }
+.link-btn { font: inherit; font-size: 14px; font-weight: 600; color: var(--muted); background: none; border: 0; padding: var(--s-1) 0; cursor: pointer; display: inline-flex; align-items: center; gap: 2px; }
+.link-btn:hover { color: var(--ink); }
+.link-btn svg { width: 16px; height: 16px; }
 
-/* Hero balance */
-.hero { background: var(--brand); color: var(--brand-ink); border-radius: 24px; padding: 20px; display: flex; flex-direction: column; gap: 16px; position: relative; overflow: hidden; }
-.hero::after { content: ""; position: absolute; right: -40px; top: -40px; width: 160px; height: 160px; border-radius: 50%; border: 26px solid var(--accent); opacity: .16; }
+/* ---------- top bar ---------- */
+.topbar { display: flex; justify-content: space-between; align-items: center; gap: var(--s-2); min-height: 36px; }
+.topbar h1 { white-space: nowrap; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.top-right { display: flex; gap: var(--s-2); align-items: center; }
+.pill { font-size: 13px; font-weight: 600; background: var(--surface-2); padding: 6px 12px; border-radius: var(--r-pill); white-space: nowrap; }
+.brand { display: inline-flex; align-items: center; gap: 10px; }
+.brand-ic { width: 32px; height: 32px; border-radius: var(--r-sm); background: var(--brand); color: var(--accent); display: grid; place-items: center; flex: none; }
+.brand-ic svg { width: 18px; height: 18px; }
+
+/* segmented switcher (Home sections, Setup sections, week/month) */
+.seg { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; background: var(--surface-2); border-radius: var(--r-md); padding: 3px; gap: 2px; }
+.seg button { font: inherit; font-size: 14px; font-weight: 600; border: 0; background: none; color: var(--muted); padding: 8px 10px; border-radius: 11px; cursor: pointer; white-space: nowrap; }
+.seg button[aria-pressed="true"], .seg button[aria-current="page"] { background: var(--surface); color: var(--ink); box-shadow: var(--shadow); }
+.seg.mini { display: inline-grid; border-radius: var(--r-pill); }
+.seg.mini button { font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: var(--r-pill); }
+
+/* ---------- hero ---------- */
+.hero { background: var(--brand); color: var(--brand-ink); border-radius: var(--r-lg); padding: 20px; display: flex; flex-direction: column; gap: var(--s-4); position: relative; overflow: hidden; }
+.hero::after { content: ""; position: absolute; right: -48px; top: -48px; width: 168px; height: 168px; border-radius: 50%; border: 26px solid var(--accent); opacity: .14; pointer-events: none; }
 .hero .label { color: color-mix(in srgb, var(--brand-ink) 70%, transparent); }
-.hero-total { font-family: var(--f-display); font-size: 44px; font-weight: 800; line-height: 1; letter-spacing: -.02em; }
-.hero-total small { font-size: 18px; font-weight: 600; opacity: .7; margin-right: 6px; }
+.hero-total { font-family: var(--f-display); font-size: 42px; font-weight: 800; line-height: 1; letter-spacing: -.02em; }
+.hero-total small { font-size: 17px; font-weight: 600; opacity: .7; margin-right: 6px; }
 .accounts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.acct { background: color-mix(in srgb, var(--brand-ink) 10%, transparent); border: 0; color: inherit; text-align: left; border-radius: 14px; padding: 12px; font: inherit; cursor: pointer; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
-.acct:hover { background: color-mix(in srgb, var(--brand-ink) 16%, transparent); }
-.acct-name { font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+.acct { background: color-mix(in srgb, var(--brand-ink) 9%, transparent); border: 0; color: inherit; text-align: left; border-radius: var(--r-md); padding: var(--s-3); font: inherit; cursor: pointer; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.acct:hover:not([disabled]) { background: color-mix(in srgb, var(--brand-ink) 15%, transparent); }
+.acct[disabled] { cursor: default; }
+.acct-name { font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 6px; min-width: 0; }
+.acct-name span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.acct-name .edit { margin-left: auto; width: 14px; height: 14px; opacity: .55; }
 .acct-dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
 .acct-bal { font-family: var(--f-display); font-size: 20px; font-weight: 600; }
-.acct-hint { font-size: 11px; opacity: .65; }
 
-/* Quick actions */
-.quick { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-.qa { border: 0; background: var(--surface); box-shadow: var(--shadow); border-radius: 16px; padding: 12px 4px 10px; font: inherit; font-size: 12px; font-weight: 600; color: var(--ink); display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; }
+/* ---------- quick actions ---------- */
+.quick { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--s-2); }
+.qa { border: 0; background: var(--surface); box-shadow: var(--shadow); border-radius: var(--r-md); padding: var(--s-3) var(--s-1) 10px; font: inherit; font-size: 12px; font-weight: 600; color: var(--ink); display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; }
 .qa:hover { background: var(--surface-2); }
-.qa-ic { width: 38px; height: 38px; border-radius: 12px; display: grid; place-items: center; }
+.qa-ic, .item-ic { width: 36px; height: 36px; border-radius: var(--r-sm); display: grid; place-items: center; flex: none; }
 .qa-ic svg { width: 20px; height: 20px; }
+.item-ic svg { width: 18px; height: 18px; }
 
-/* Debt */
-.debt-big { font-family: var(--f-display); font-size: 28px; font-weight: 800; }
-.bar { height: 12px; border-radius: 99px; background: var(--surface-2); overflow: hidden; display: flex; }
-.bar > span { display: block; height: 100%; }
-.legend { display: flex; flex-direction: column; gap: 8px; }
-.legend-row { display: flex; align-items: center; gap: 10px; font-size: 14px; }
+/* ---------- "left until payday" ---------- */
+.big { font-family: var(--f-display); font-size: 32px; font-weight: 800; line-height: 1.05; letter-spacing: -.01em; }
+.big.bad { color: var(--bad); }
+.meter { height: 10px; border-radius: var(--r-pill); background: var(--surface-2); overflow: hidden; display: flex; }
+.meter > span { display: block; height: 100%; }
+.meter.thin { height: 6px; }
+.meter-key { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); gap: var(--s-2); }
+.checks { display: flex; flex-direction: column; }
+.check { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-top: 1px solid var(--line); font-size: 14px; min-width: 0; }
+.check-dot { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; flex: none; border: 1.5px solid var(--line); color: transparent; }
+.check-dot svg { width: 14px; height: 14px; }
+.check.done .check-dot { background: var(--good); border-color: var(--good); color: var(--surface); }
+.check.over .check-dot { background: var(--bad); border-color: var(--bad); color: var(--surface); }
+.check-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.check-amt { font-family: var(--f-mono); font-size: 13px; white-space: nowrap; }
+.check .btn { padding: 5px 10px; font-size: 13px; }
+
+/* ---------- breakdown & debts ---------- */
+.legend { display: flex; flex-direction: column; gap: var(--s-2); }
+.legend-row { display: flex; align-items: center; gap: 10px; font-size: 14px; min-width: 0; }
 .legend-row .sw { width: 10px; height: 10px; border-radius: 3px; flex: none; }
 .legend-row .amt { margin-left: auto; font-weight: 600; white-space: nowrap; }
 .legend-row .tag { white-space: nowrap; }
-.bd-h { font-size: 13px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin: 6px 0 -2px; }
-.bd-tip { font-size: 12px; margin: 0; }
+.bd-h { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-top: var(--s-2); }
+.bd-tip { font-size: 13px; color: var(--muted); }
 .bd-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.bd-nav { display: flex; align-items: center; gap: 6px; }
-.bd-nav .btn { padding: 4px 10px; min-width: 0; }
-.bd-nav .btn[disabled] { opacity: .35; }
-.cat-list { display: flex; flex-direction: column; gap: 8px; }
-.cat-row { gap: 8px; }
-.cat-row input { flex: 1; min-width: 0; }
-.cat-chips { display: flex; flex-wrap: wrap; gap: 6px; }
-.tag { font-size: 12px; font-weight: 600; padding: 3px 9px; border-radius: 99px; }
+.bd-nav { display: flex; align-items: center; justify-content: space-between; gap: var(--s-2); }
+.icon-btn { width: 36px; height: 36px; border: 0; border-radius: var(--r-sm); background: var(--surface-2); color: var(--ink); display: grid; place-items: center; cursor: pointer; padding: 0; flex: none; }
+.icon-btn svg { width: 18px; height: 18px; }
+.icon-btn[disabled] { opacity: .35; cursor: default; }
+.total-row { display: flex; justify-content: space-between; align-items: baseline; border-top: 1.5px solid var(--line); padding-top: var(--s-2); font-weight: 700; font-size: 14px; }
+.total-row b { font-family: var(--f-display); font-size: 17px; }
+.debt-list { display: flex; flex-direction: column; gap: var(--s-3); }
+.debt-row { display: flex; flex-direction: column; gap: 6px; }
+.debt-row .row { gap: var(--s-2); }
+.debt-name { font-weight: 600; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tag { font-size: 12px; font-weight: 600; padding: 3px 9px; border-radius: var(--r-pill); background: var(--surface-2); display: inline-flex; align-items: center; gap: 4px; }
+.tag svg { width: 12px; height: 12px; }
 .tag.good { background: color-mix(in srgb, var(--good) 16%, transparent); color: var(--good); }
 .tag.bad { background: color-mix(in srgb, var(--bad) 16%, transparent); color: var(--bad); }
 .tag.warn { background: color-mix(in srgb, var(--warn) 18%, transparent); color: var(--warn); }
+.cat-list { display: flex; flex-direction: column; gap: var(--s-2); }
+.cat-row { gap: var(--s-2); }
+.cat-row input { flex: 1; min-width: 0; }
+.cat-chips { display: flex; flex-wrap: wrap; gap: 6px; }
 
-/* Log */
+/* ---------- log ---------- */
 .list { display: flex; flex-direction: column; }
-.item { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.item { display: flex; align-items: center; gap: var(--s-3); padding: 10px 0; border-bottom: 1px solid var(--line); }
 .item:last-child { border-bottom: 0; }
-.item-ic { width: 38px; height: 38px; border-radius: 12px; display: grid; place-items: center; flex: none; }
-.item-ic svg { width: 18px; height: 18px; }
 .item-main { flex: 1; min-width: 0; }
 .item-title { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .item-sub { font-size: 12px; color: var(--muted); }
-.item-amt { font-weight: 700; font-family: var(--f-mono); font-size: 14px; text-align: right; }
+.item-amt { font-weight: 700; font-family: var(--f-mono); font-size: 14px; text-align: right; white-space: nowrap; }
 .item-amt.plus { color: var(--good); }
-.del { border: 0; background: none; color: var(--muted); cursor: pointer; padding: 6px; border-radius: 8px; font-size: 18px; line-height: 1; }
+.del { border: 0; background: none; color: var(--muted); cursor: pointer; padding: 6px; border-radius: var(--r-sm); line-height: 1; display: grid; place-items: center; font: inherit; font-size: 12px; font-weight: 700; min-width: 30px; min-height: 30px; }
+.del svg { width: 16px; height: 16px; }
 .del:hover { color: var(--bad); background: var(--surface-2); }
-.day-head { font-size: 12px; font-weight: 600; color: var(--muted); padding-top: 12px; text-transform: uppercase; letter-spacing: .06em; }
+.del.confirm { color: var(--bad); }
+.day-head { font-size: 12px; font-weight: 600; color: var(--muted); padding-top: var(--s-3); text-transform: uppercase; letter-spacing: .06em; }
 .empty { text-align: center; padding: 20px 8px; color: var(--muted); display: flex; flex-direction: column; gap: 10px; align-items: center; }
+.appr { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: var(--s-1); }
+.appr .tag { font-size: 11px; padding: 2px 8px; }
+.pnote { font-size: 12px; color: var(--ink); font-style: italic; }
+.pv-acts { display: flex; gap: var(--s-2); padding: 0 0 10px 48px; border-bottom: 1px solid var(--line); margin-top: -4px; flex-wrap: wrap; }
+.pv-acts .btn { padding: 7px 12px; font-size: 13px; }
+.item:has(+ .pv-acts) { border-bottom: 0; }
+.list.gone .item { opacity: .55; text-decoration: line-through; }
 
-/* Forms */
+/* ---------- forms ---------- */
 .field { display: flex; flex-direction: column; gap: 6px; }
 .field label { font-size: 13px; font-weight: 600; color: var(--muted); }
 input[type=number], input[type=text], input[type=date], select, textarea {
-  font: inherit; font-size: 16px; color: var(--ink); background: var(--surface-2); border: 1.5px solid transparent; border-radius: 12px; padding: 12px; width: 100%; min-width: 0;
+  font: inherit; font-size: 16px; color: var(--ink); background: var(--surface-2); border: 1.5px solid transparent; border-radius: var(--r-md); padding: var(--s-3); width: 100%; min-width: 0;
 }
 input:focus, select:focus, textarea:focus { outline: none; border-color: var(--brand); }
-:root[data-theme="dark"] input:focus { border-color: var(--accent); }
+:root[data-theme="dark"] input:focus, :root[data-theme="dark"] select:focus { border-color: var(--accent); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) input:focus, :root:not([data-theme="light"]) select:focus { border-color: var(--accent); } }
+textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
 .money-input { position: relative; }
 .money-input span { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--muted); font-weight: 600; font-size: 14px; }
 .money-input input { padding-left: 52px; font-family: var(--f-display); font-size: 26px; font-weight: 800; }
 .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.btn { font: inherit; font-weight: 700; border: 0; border-radius: 14px; padding: 14px 18px; cursor: pointer; background: var(--accent); color: var(--accent-ink); font-size: 16px; }
+.btn { font: inherit; font-weight: 700; border: 0; border-radius: var(--r-md); padding: 13px 18px; cursor: pointer; background: var(--accent); color: var(--accent-ink); font-size: 16px; display: inline-flex; align-items: center; justify-content: center; gap: var(--s-2); }
+.btn svg { width: 18px; height: 18px; }
 .btn:hover { filter: brightness(.96); }
+.btn[disabled] { opacity: .5; cursor: default; }
 .btn.ghost { background: var(--surface-2); color: var(--ink); }
 .btn.danger { background: color-mix(in srgb, var(--bad) 14%, transparent); color: var(--bad); }
-.btn.small { padding: 9px 14px; font-size: 14px; border-radius: 11px; }
-button:focus-visible, .acct:focus-visible, input[type=range]:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
-.chips { display: flex; flex-wrap: wrap; gap: 8px; }
-.chip { font: inherit; font-size: 14px; font-weight: 600; border: 1.5px solid var(--line); background: var(--surface); color: var(--ink); padding: 8px 12px; border-radius: 99px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+.btn.small { padding: 9px 14px; font-size: 14px; border-radius: var(--r-sm); }
+.btn.small svg { width: 16px; height: 16px; }
+.btn.start { align-self: flex-start; }
+button:focus-visible, .acct:focus-visible, input[type=range]:focus-visible, summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.chips { display: flex; flex-wrap: wrap; gap: var(--s-2); }
+.chip { font: inherit; font-size: 14px; font-weight: 600; border: 1.5px solid var(--line); background: var(--surface); color: var(--ink); padding: 7px 12px; border-radius: var(--r-pill); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
 .chip[aria-pressed="true"] { background: var(--brand); color: var(--brand-ink); border-color: var(--brand); }
 .chip .d { width: 8px; height: 8px; border-radius: 50%; }
+details.more > summary { cursor: pointer; font-weight: 600; font-size: 14px; color: var(--muted); list-style: none; display: flex; align-items: center; gap: 6px; }
+details.more > summary::-webkit-details-marker { display: none; }
+details.more > summary svg { width: 16px; height: 16px; transition: transform .15s; }
+details.more[open] > summary svg { transform: rotate(90deg); }
+details.more[open] > summary { margin-bottom: var(--s-3); }
+details.more > div { display: flex; flex-direction: column; gap: var(--s-3); }
 
-/* Sliders */
+/* ---------- plan ---------- */
 .slider { display: flex; flex-direction: column; gap: 6px; }
-.slider-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
-.slider-top b { font-family: var(--f-mono); font-size: 14px; white-space: nowrap; }
-.plan-lines { display: flex; flex-direction: column; gap: 6px; font-size: 14px; }
+.slider-top { display: flex; justify-content: space-between; align-items: baseline; gap: var(--s-2); font-size: 14px; }
+.slider-top b { font-family: var(--f-mono); font-size: 13px; white-space: nowrap; }
 input[type=range] { width: 100%; accent-color: var(--brand); height: 28px; }
 :root[data-theme="dark"] input[type=range] { accent-color: var(--accent); }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) input[type=range] { accent-color: var(--accent); } }
-
-.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-.stat { background: var(--surface-2); border-radius: 14px; padding: 10px; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-.stat b { font-family: var(--f-display); font-size: 18px; font-weight: 800; }
-.stat span { font-size: 11px; color: var(--muted); font-weight: 600; }
-.callout { background: color-mix(in srgb, var(--accent) 22%, var(--surface)); border-radius: 14px; padding: 12px 14px; font-size: 14px; }
+.save-slider { background: color-mix(in srgb, var(--c-save) 12%, transparent); border-radius: var(--r-md); padding: 10px var(--s-3); }
+.save-slider input[type=range] { accent-color: var(--c-save); }
+.plan-lines { display: flex; flex-direction: column; gap: 6px; font-size: 14px; }
+.callout { background: color-mix(in srgb, var(--accent) 20%, var(--surface)); border-radius: var(--r-md); padding: var(--s-3) 14px; font-size: 14px; display: flex; flex-direction: column; gap: var(--s-2); }
+.callout.good { background: color-mix(in srgb, var(--good) 14%, var(--surface)); }
+.callout.bad { background: color-mix(in srgb, var(--bad) 16%, var(--surface)); }
+.callout.row { flex-direction: row; }
 .callout b { font-weight: 700; }
 .chart { width: 100%; height: auto; display: block; }
 .chart text { fill: var(--muted); font-family: var(--f-body); font-size: 10px; }
+.chart-key { display: flex; flex-wrap: wrap; gap: 14px; font-size: 13px; color: var(--muted); }
+.chart-key span { display: inline-flex; align-items: center; gap: 6px; }
+.chart-key i { display: inline-block; }
+.k-bar { width: 10px; height: 12px; border-radius: 2px; background: var(--c-save); }
+.k-line { width: 16px; height: 3px; border-radius: 2px; background: var(--bad); }
+.k-dash { width: 16px; border-top: 2px dashed var(--warn); }
+.flow { display: flex; flex-direction: column; gap: 6px; }
+.flow-row { display: flex; justify-content: space-between; font-size: 15px; gap: var(--s-2); }
+.flow-row b { font-family: var(--f-mono); font-size: 14px; white-space: nowrap; }
+.flow-row.total { border-top: 1.5px solid var(--line); padding-top: var(--s-2); font-weight: 700; }
+.flow-row.total b { font-family: var(--f-display); font-size: 20px; }
+.ftable { display: flex; flex-direction: column; font-size: 13px; }
+.fr { display: grid; grid-template-columns: 1.1fr 1fr 1fr 1fr; gap: 6px; padding: 7px 0; border-bottom: 1px solid var(--line); text-align: right; }
+.fr span:first-child { text-align: left; color: var(--muted); }
+.fr:last-child { border-bottom: 0; }
+.fr5 .fr { grid-template-columns: 1fr 1fr .8fr 1fr 1fr; }
+.fh { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+.hist-row { font: inherit; font-size: 13px; color: var(--ink); background: none; border: 0; border-bottom: 1px solid var(--line); cursor: pointer; width: 100%; border-radius: 0; }
+.hist-row.on { background: var(--surface-2); }
 
-/* Bottom nav */
+/* ---------- setup ---------- */
+.pvd { display: flex; flex-direction: column; gap: var(--s-2); padding: 10px 0; border-bottom: 1px solid var(--line); }
+.code { font-size: 28px; font-weight: 800; letter-spacing: .08em; }
+.notes { margin: 0; padding-left: 18px; font-size: 14px; display: flex; flex-direction: column; gap: var(--s-1); }
+.upd-card { border: 2px solid var(--accent); }
+.viewbar { background: var(--accent); color: var(--accent-ink); border-radius: var(--r-md); padding: var(--s-3) 14px; display: flex; align-items: center; gap: var(--s-3); }
+.viewbar div { flex: 1; min-width: 0; }
+.viewbar b { display: block; }
+.viewbar small { font-size: 12px; opacity: .8; }
+.viewbar .btn { background: var(--accent-ink); color: var(--accent); }
+.preview-note { font-size: 12px; color: var(--muted); text-align: center; }
+
+/* ---------- bottom tab bar ---------- */
 .tabbar {
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 20;
   background: color-mix(in srgb, var(--surface) 92%, transparent); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
@@ -211,66 +314,21 @@ input[type=range] { width: 100%; accent-color: var(--brand); height: 28px; }
 .tab { border: 0; background: none; font: inherit; font-size: 11px; font-weight: 600; color: var(--muted); display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 6px 0; cursor: pointer; }
 .tab svg { width: 22px; height: 22px; }
 .tab[aria-current="page"] { color: var(--ink); }
-.tab-add { justify-self: center; width: 54px; height: 54px; border-radius: 18px; border: 0; background: var(--accent); color: var(--accent-ink); display: grid; place-items: center; cursor: pointer; box-shadow: 0 6px 16px color-mix(in srgb, var(--accent) 45%, transparent); margin-top: -18px; }
+.tab-add { justify-self: center; width: 52px; height: 52px; border-radius: var(--r-lg); border: 0; background: var(--accent); color: var(--accent-ink); display: grid; place-items: center; cursor: pointer; box-shadow: 0 6px 16px color-mix(in srgb, var(--accent) 40%, transparent); margin-top: -18px; }
 .tab-add svg { width: 26px; height: 26px; }
 
-/* Sheet */
-.scrim { position: fixed; inset: 0; background: rgba(5,15,14,.45); z-index: 30; display: flex; align-items: flex-end; justify-content: center; }
+/* ---------- sheet & toast ---------- */
+.scrim { position: fixed; inset: 0; background: var(--scrim); z-index: 30; display: flex; align-items: flex-end; justify-content: center; }
 .sheet {
-  background: var(--surface); width: 100%; max-width: 520px; border-radius: 24px 24px 0 0; max-height: 92%; overflow-y: auto;
-  padding: 10px max(16px, env(safe-area-inset-right, 0px)) calc(20px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+  background: var(--surface); width: 100%; max-width: 520px; border-radius: var(--r-lg) var(--r-lg) 0 0; max-height: 92%; overflow-y: auto;
+  padding: 10px max(var(--s-4), env(safe-area-inset-right, 0px)) calc(20px + env(safe-area-inset-bottom, 0px)) max(var(--s-4), env(safe-area-inset-left, 0px));
   display: flex; flex-direction: column; gap: 14px; animation: up .22s ease-out;
 }
-.grab { width: 40px; height: 5px; border-radius: 99px; background: var(--line); align-self: center; }
+.grab { width: 40px; height: 5px; border-radius: var(--r-pill); background: var(--line); align-self: center; }
 @keyframes up { from { transform: translateY(30px); opacity: .6; } to { transform: none; opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .sheet { animation: none; } }
-.toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(92px + env(safe-area-inset-bottom, 0px)); background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 12px; font-weight: 600; font-size: 14px; z-index: 40; max-width: calc(100% - 32px); }
-.preview-note { font-size: 12px; color: var(--muted); text-align: center; }
-textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
-/* v2 additions */
-.top-right { display: flex; gap: 8px; align-items: center; }
-.lang { display: inline-flex; background: var(--surface-2); border-radius: 99px; padding: 3px; }
-.lang button { font: inherit; font-size: 12px; font-weight: 700; border: 0; background: none; color: var(--muted); padding: 4px 9px; border-radius: 99px; cursor: pointer; }
-.lang button[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: var(--shadow); }
-.debt-list { display: flex; flex-direction: column; gap: 14px; }
-.debt-row { display: flex; flex-direction: column; gap: 6px; }
-.debt-row .row { gap: 8px; }
-.debt-row .bar { height: 8px; }
-.debt-name { font-weight: 600; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.viewbar { background: var(--accent); color: var(--accent-ink); border-radius: 16px; padding: 12px 14px; display: flex; align-items: center; gap: 12px; }
-.viewbar div { flex: 1; min-width: 0; }
-.viewbar b { display: block; }
-.viewbar small { font-size: 12px; opacity: .8; }
-.viewbar .btn { background: var(--accent-ink); color: var(--accent); }
-.setup-debt { border: 1.5px solid var(--line); border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 10px; }
-.appr { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 4px; }
-.appr .tag { font-size: 11px; padding: 2px 8px; }
-.pnote { font-size: 12px; color: var(--ink); font-style: italic; }
-.save-slider { background: color-mix(in srgb, var(--c-save) 12%, transparent); border-radius: 14px; padding: 10px 12px; }
-.save-slider input[type=range] { accent-color: var(--c-save); }
-.flow { display: flex; flex-direction: column; gap: 6px; }
-.flow-row { display: flex; justify-content: space-between; font-size: 15px; }
-.flow-row b { font-family: var(--f-mono); font-size: 14px; }
-.flow-row.total { border-top: 1.5px solid var(--line); padding-top: 8px; font-weight: 700; }
-.flow-row.total b { font-family: var(--f-display); font-size: 20px; }
-.chart-key { display: flex; flex-wrap: wrap; gap: 14px; font-size: 13px; color: var(--muted); }
-.chart-key span { display: inline-flex; align-items: center; gap: 6px; }
-.chart-key i { display: inline-block; }
-.k-bar { width: 10px; height: 12px; border-radius: 2px; background: var(--c-save); }
-.k-line { width: 16px; height: 3px; border-radius: 2px; background: var(--bad); }
-.k-dash { width: 16px; border-top: 2px dashed var(--warn); }
-.ftable { display: flex; flex-direction: column; font-size: 13px; }
-.fr { display: grid; grid-template-columns: 1.1fr 1fr 1fr 1fr; gap: 6px; padding: 7px 0; border-bottom: 1px solid var(--line); text-align: right; }
-.fr span:first-child { text-align: left; color: var(--muted); }
-.fr:last-child { border-bottom: 0; }
-.hist-row { font: inherit; font-size: 13px; color: var(--ink); background: none; border: 0; border-bottom: 1px solid var(--line); cursor: pointer; width: 100%; border-radius: 0; }
-.hist-row.on { background: var(--surface-2); }
-.fr5 .fr { grid-template-columns: 1fr 1fr .8fr 1fr 1fr; }
-.fh { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
-.brand { display: inline-flex; align-items: center; gap: 10px; }
-.brand-ic { width: 34px; height: 34px; border-radius: 10px; background: var(--brand); color: var(--accent); display: grid; place-items: center; flex: none; }
-.brand-ic svg { width: 20px; height: 20px; }
-.grid3 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(92px + env(safe-area-inset-bottom, 0px)); background: var(--ink); color: var(--bg); padding: 10px var(--s-4); border-radius: var(--r-md); font-weight: 600; font-size: 14px; z-index: 40; max-width: calc(100% - 32px); }
+@media (max-width: 370px) { .topbar .pill { display: none; } h1 { font-size: 21px; } }
 </style>
 </head>
 <body>
@@ -296,130 +354,104 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
   // ---------- translations (Swiss German: no ß) ----------
   var L = {
     en: {
-      appName: "Pocket Money", tab_home: "Home", tab_log: "Log", tab_plan: "Plan", tab_setup: "Setup", addEntry: "Add entry",
-      allMoney: "All my money", tapUpdate: "Tap to update from your app",
-      startHere: "<b>Start here:</b> open your {a} and {b} apps and tap each account above to type in what you see.",
-      qa_allowance: "Allowance", qa_job: "Job hours", qa_gas: "Gas", qa_debt: "Pay debt",
-      debts: "Debts", debtFree: "Debt free", open: "open", stillToPay: "still to pay", ofTotal: "of CHF {n}",
-      hoursOfWork: "That is <b>{h} hours</b> of work at CHF {r}/h.", addDebt: "Add debt", noDebts: "No debts. Keep it that way!",
-      leftOf: "CHF {l} left of {t}", perMonthShort: "CHF {n}/month",
-      whereGoes: "Where the {n} goes", eachMonth: "each month", parkingSpace: "Parking space", gasBudget: "Scooter gas (budget)",
-      debtPayments: "Debt payments", leftOver: "Left to spend or save", missing: "Missing",
-      thisMonth: "This month so far", moneyIn: "Money in", spent: "Spent", jobHours: "Job hours",
-      over: "CHF {n} over", left: "CHF {n} left", paid: "Paid", notPaid: "Not paid yet", toGo: "CHF {n} to go", done: "Done",
-      logParking: "Log parking CHF {n}", otherSpending: "Other spending",
-      latest: "Latest entries", seeAll: "See all", nothingYet: "Nothing logged yet. Every entry you add shows up here with the date.",
+      appName: "Pocket Money", tab_home: "Home", tab_log: "History", tab_plan: "Plan", tab_setup: "Setup", addEntry: "Add entry",
+      allMoney: "All my money", startHere: "<b>First step:</b> tap each account and type in its balance.",
+      qa_job: "Job hours", qa_gas: "Gas", qa_debt: "Pay debt",
+      debts: "Debts", debtFree: "Debt free", noDebts: "No debts. Keep it that way!",
+      leftOf: "CHF {l} left of {t}", parkingSpace: "Parking space", missing: "Missing",
+      moneyIn: "Money in", spent: "Spent", over: "CHF {n} over", left: "CHF {n} left", paid: "Paid", notPaid: "Not paid yet", toGo: "CHF {n} to go", done: "Done",
+            latest: "Latest", seeAll: "See all", nothingYet: "Nothing logged yet.",
       notSaving: "This browser is not saving data right now (private mode?). Entries will be lost when you close it.",
       ty_allowance: "Allowance", ty_job: "Job", ty_income: "Other money in", ty_gas: "Scooter gas", ty_parking: "Parking",
       ty_debt: "Debt payment", ty_spend: "Other spending", ty_balance: "Balance check", ty_newdebt: "New debt",
-      log: "Money log", entries: "{n} entries", noEntries: "No entries yet.",
-      noEntriesHint: "Tap the yellow + to log money you got or spent. The app keeps every entry with its date.",
+      log: "History", noEntries: "No entries yet.",
+      noEntriesHint: "Tap + to log money in or out.",
       inOut: "in {a} · out {b}", set: "set", del: "Delete entry", delQ: "Delete?",
-      plan: "What if…", perMonth: "per month",
-      planIntro: "Move the sliders to see how fast your debts are gone and when you reach your goal. Your allowance of CHF {a} and parking of CHF {p} are included.",
+      plan: "What if…", planIntro: "Move the sliders. Allowance (CHF {a}) and parking (CHF {p}) are included.",
       sl_hours: "Job hours per month", sl_gas: "Scooter gas", sl_debt: "Debt payments (all debts)", sl_other: "Other spending (food, games, going out)",
-      moneyOut: "Money out", saved: "Saved",
-      overspend: "You spend <b>CHF {n}</b> more than you get each month. Work about <b>{h} more hours</b> or spend less.",
+      moneyOut: "Money out", overspend: "You spend <b>CHF {n}</b> more than you get each month. Work about <b>{h} more hours</b> or spend less.",
       noDebtLeft: "<b>No debts left.</b> Nice.", noPay: "With no debt payments, the CHF {n} never goes away.",
       debtFreeIn: "Debt free in <b>{m}</b>, in {d}.", tooLong: "At this pace the debts take more than 5 years.",
-      goalHave: "You already have enough for <b>{g}</b> (CHF {n}).", goalIn: "<b>{g}</b> (CHF {n}) reached in <b>{m}</b>.",
+      goalIn: "<b>{g}</b> (CHF {n}) reached in <b>{m}</b>.",
       goalNo: "<b>{g}</b> (CHF {n}) is out of reach with these numbers.", month1: "1 month", months: "{n} months",
-      next12: "Next 12 months", myMoney: "My money", debtLeftLbl: "Debts left", now: "Now",
+      next12: "Next 12 months", debtLeftLbl: "Debts left", now: "Now",
       useBudget: "Use these numbers as my monthly budget", budgetUpdated: "Budget updated", chartLabel: "Projection of money and debts over 12 months",
-      setup: "Setup", monthlyMoney: "Monthly money", f_allowance: "Allowance (CHF)", f_parking: "Parking space (CHF)", f_gas: "Gas budget (CHF)",
+      setup: "Setup", monthlyMoney: "Monthly money", f_parking: "Parking space (CHF)", f_gas: "Gas budget (CHF)",
       f_other: "Other spending (CHF)", f_rate: "Job pay per hour (CHF)", f_hours: "Usual job hours", f_name: "Your first name",
       savingsGoal: "Savings goal", defaultGoal: "Savings goal", whatFor: "What for?", amountChf: "Amount (CHF)", accounts: "Accounts",
-      accountName: "Account name", saveSetup: "Save setup", setupSaved: "Setup saved", language: "Language", you: "You",
-      debtName: "What is it for?", debtTotal: "Total debt (CHF)", debtMonthly: "Pay back per month (CHF)", debtAlready: "Already paid (CHF)",
-      paidSoFar: "Paid so far: CHF {n}", removeDebt: "Remove", removeQ: "Remove this debt?", yesRemove: "Yes, remove", cancel: "Cancel",
-      debtRemoved: "Debt removed", debtAdded: "Debt added", newDebtTitle: "New debt", saveDebt: "Add debt", debtNameEx: "e.g. Phone repair",
-      licence: "Driving licence", needName: "Give the debt a name",
-      backup: "Backup", backupHint: "Everything is saved on this phone only. Copy the backup code and keep it somewhere (for example in a note), so you can restore it on a new phone.",
+      saveSetup: "Save setup", setupSaved: "Setup saved", language: "Language", you: "You",
+      debtName: "What is it for?", debtTotal: "Total debt (CHF)", debtMonthly: "Pay back per month (CHF)", removeDebt: "Remove", yesRemove: "Yes, remove", cancel: "Cancel",
+            licence: "Driving licence", backup: "Backup", backupHint: "Your data lives on this phone only. Keep a backup code somewhere safe.",
       copyBackup: "Copy backup code", restoreFrom: "Restore from code", pasteBackup: "Paste backup code", restore: "Restore",
       backupCopied: "Backup code copied", selectCopy: "Select and copy the code below", backupRestored: "Backup restored", badCode: "That code does not look right",
       startOver: "Start over", startOverHint: "Deletes all entries and balances on this phone.", deleteAll: "Delete everything",
       reallyDelete: "Really delete everything?", yesDelete: "Yes, delete", allDeleted: "Everything deleted",
-      parentTitle: "For parents", parentHint: "Send a link with all your entries. Your parent sees everything, but can't change anything. Send a new one whenever you want to show the latest.",
+      parentTitle: "Send to parent", parentHint: "A read-only link with all your entries.",
       sendParent: "Send to parent", linkCopied: "Link copied. Paste it in WhatsApp.", shareText: "{name}: CHF {total} on my accounts, CHF {debt} debts left. All my entries:",
       linkHere: "Copy this link and send it:", viewing: "{name}'s money", sentAt: "Sent {d} · read only", closeView: "Close",
       lastReport: "Last report from {name}", openReport: "Open",
-      syncTitle: "Live sync", syncHint: "Your parent set up a Google Sheet. Paste the sync link here once, and every entry is sent there automatically.", syncUrl: "Sync link", syncNow: "Send now", syncSaved: "Sync link saved", syncOff: "Not connected", syncOk: "Last sent {d}", syncFail: "Could not send (no internet?). It tries again with the next entry.", syncBad: "That does not look like a Google sync link", syncRemove: "Disconnect", syncConnected: "Live sync connected", sl_save: "Put into savings", savingsPot: "Savings", toSavings: "Into savings", freeLeft: "Free to spend", allMoneyShort: "All money", debtFreeShort: "debt free", goalNoSave: "Move the savings slider to see when you reach <b>{g}</b>.", syncShare: "Send link to other phone", syncShareText: "Tap this link once to connect the app to the Google Sheet:", approved: "Approved", approvedLocked: "Approved entries can only be deleted by your parent", debtsByParent: "Debts are managed by your parent in the Google Sheet.", syncSheet: "The Sheet did not answer. Ask your parent to check the script deployment.", syncUnknown: "Sent, but the Sheet did not confirm it.", syncError: "The Sheet reported a problem: {m}",
-      fam_title: "Family sync", fam_hint: "Connect this phone with your family. Entries, approvals and debts then sync by themselves, and nothing is lost if the phone gets lost.", fam_code: "Code from your parent", fam_join: "Connect", fam_parentQ: "Are you the parent?", fam_parentHint: "Set up the family on your own phone. This phone then becomes the parent view, and you get a code for your child's phone.", fam_parentName: "Your name", fam_kidName: "Your child's name", fam_create: "Create family", fam_kidOk: "Connected with your family · last sync {d}", fam_kidNever: "Connected with your family · not synced yet", fam_fail: "Could not sync (no internet?). It tries again with the next entry.", fam_unpaired: "This phone is no longer connected. Ask your parent for a new code.", fam_badCode: "That code is not valid or was already used. Ask your parent for a new one.", fam_needNames: "Type both names first", fam_codeTitle: "Code for {name}'s phone", fam_codeHint: "On {name}'s phone, open the app from the home-screen icon, go to Setup → Family sync and type this code. It works once, for 7 days.", fam_share: "Send code", fam_newCode: "Make a code for {name}'s phone", fam_newCodeHint: "For a new phone, or if the app was deleted and added again.", fam_meCode: "Make a code for another parent phone", fam_meCodeHint: "Do this before you delete the app from your home screen, or for a second parent. Type the code in the new app to get the parent view back.", fam_meCodeTitle: "Code for a parent phone", fam_shareText: "Code for the Pocket Money app: {c}. Open the app → Setup → Family sync and type it in, or tap this link in the app:", fam_leave: "Disconnect this phone", fam_leaveQ: "Disconnect this phone from the family?", fam_left: "Disconnected", fam_joined: "Connected with your family", fam_created: "Family created", fam_safari: "This opened in Safari. Open the app from the home-screen icon instead and type the code there: {c}", fam_working: "One moment…", debtsByParentApp: "Debts are managed by your parent.", pv_manageDebts: "You change debts under Setup.",
-      pv_banner: "Parent view · {name}", pv_synced: "Last update from {name}: {d}", pv_waiting: "Waiting for {name}'s first sync. Ask {name} to open the app once.", pv_refresh: "Refresh", pv_pending: "<b>{n} entries</b> not approved yet.", pv_pendingGo: "Review", pv_approve: "✓ Approve", pv_unapprove: "Undo approval", pv_note: "Note", pv_noteTitle: "Note for {name}", pv_saveNote: "Save note", pv_saved: "Saved", pv_debtsTitle: "Debts for {name}", pv_debtsHint: "{name} sees changes after the next sync. \"Paid\" fills in from {name}'s payments.", pv_addDebt: "+ Add debt", pv_saveDebts: "Save debts", pv_debtsSaved: "Debts saved", pv_paid: "paid CHF {p}", pv_deleted: "Deleted entries", pv_fail: "Could not load (no internet?)", pv_kid: "your child", bd_title: "Monthly breakdown", bd_in: "Money in", bd_must: "Must pay", bd_spend: "Spending", bd_received: "received", bd_notYet: "not yet", bd_job: "Job · {h} h", bd_jobTip: "Each hour of work brings CHF {r}. {h} hours a month would add CHF {x}.", bd_nothing: "Nothing spent this month.", bd_left: "Left", bd_noCat: "Other", bd_prev: "Previous month", bd_next: "Next month", bd_freePlan: "Of the CHF {a}, CHF {f} is free after parking, gas and debts.", bd_shortPlan: "Parking, gas and debts cost CHF {f} more than the CHF {a}.", cat_food: "Food", cat_out: "Going out", cat_clothes: "Clothes", cat_games: "Games", cat_phone: "Phone", cat_title: "Spending categories", cat_label: "Category", cat_hintParent: "{name} picks one when logging other spending, and can add new ones. Renamed or removed categories stay on old entries.", cat_hintKid: "Your parent manages this list. You can add a new one when you log an entry.", cat_hintSelf: "Pick one when you log other spending.", cat_add: "+ Add category", cat_save: "Save categories", cat_saved: "Categories saved", cat_new: "+ New", cat_newPh: "New category", pv_delete: "Delete", pv_deleteQ: "Really delete?", pv_removed: "Deleted. It goes away on {name}'s phone with the next sync.", pv_removedKid: "Your parent deleted {n} entries", pv_byYou: "Deleted by the parent",
-      al_title: "Allowance", al_titleFor: "Allowance for {name}", al_mode: "How often", al_month: "Per month", al_week: "Per week", al_amountM: "Amount per month (CHF)", al_amountW: "Amount per week (CHF)", al_day: "Payday", al_mday: "Day of the month", al_preview: "{m}: {c} × CHF {a} = CHF {n}", al_save: "Save allowance", al_saved: "Allowance saved", al_hintParent: "{name} sees the change after the next sync. With a weekly allowance, a month with five paydays gets five payments.", al_byParent: "Your parent sets your allowance.", al_sumWeek: "CHF {a} every {d}", al_sumMonth: "CHF {a} on day {d} of each month", bd_allowW: "Allowance · {c} × {a}", h_allowanceW: "Your weekly CHF {n}, every {d}.",
-      ac_title: "Allowance check", ac_hint: "Pick a start date. The app takes the allowance from that day until today as received, adds extra allowance you gave and what {name} earned, and takes off what {name} logged as spent.", ac_start: "Start date", ac_future: "Pick a start date that is today or earlier.", ac_due: "Allowance received · {c} paydays", ac_auto: "Every payday counts as received automatically. {name} does not have to log it or prove it.", ac_days: "Paydays: {d}", bd_allowGot: "✓ {c} of {n} received", bd_allowNext: "next {d}", bd_allowAuto: "The allowance counts as received on each payday by itself. Nothing to log.", bd_lastOk: "<b>CHF {n} left</b> until {d}.", bd_lastShort: "<b>CHF {n} short</b> until {d}.", bd_addOwn: "Not enough? Add your own money with + → Other money in.", bd_monthEnd: "the end of the month", bd_inTotal: "All money in", bd_titleW: "Weekly breakdown", bd_week: "Week", bd_month: "Month", bd_view: "Show per", bd_paidW: "Paid this week", bd_nothingW: "Nothing spent this week.", bd_nothingPaidW: "No parking, gas or debt paid this week.", bd_histW: "Last 6 weeks", bd_histM: "Last 6 months", ac_job: "Earned (job)", ac_extra: "Extra allowance", ac_left: "Should be left", ac_short: "Spent more than given", ac_month: "Month", ac_allow: "Allowance", ac_extraShort: "Extra + earned", ac_spentShort: "Spent", ac_leftShort: "Left", ac_extras: "Extra allowance you gave", ac_extrasHint: "Money you gave on top of the normal allowance. Only you see this list.", ac_noExtras: "None yet.", ac_add: "+ Add extra allowance", ac_addTitle: "Extra allowance", ac_noteEx: "e.g. Birthday, school trip", ac_save: "Save", ac_saved: "Saved", ac_removed: "Removed", ac_spentTitle: "Logged as spent",
-      updTitle: "App version & updates", updVersion: "Version {v} · {d}", updCheck: "Check for updates", updChecking: "Checking…", updLatest: "You have the newest version.", updAvail: "Update available: {v}", updNow: "Update now", updKeeps: "Keeps all your entries.", updOffline: "Could not check (no internet?).", updNew: "What's new in {v}", updGotIt: "Got it", updUndo: "Undo: use the data from before the update", updUndoHint: "Saved automatically before the update to {v}.", updUndone: "Data from before the update restored", updBanner: "A new version of the app is ready.", updLoading: "Updating…",
-      installTitle: "Install as app", installHint: "Put the app on your home screen. It opens like a normal app and also works without internet.", installBtn: "Install app", installIos: "Tap the Share button at the bottom of Safari, then \"Add to Home Screen\".", installOther: "Open the browser menu (⋮) and tap \"Install app\" or \"Add to Home screen\".", installLater: "Later",
+      syncTitle: "Google Sheet sync", syncHint: "Paste the link from your parent's Google Sheet. Entries are sent automatically.", syncUrl: "Sync link", syncNow: "Send now", syncOff: "Not connected", syncOk: "Last sent {d}", syncFail: "Could not send (no internet?). It tries again with the next entry.", syncBad: "That does not look like a Google sync link", syncRemove: "Disconnect", syncConnected: "Live sync connected", sl_save: "Put into savings", savingsPot: "Savings", toSavings: "Into savings", freeLeft: "Free to spend", goalNoSave: "Move the savings slider to see when you reach <b>{g}</b>.", syncShare: "Send link to other phone", syncShareText: "Tap this link once to connect the app to the Google Sheet:", approved: "Approved", approvedLocked: "Approved entries can only be deleted by your parent", debtsByParent: "Your parent manages debts in the Google Sheet.", syncSheet: "The Sheet did not answer. Ask your parent to check the script deployment.", syncUnknown: "Sent, but the Sheet did not confirm it.", syncError: "The Sheet reported a problem: {m}",
+      fam_title: "Family sync", fam_hint: "Connect to your parent's phone. Entries, approvals and debts sync automatically.", fam_code: "Code from your parent", fam_join: "Connect", fam_parentQ: "Are you the parent?", fam_parentHint: "This phone becomes the parent view. You get a code for your child's phone.", fam_parentName: "Your name", fam_kidName: "Your child's name", fam_create: "Create family", fam_kidOk: "Connected with your family · last sync {d}", fam_kidNever: "Connected with your family · not synced yet", fam_fail: "Could not sync (no internet?). It tries again with the next entry.", fam_unpaired: "This phone is no longer connected. Ask your parent for a new code.", fam_badCode: "That code is not valid or was already used. Ask your parent for a new one.", fam_needNames: "Type both names first", fam_codeTitle: "Code for {name}'s phone", fam_codeHint: "On {name}'s phone: Setup → Sharing → type the code. Works once, for 7 days.", fam_share: "Send code", fam_newCode: "Make a code for {name}'s phone", fam_newCodeHint: "For a new phone or a reinstalled app.", fam_meCode: "Make a code for another parent phone", fam_meCodeHint: "Do this before deleting the app, or for a second parent.", fam_meCodeTitle: "Code for a parent phone", fam_shareText: "Pocket Money code: {c}. Open the app → Setup → Sharing and type it in, or tap this link in the app:", fam_leave: "Disconnect this phone", fam_leaveQ: "Disconnect this phone from the family?", fam_left: "Disconnected", fam_joined: "Connected with your family", fam_created: "Family created", fam_safari: "This opened in Safari. Open the app from its home-screen icon and type the code there: {c}", fam_working: "One moment…", pv_banner: "Parent view · {name}", pv_synced: "Last update from {name}: {d}", pv_waiting: "Waiting for {name}'s first sync. Ask {name} to open the app once.", pv_refresh: "Refresh", pv_pending: "<b>{n} entries</b> not approved yet.", pv_pendingGo: "Review", pv_approve: "Approve", pv_unapprove: "Undo approval", pv_note: "Note", pv_noteTitle: "Note for {name}", pv_saveNote: "Save note", pv_saved: "Saved", pv_debtsTitle: "Debts for {name}", pv_debtsHint: "{name} sees changes after the next sync.", pv_addDebt: "Add debt", pv_saveDebts: "Save debts", pv_debtsSaved: "Debts saved", pv_paid: "paid CHF {p}", pv_deleted: "Deleted entries", pv_fail: "Could not load (no internet?)", pv_kid: "your child", bd_in: "Money in", bd_must: "Fixed costs", bd_spend: "Spending", bd_job: "Job · {h} h", bd_nothing: "Nothing spent this month.", bd_left: "Left", bd_noCat: "Other", bd_prev: "Previous month", bd_next: "Next month", bd_freePlan: "Of the CHF {a}, CHF {f} is free after parking, gas and debts.", bd_shortPlan: "Parking, gas and debts cost CHF {f} more than the CHF {a}.", cat_food: "Food", cat_out: "Going out", cat_clothes: "Clothes", cat_games: "Games", cat_phone: "Phone", cat_title: "Spending categories", cat_label: "Category", cat_hintParent: "{name} picks one when logging spending.", cat_hintKid: "Set by your parent. You can add one when logging.", cat_hintSelf: "Pick one when you log spending.", cat_add: "Add category", cat_save: "Save categories", cat_saved: "Categories saved", cat_new: "New", cat_newPh: "New category", pv_delete: "Delete", pv_deleteQ: "Really delete?", pv_removed: "Deleted. It goes away on {name}'s phone with the next sync.", pv_removedKid: "Your parent deleted {n} entries", pv_byYou: "Deleted by the parent",
+      al_title: "Allowance", al_titleFor: "Allowance for {name}", al_mode: "How often", al_month: "Per month", al_week: "Per week", al_amountM: "Amount per month (CHF)", al_amountW: "Amount per week (CHF)", al_day: "Payday", al_mday: "Day of the month", al_preview: "{m}: {c} × CHF {a} = CHF {n}", al_save: "Save allowance", al_saved: "Allowance saved", al_hintParent: "{name} sees the change after the next sync.", al_byParent: "Your parent sets your allowance.", al_sumWeek: "CHF {a} every {d}", al_sumMonth: "CHF {a} on day {d} of each month", bd_allowW: "Allowance · {c} × {a}", h_allowanceW: "Your weekly CHF {n}, every {d}.",
+      ac_title: "Allowance check", ac_hint: "Allowance from the start date until today, plus extras and job money, minus what {name} logged as spent.", ac_start: "Start date", ac_future: "Pick a start date that is today or earlier.", ac_due: "Allowance received · {c} paydays", ac_auto: "Paydays count as received automatically.", ac_days: "Paydays: {d}", bd_allowGot: "{c} of {n} received", bd_allowNext: "next {d}", bd_monthEnd: "the end of the month", bd_inTotal: "All money in", bd_week: "Week", bd_month: "Month", bd_view: "Show per", bd_paidW: "Paid this week", bd_nothingW: "Nothing spent this week.", bd_nothingPaidW: "No parking, gas or debt paid this week.", bd_histW: "Last 6 weeks", bd_histM: "Last 6 months", ac_job: "Earned (job)", ac_extra: "Extra allowance", ac_left: "Should be left", ac_short: "Spent more than given", ac_month: "Month", ac_allow: "Allowance", ac_extraShort: "Extra + earned", ac_spentShort: "Spent", ac_leftShort: "Left", ac_extras: "Extra allowance", ac_extrasHint: "Money on top of the normal allowance. Only you see this.", ac_noExtras: "None yet.", ac_add: "Add extra allowance", ac_addTitle: "Extra allowance", ac_noteEx: "e.g. Birthday, school trip", ac_save: "Save", ac_saved: "Saved", ac_removed: "Removed", ac_spentTitle: "Logged as spent",
+      updTitle: "App version", updVersion: "Version {v} · {d}", updCheck: "Check for updates", updChecking: "Checking…", updLatest: "You have the newest version.", updAvail: "Update available: {v}", updNow: "Update now", updKeeps: "Keeps all your entries.", updOffline: "Could not check (no internet?).", updNew: "What's new in {v}", updGotIt: "Got it", updUndo: "Restore data from before the update", updUndoHint: "Saved automatically before the update to {v}.", updUndone: "Data from before the update restored", updBanner: "New version ready", updLoading: "Updating…",
+      installTitle: "Install the app", installBtn: "Install app", installIos: "Tap the Share button at the bottom of Safari, then \"Add to Home Screen\".", installOther: "Open the browser menu (⋮) and tap \"Install app\" or \"Add to Home screen\".", installLater: "Later",
       newEntry: "New entry", close: "Close", hoursWorked: "Hours worked", hoursEx: "e.g. 4", amount: "Amount", balanceShown: "Balance shown in your app",
       earned: "Earned", account: "Account", date: "Date", noteOpt: "Note (optional)", noteEx: "e.g. Kebab with friends", saveEntry: "Save entry",
       whichDebt: "Which debt?", typeAmount: "Type an amount first", balUpdated: "Balance updated", savedLog: "Saved to your log",
-      entryDeleted: "Entry deleted", deletePaymentsFirst: "Delete the payments for this debt first",
-      h_allowance: "Your monthly CHF {n}.", h_job: "Type the hours, the app counts CHF {r} per hour.", h_gas: "Budget this month: CHF {n}.",
+      entryDeleted: "Entry deleted", h_allowance: "Your monthly CHF {n}.", h_job: "CHF {r} per hour.", h_gas: "Budget this month: CHF {n}.",
       h_parking: "Your parking space costs CHF {n} per month.", h_debt: "CHF {n} still open.",
-      h_balance: "Open your bank app and copy the exact number. The difference gets logged.", h_income: "Birthday money, selling something…", h_spend: ""
+      h_balance: "Type the exact balance from your bank app.", h_income: "Birthday money, selling something…", updUndoTitle: "Undo the last update", sec_money: "Money", sec_share: "Sharing", sec_family: "Family", sec_app: "App", lv_list: "Entries", lv_sum: "Breakdown", now_month: "This month", now_week: "This week", now_left: "left until {d}", now_short: "short until {d}", now_in: "In: CHF {n}", now_out: "Out: CHF {n}", now_toPay: "To pay this month", now_log: "Log", now_pay: "Pay", now_gas: "Gas budget", details: "Details", pctPaid: "{n}% paid", you_title: "You", accountN: "Account {n}", qa_spend: "Spending", h_spend: ""
     },
     de: {
       appName: "Sackgeld", tab_home: "Start", tab_log: "Verlauf", tab_plan: "Plan", tab_setup: "Setup", addEntry: "Eintrag hinzufügen",
-      allMoney: "Mein ganzes Geld", tapUpdate: "Tippen, um den Stand aus der App einzutragen",
-      startHere: "<b>So startest du:</b> Öffne deine {a}- und {b}-App und tippe oben auf jedes Konto, um den Kontostand einzutragen.",
-      qa_allowance: "Sackgeld", qa_job: "Arbeit", qa_gas: "Benzin", qa_debt: "Abzahlen",
-      debts: "Schulden", debtFree: "Schuldenfrei", open: "offen", stillToPay: "noch zu zahlen", ofTotal: "von CHF {n}",
-      hoursOfWork: "Das sind <b>{h} Stunden</b> Arbeit à CHF {r}/h.", addDebt: "Schuld hinzufügen", noDebts: "Keine Schulden. Bleib dran!",
-      leftOf: "noch CHF {l} von {t}", perMonthShort: "CHF {n}/Monat",
-      whereGoes: "Wohin die {n} gehen", eachMonth: "pro Monat", parkingSpace: "Parkplatz", gasBudget: "Benzin (Budget)",
-      debtPayments: "Abzahlungen", leftOver: "Zum Ausgeben oder Sparen", missing: "Fehlt",
-      thisMonth: "Dieser Monat bisher", moneyIn: "Einnahmen", spent: "Ausgaben", jobHours: "Arbeitsstunden",
-      over: "CHF {n} drüber", left: "CHF {n} übrig", paid: "Bezahlt", notPaid: "Noch offen", toGo: "noch CHF {n}", done: "Erledigt",
-      logParking: "Parkplatz CHF {n} eintragen", otherSpending: "Andere Ausgaben",
-      latest: "Letzte Einträge", seeAll: "Alle", nothingYet: "Noch nichts eingetragen. Jeder Eintrag erscheint hier mit Datum.",
+      allMoney: "Mein ganzes Geld", startHere: "<b>Erster Schritt:</b> Tippe auf jedes Konto und trag den Kontostand ein.",
+      qa_job: "Arbeit", qa_gas: "Benzin", qa_debt: "Abzahlen",
+      debts: "Schulden", debtFree: "Schuldenfrei", noDebts: "Keine Schulden. Bleib dran!",
+      leftOf: "noch CHF {l} von {t}", parkingSpace: "Parkplatz", missing: "Fehlt",
+      moneyIn: "Einnahmen", spent: "Ausgaben", over: "CHF {n} drüber", left: "CHF {n} übrig", paid: "Bezahlt", notPaid: "Noch offen", toGo: "noch CHF {n}", done: "Erledigt",
+            latest: "Letzte", seeAll: "Alle", nothingYet: "Noch nichts eingetragen.",
       notSaving: "Dieser Browser speichert gerade nichts (privater Modus?). Die Einträge gehen beim Schliessen verloren.",
       ty_allowance: "Sackgeld", ty_job: "Job", ty_income: "Anderes Geld rein", ty_gas: "Benzin", ty_parking: "Parkplatz",
       ty_debt: "Abzahlung", ty_spend: "Andere Ausgabe", ty_balance: "Kontostand", ty_newdebt: "Neue Schuld",
-      log: "Verlauf", entries: "{n} Einträge", noEntries: "Noch keine Einträge.",
-      noEntriesHint: "Tippe auf das gelbe +, um Geld einzutragen, das du bekommen oder ausgegeben hast. Die App speichert jeden Eintrag mit Datum.",
+      log: "Verlauf", noEntries: "Noch keine Einträge.",
+      noEntriesHint: "Tippe auf +, um Geld rein oder raus einzutragen.",
       inOut: "rein {a} · raus {b}", set: "neu", del: "Eintrag löschen", delQ: "Löschen?",
-      plan: "Was wäre, wenn…", perMonth: "pro Monat",
-      planIntro: "Verschieb die Regler und schau, wie schnell deine Schulden weg sind und wann du dein Ziel erreichst. Dein Sackgeld von CHF {a} und der Parkplatz für CHF {p} sind eingerechnet.",
+      plan: "Was wäre, wenn…", planIntro: "Verschieb die Regler. Sackgeld (CHF {a}) und Parkplatz (CHF {p}) sind eingerechnet.",
       sl_hours: "Arbeitsstunden pro Monat", sl_gas: "Benzin", sl_debt: "Abzahlungen (alle Schulden)", sl_other: "Andere Ausgaben (Essen, Games, Ausgang)",
-      moneyOut: "Ausgaben", saved: "Gespart",
-      overspend: "Du gibst jeden Monat <b>CHF {n}</b> mehr aus, als du bekommst. Arbeite etwa <b>{h} Stunden mehr</b> oder gib weniger aus.",
+      moneyOut: "Ausgaben", overspend: "Du gibst jeden Monat <b>CHF {n}</b> mehr aus, als du bekommst. Arbeite etwa <b>{h} Stunden mehr</b> oder gib weniger aus.",
       noDebtLeft: "<b>Keine Schulden mehr.</b> Stark.", noPay: "Ohne Abzahlung bleiben die CHF {n} für immer.",
       debtFreeIn: "Schuldenfrei in <b>{m}</b>, im {d}.", tooLong: "In diesem Tempo dauern die Schulden über 5 Jahre.",
-      goalHave: "Du hast schon genug für <b>{g}</b> (CHF {n}).", goalIn: "<b>{g}</b> (CHF {n}) erreicht in <b>{m}</b>.",
+      goalIn: "<b>{g}</b> (CHF {n}) erreicht in <b>{m}</b>.",
       goalNo: "<b>{g}</b> (CHF {n}) ist mit diesen Zahlen nicht erreichbar.", month1: "1 Monat", months: "{n} Monaten",
-      next12: "Nächste 12 Monate", myMoney: "Mein Geld", debtLeftLbl: "Schulden", now: "Jetzt",
+      next12: "Nächste 12 Monate", debtLeftLbl: "Schulden", now: "Jetzt",
       useBudget: "Diese Zahlen als Monatsbudget übernehmen", budgetUpdated: "Budget gespeichert", chartLabel: "Verlauf von Geld und Schulden über 12 Monate",
-      setup: "Einstellungen", monthlyMoney: "Geld pro Monat", f_allowance: "Sackgeld (CHF)", f_parking: "Parkplatz (CHF)", f_gas: "Benzin-Budget (CHF)",
+      setup: "Setup", monthlyMoney: "Geld pro Monat", f_parking: "Parkplatz (CHF)", f_gas: "Benzin-Budget (CHF)",
       f_other: "Andere Ausgaben (CHF)", f_rate: "Lohn pro Stunde (CHF)", f_hours: "Übliche Arbeitsstunden", f_name: "Dein Vorname",
       savingsGoal: "Sparziel", defaultGoal: "Sparziel", whatFor: "Wofür?", amountChf: "Betrag (CHF)", accounts: "Konten",
-      accountName: "Kontoname", saveSetup: "Speichern", setupSaved: "Gespeichert", language: "Sprache", you: "Du",
-      debtName: "Wofür?", debtTotal: "Schuld total (CHF)", debtMonthly: "Abzahlung pro Monat (CHF)", debtAlready: "Schon bezahlt (CHF)",
-      paidSoFar: "Bisher bezahlt: CHF {n}", removeDebt: "Entfernen", removeQ: "Diese Schuld entfernen?", yesRemove: "Ja, entfernen", cancel: "Abbrechen",
-      debtRemoved: "Schuld entfernt", debtAdded: "Schuld hinzugefügt", newDebtTitle: "Neue Schuld", saveDebt: "Schuld hinzufügen", debtNameEx: "z.B. Handy-Reparatur",
-      licence: "Führerschein", needName: "Gib der Schuld einen Namen",
-      backup: "Sicherung", backupHint: "Alles ist nur auf diesem Handy gespeichert. Kopiere den Sicherungscode und bewahre ihn auf (z.B. in einer Notiz), damit du alles auf einem neuen Handy wiederherstellen kannst.",
+      saveSetup: "Speichern", setupSaved: "Gespeichert", language: "Sprache", you: "Du",
+      debtName: "Wofür?", debtTotal: "Schuld total (CHF)", debtMonthly: "Abzahlung pro Monat (CHF)", removeDebt: "Entfernen", yesRemove: "Ja, entfernen", cancel: "Abbrechen",
+            licence: "Führerschein", backup: "Sicherung", backupHint: "Deine Daten sind nur auf diesem Handy. Bewahr einen Sicherungscode gut auf.",
       copyBackup: "Sicherungscode kopieren", restoreFrom: "Aus Code wiederherstellen", pasteBackup: "Sicherungscode einfügen", restore: "Wiederherstellen",
       backupCopied: "Sicherungscode kopiert", selectCopy: "Markiere und kopiere den Code unten", backupRestored: "Sicherung wiederhergestellt", badCode: "Dieser Code stimmt nicht",
       startOver: "Neu anfangen", startOverHint: "Löscht alle Einträge und Kontostände auf diesem Handy.", deleteAll: "Alles löschen",
       reallyDelete: "Wirklich alles löschen?", yesDelete: "Ja, löschen", allDeleted: "Alles gelöscht",
-      parentTitle: "Für Eltern", parentHint: "Schick einen Link mit all deinen Einträgen. Deine Eltern sehen alles, können aber nichts ändern. Schick einfach einen neuen, wenn du den aktuellen Stand zeigen willst.",
+      parentTitle: "An Eltern senden", parentHint: "Ein Link mit allen Einträgen, nur zum Ansehen.",
       sendParent: "An Eltern senden", linkCopied: "Link kopiert. Füge ihn in WhatsApp ein.", shareText: "{name}: CHF {total} auf den Konten, noch CHF {debt} Schulden. Alle Einträge:",
       linkHere: "Kopiere diesen Link und schick ihn:", viewing: "Geld von {name}", sentAt: "Gesendet {d} · nur ansehen", closeView: "Schliessen",
       lastReport: "Letzter Bericht von {name}", openReport: "Öffnen",
-      syncTitle: "Live-Sync", syncHint: "Deine Eltern haben ein Google Sheet eingerichtet. Füge den Sync-Link einmal hier ein, dann wird jeder Eintrag automatisch dorthin geschickt.", syncUrl: "Sync-Link", syncNow: "Jetzt senden", syncSaved: "Sync-Link gespeichert", syncOff: "Nicht verbunden", syncOk: "Zuletzt gesendet {d}", syncFail: "Senden ging nicht (kein Internet?). Es klappt beim nächsten Eintrag wieder.", syncBad: "Das ist kein Google-Sync-Link", syncRemove: "Trennen", syncConnected: "Live-Sync verbunden", sl_save: "Auf die Seite legen (Sparen)", savingsPot: "Erspartes", toSavings: "Ins Sparen", freeLeft: "Frei zum Ausgeben", allMoneyShort: "Ganzes Geld", debtFreeShort: "schuldenfrei", goalNoSave: "Schieb den Spar-Regler, um zu sehen, wann du <b>{g}</b> erreichst.", syncShare: "Link an anderes Handy senden", syncShareText: "Tippe einmal auf diesen Link, um die App mit dem Google Sheet zu verbinden:", approved: "Bestätigt", approvedLocked: "Bestätigte Einträge können nur deine Eltern löschen", debtsByParent: "Schulden werden von deinen Eltern im Google Sheet verwaltet.", syncSheet: "Das Sheet hat nicht geantwortet. Deine Eltern sollen das Skript prüfen.", syncUnknown: "Gesendet, aber das Sheet hat es nicht bestätigt.", syncError: "Das Sheet meldet ein Problem: {m}",
-      fam_title: "Familien-Sync", fam_hint: "Verbinde dieses Handy mit deiner Familie. Einträge, Bestätigungen und Schulden synchronisieren sich dann von selbst, und nichts geht verloren, wenn das Handy weg ist.", fam_code: "Code von deinen Eltern", fam_join: "Verbinden", fam_parentQ: "Bist du der Elternteil?", fam_parentHint: "Richte die Familie auf deinem eigenen Handy ein. Dieses Handy wird dann die Eltern-Ansicht, und du bekommst einen Code für das Handy deines Kindes.", fam_parentName: "Dein Name", fam_kidName: "Name deines Kindes", fam_create: "Familie erstellen", fam_kidOk: "Mit deiner Familie verbunden · zuletzt synchronisiert {d}", fam_kidNever: "Mit deiner Familie verbunden · noch nicht synchronisiert", fam_fail: "Sync ging nicht (kein Internet?). Es klappt beim nächsten Eintrag wieder.", fam_unpaired: "Dieses Handy ist nicht mehr verbunden. Frag deine Eltern nach einem neuen Code.", fam_badCode: "Der Code stimmt nicht oder wurde schon benutzt. Frag deine Eltern nach einem neuen.", fam_needNames: "Gib zuerst beide Namen ein", fam_codeTitle: "Code für {name}s Handy", fam_codeHint: "Öffne auf {name}s Handy die App über das Symbol auf dem Home-Bildschirm, geh zu Setup → Familien-Sync und gib diesen Code ein. Er gilt einmal, 7 Tage lang.", fam_share: "Code senden", fam_newCode: "Code für {name}s Handy erstellen", fam_newCodeHint: "Für ein neues Handy, oder wenn die App gelöscht und neu hinzugefügt wurde.", fam_meCode: "Code für ein anderes Eltern-Handy erstellen", fam_meCodeHint: "Mach das, bevor du die App vom Home-Bildschirm löschst, oder für einen zweiten Elternteil. Gib den Code in der neuen App ein, dann ist die Eltern-Ansicht wieder da.", fam_meCodeTitle: "Code für ein Eltern-Handy", fam_shareText: "Code für die Sackgeld-App: {c}. Öffne die App → Setup → Familien-Sync und gib ihn ein, oder tippe in der App auf diesen Link:", fam_leave: "Dieses Handy trennen", fam_leaveQ: "Dieses Handy von der Familie trennen?", fam_left: "Getrennt", fam_joined: "Mit deiner Familie verbunden", fam_created: "Familie erstellt", fam_safari: "Das hat sich in Safari geöffnet. Öffne die App stattdessen über das Symbol auf dem Home-Bildschirm und gib dort den Code ein: {c}", fam_working: "Einen Moment…", debtsByParentApp: "Schulden werden von deinen Eltern verwaltet.", pv_manageDebts: "Schulden änderst du im Setup.",
-      pv_banner: "Eltern-Ansicht · {name}", pv_synced: "Letztes Update von {name}: {d}", pv_waiting: "Warte auf den ersten Sync von {name}. {name} soll die App einmal öffnen.", pv_refresh: "Aktualisieren", pv_pending: "<b>{n} Einträge</b> noch nicht bestätigt.", pv_pendingGo: "Ansehen", pv_approve: "✓ Bestätigen", pv_unapprove: "Bestätigung aufheben", pv_note: "Notiz", pv_noteTitle: "Notiz für {name}", pv_saveNote: "Notiz speichern", pv_saved: "Gespeichert", pv_debtsTitle: "Schulden von {name}", pv_debtsHint: "{name} sieht Änderungen nach dem nächsten Sync. \"Bezahlt\" füllt sich durch die Zahlungen von {name}.", pv_addDebt: "+ Schuld hinzufügen", pv_saveDebts: "Schulden speichern", pv_debtsSaved: "Schulden gespeichert", pv_paid: "bezahlt CHF {p}", pv_deleted: "Gelöschte Einträge", pv_fail: "Laden ging nicht (kein Internet?)", pv_kid: "dein Kind", bd_title: "Monatsübersicht", bd_in: "Einnahmen", bd_must: "Muss bezahlt werden", bd_spend: "Ausgaben", bd_received: "erhalten", bd_notYet: "noch nicht", bd_job: "Job · {h} h", bd_jobTip: "Jede Stunde Arbeit bringt CHF {r}. {h} Stunden im Monat bringen CHF {x} dazu.", bd_nothing: "Diesen Monat noch nichts ausgegeben.", bd_left: "Übrig", bd_noCat: "Sonstiges", bd_prev: "Vorheriger Monat", bd_next: "Nächster Monat", bd_freePlan: "Von den CHF {a} sind nach Parkplatz, Benzin und Schulden CHF {f} frei.", bd_shortPlan: "Parkplatz, Benzin und Schulden kosten CHF {f} mehr als die CHF {a}.", cat_food: "Essen", cat_out: "Ausgang", cat_clothes: "Kleider", cat_games: "Games", cat_phone: "Handy", cat_title: "Ausgaben-Kategorien", cat_label: "Kategorie", cat_hintParent: "{name} wählt eine aus, wenn er andere Ausgaben einträgt, und kann neue hinzufügen. Umbenannte oder entfernte Kategorien bleiben bei alten Einträgen.", cat_hintKid: "Deine Eltern verwalten diese Liste. Neue kannst du beim Eintragen hinzufügen.", cat_hintSelf: "Wähle eine aus, wenn du andere Ausgaben einträgst.", cat_add: "+ Kategorie hinzufügen", cat_save: "Kategorien speichern", cat_saved: "Kategorien gespeichert", cat_new: "+ Neu", cat_newPh: "Neue Kategorie", pv_delete: "Löschen", pv_deleteQ: "Wirklich löschen?", pv_removed: "Gelöscht. Auf dem Handy von {name} verschwindet es beim nächsten Sync.", pv_removedKid: "Deine Eltern haben {n} Einträge gelöscht", pv_byYou: "Von den Eltern gelöscht",
-      al_title: "Sackgeld", al_titleFor: "Sackgeld für {name}", al_mode: "Wie oft", al_month: "Pro Monat", al_week: "Pro Woche", al_amountM: "Betrag pro Monat (CHF)", al_amountW: "Betrag pro Woche (CHF)", al_day: "Zahltag", al_mday: "Tag im Monat", al_preview: "{m}: {c} × CHF {a} = CHF {n}", al_save: "Sackgeld speichern", al_saved: "Sackgeld gespeichert", al_hintParent: "{name} sieht die Änderung nach dem nächsten Sync. Bei wöchentlichem Sackgeld gibt es in einem Monat mit fünf Zahltagen fünf Zahlungen.", al_byParent: "Dein Sackgeld legen deine Eltern fest.", al_sumWeek: "CHF {a} jeden {d}", al_sumMonth: "CHF {a} jeweils am {d}. des Monats", bd_allowW: "Sackgeld · {c} × {a}", h_allowanceW: "Dein Sackgeld pro Woche: CHF {n}, jeden {d}.",
-      ac_title: "Sackgeld-Check", ac_hint: "Wähle ein Startdatum. Die App nimmt das Sackgeld von diesem Tag bis heute als erhalten, zählt Extra-Sackgeld und Verdientes dazu und zieht ab, was {name} als Ausgaben eingetragen hat.", ac_start: "Startdatum", ac_future: "Wähle ein Startdatum, das heute oder früher ist.", ac_due: "Sackgeld erhalten · {c} Zahltage", ac_auto: "Jeder Zahltag zählt automatisch als erhalten. {name} muss nichts eintragen und nichts beweisen.", ac_days: "Zahltage: {d}", bd_allowGot: "✓ {c} von {n} erhalten", bd_allowNext: "nächster {d}", bd_allowAuto: "Das Sackgeld zählt an jedem Zahltag von selbst als erhalten. Nichts einzutragen.", bd_lastOk: "<b>Noch CHF {n} übrig</b> bis {d}.", bd_lastShort: "<b>CHF {n} fehlen</b> bis {d}.", bd_addOwn: "Reicht es nicht? Trag dein eigenes Geld ein mit + → Anderes Geld rein.", bd_monthEnd: "Ende Monat", bd_inTotal: "Alle Einnahmen", bd_titleW: "Wochenübersicht", bd_week: "Woche", bd_month: "Monat", bd_view: "Anzeigen pro", bd_paidW: "Diese Woche bezahlt", bd_nothingW: "Diese Woche noch nichts ausgegeben.", bd_nothingPaidW: "Diese Woche kein Parkplatz, Benzin oder Schulden bezahlt.", bd_histW: "Letzte 6 Wochen", bd_histM: "Letzte 6 Monate", ac_job: "Verdient (Job)", ac_extra: "Extra-Sackgeld", ac_left: "Sollte übrig sein", ac_short: "Mehr ausgegeben als bekommen", ac_month: "Monat", ac_allow: "Sackgeld", ac_extraShort: "Extra + Job", ac_spentShort: "Ausgaben", ac_leftShort: "Übrig", ac_extras: "Extra-Sackgeld, das du gegeben hast", ac_extrasHint: "Geld, das du zusätzlich zum normalen Sackgeld gegeben hast. Nur du siehst diese Liste.", ac_noExtras: "Noch keines.", ac_add: "+ Extra-Sackgeld hinzufügen", ac_addTitle: "Extra-Sackgeld", ac_noteEx: "z.B. Geburtstag, Schulreise", ac_save: "Speichern", ac_saved: "Gespeichert", ac_removed: "Entfernt", ac_spentTitle: "Als Ausgaben eingetragen",
-      updTitle: "App-Version & Updates", updVersion: "Version {v} · {d}", updCheck: "Nach Updates suchen", updChecking: "Suche…", updLatest: "Du hast die neuste Version.", updAvail: "Update verfügbar: {v}", updNow: "Jetzt aktualisieren", updKeeps: "Alle deine Einträge bleiben.", updOffline: "Prüfen ging nicht (kein Internet?).", updNew: "Neu in {v}", updGotIt: "Alles klar", updUndo: "Rückgängig: Daten von vor dem Update", updUndoHint: "Automatisch gespeichert vor dem Update auf {v}.", updUndone: "Daten von vor dem Update wiederhergestellt", updBanner: "Eine neue Version der App ist bereit.", updLoading: "Wird aktualisiert…",
-      installTitle: "Als App installieren", installHint: "Leg die App auf deinen Homescreen. Sie öffnet sich wie eine normale App und funktioniert auch ohne Internet.", installBtn: "App installieren", installIos: "Tippe in Safari unten auf Teilen und dann auf \"Zum Home-Bildschirm\".", installOther: "Öffne das Browser-Menü (⋮) und tippe auf \"App installieren\" oder \"Zum Startbildschirm hinzufügen\".", installLater: "Später",
+      syncTitle: "Google-Sheet-Sync", syncHint: "Füge den Link vom Google Sheet deiner Eltern ein. Einträge werden automatisch gesendet.", syncUrl: "Sync-Link", syncNow: "Jetzt senden", syncOff: "Nicht verbunden", syncOk: "Zuletzt gesendet {d}", syncFail: "Senden ging nicht (kein Internet?). Es klappt beim nächsten Eintrag wieder.", syncBad: "Das ist kein Google-Sync-Link", syncRemove: "Trennen", syncConnected: "Live-Sync verbunden", sl_save: "Auf die Seite legen (Sparen)", savingsPot: "Erspartes", toSavings: "Ins Sparen", freeLeft: "Frei zum Ausgeben", goalNoSave: "Schieb den Spar-Regler, um zu sehen, wann du <b>{g}</b> erreichst.", syncShare: "Link an anderes Handy senden", syncShareText: "Tippe einmal auf diesen Link, um die App mit dem Google Sheet zu verbinden:", approved: "Bestätigt", approvedLocked: "Bestätigte Einträge können nur deine Eltern löschen", debtsByParent: "Deine Eltern verwalten die Schulden im Google Sheet.", syncSheet: "Das Sheet hat nicht geantwortet. Deine Eltern sollen das Skript prüfen.", syncUnknown: "Gesendet, aber das Sheet hat es nicht bestätigt.", syncError: "Das Sheet meldet ein Problem: {m}",
+      fam_title: "Familien-Sync", fam_hint: "Mit dem Handy deiner Eltern verbinden. Einträge, Bestätigungen und Schulden synchronisieren sich automatisch.", fam_code: "Code von deinen Eltern", fam_join: "Verbinden", fam_parentQ: "Bist du der Elternteil?", fam_parentHint: "Dieses Handy wird die Eltern-Ansicht. Du bekommst einen Code für das Handy deines Kindes.", fam_parentName: "Dein Name", fam_kidName: "Name deines Kindes", fam_create: "Familie erstellen", fam_kidOk: "Mit deiner Familie verbunden · zuletzt synchronisiert {d}", fam_kidNever: "Mit deiner Familie verbunden · noch nicht synchronisiert", fam_fail: "Sync ging nicht (kein Internet?). Es klappt beim nächsten Eintrag wieder.", fam_unpaired: "Dieses Handy ist nicht mehr verbunden. Frag deine Eltern nach einem neuen Code.", fam_badCode: "Der Code stimmt nicht oder wurde schon benutzt. Frag deine Eltern nach einem neuen.", fam_needNames: "Gib zuerst beide Namen ein", fam_codeTitle: "Code für {name}s Handy", fam_codeHint: "Auf {name}s Handy: Setup → Teilen → Code eingeben. Gilt einmal, 7 Tage lang.", fam_share: "Code senden", fam_newCode: "Code für {name}s Handy erstellen", fam_newCodeHint: "Für ein neues Handy oder eine neu installierte App.", fam_meCode: "Code für ein anderes Eltern-Handy erstellen", fam_meCodeHint: "Mach das, bevor du die App löschst, oder für einen zweiten Elternteil.", fam_meCodeTitle: "Code für ein Eltern-Handy", fam_shareText: "Code für die Sackgeld-App: {c}. Öffne die App → Setup → Teilen und gib ihn ein, oder tippe in der App auf diesen Link:", fam_leave: "Dieses Handy trennen", fam_leaveQ: "Dieses Handy von der Familie trennen?", fam_left: "Getrennt", fam_joined: "Mit deiner Familie verbunden", fam_created: "Familie erstellt", fam_safari: "Das hat sich in Safari geöffnet. Öffne die App über das Symbol auf dem Home-Bildschirm und gib dort den Code ein: {c}", fam_working: "Einen Moment…", pv_banner: "Eltern-Ansicht · {name}", pv_synced: "Letztes Update von {name}: {d}", pv_waiting: "Warte auf den ersten Sync von {name}. {name} soll die App einmal öffnen.", pv_refresh: "Aktualisieren", pv_pending: "<b>{n} Einträge</b> noch nicht bestätigt.", pv_pendingGo: "Ansehen", pv_approve: "Bestätigen", pv_unapprove: "Bestätigung aufheben", pv_note: "Notiz", pv_noteTitle: "Notiz für {name}", pv_saveNote: "Notiz speichern", pv_saved: "Gespeichert", pv_debtsTitle: "Schulden von {name}", pv_debtsHint: "{name} sieht Änderungen nach dem nächsten Sync.", pv_addDebt: "Schuld hinzufügen", pv_saveDebts: "Schulden speichern", pv_debtsSaved: "Schulden gespeichert", pv_paid: "bezahlt CHF {p}", pv_deleted: "Gelöschte Einträge", pv_fail: "Laden ging nicht (kein Internet?)", pv_kid: "dein Kind", bd_in: "Einnahmen", bd_must: "Fixkosten", bd_spend: "Ausgaben", bd_job: "Job · {h} h", bd_nothing: "Diesen Monat noch nichts ausgegeben.", bd_left: "Übrig", bd_noCat: "Sonstiges", bd_prev: "Vorheriger Monat", bd_next: "Nächster Monat", bd_freePlan: "Von den CHF {a} sind nach Parkplatz, Benzin und Schulden CHF {f} frei.", bd_shortPlan: "Parkplatz, Benzin und Schulden kosten CHF {f} mehr als die CHF {a}.", cat_food: "Essen", cat_out: "Ausgang", cat_clothes: "Kleider", cat_games: "Games", cat_phone: "Handy", cat_title: "Ausgaben-Kategorien", cat_label: "Kategorie", cat_hintParent: "{name} wählt eine beim Eintragen von Ausgaben.", cat_hintKid: "Von deinen Eltern festgelegt. Beim Eintragen kannst du eine neue hinzufügen.", cat_hintSelf: "Wähle eine beim Eintragen von Ausgaben.", cat_add: "Kategorie hinzufügen", cat_save: "Kategorien speichern", cat_saved: "Kategorien gespeichert", cat_new: "Neu", cat_newPh: "Neue Kategorie", pv_delete: "Löschen", pv_deleteQ: "Wirklich löschen?", pv_removed: "Gelöscht. Auf dem Handy von {name} verschwindet es beim nächsten Sync.", pv_removedKid: "Deine Eltern haben {n} Einträge gelöscht", pv_byYou: "Von den Eltern gelöscht",
+      al_title: "Sackgeld", al_titleFor: "Sackgeld für {name}", al_mode: "Wie oft", al_month: "Pro Monat", al_week: "Pro Woche", al_amountM: "Betrag pro Monat (CHF)", al_amountW: "Betrag pro Woche (CHF)", al_day: "Zahltag", al_mday: "Tag im Monat", al_preview: "{m}: {c} × CHF {a} = CHF {n}", al_save: "Sackgeld speichern", al_saved: "Sackgeld gespeichert", al_hintParent: "{name} sieht die Änderung nach dem nächsten Sync.", al_byParent: "Dein Sackgeld legen deine Eltern fest.", al_sumWeek: "CHF {a} jeden {d}", al_sumMonth: "CHF {a} jeweils am {d}. des Monats", bd_allowW: "Sackgeld · {c} × {a}", h_allowanceW: "Dein Sackgeld pro Woche: CHF {n}, jeden {d}.",
+      ac_title: "Sackgeld-Check", ac_hint: "Sackgeld vom Startdatum bis heute, plus Extras und Jobgeld, minus was {name} als Ausgaben eingetragen hat.", ac_start: "Startdatum", ac_future: "Wähle ein Startdatum, das heute oder früher ist.", ac_due: "Sackgeld erhalten · {c} Zahltage", ac_auto: "Zahltage zählen automatisch als erhalten.", ac_days: "Zahltage: {d}", bd_allowGot: "{c} von {n} erhalten", bd_allowNext: "nächster {d}", bd_monthEnd: "Ende Monat", bd_inTotal: "Alle Einnahmen", bd_week: "Woche", bd_month: "Monat", bd_view: "Anzeigen pro", bd_paidW: "Diese Woche bezahlt", bd_nothingW: "Diese Woche noch nichts ausgegeben.", bd_nothingPaidW: "Diese Woche kein Parkplatz, Benzin oder Schulden bezahlt.", bd_histW: "Letzte 6 Wochen", bd_histM: "Letzte 6 Monate", ac_job: "Verdient (Job)", ac_extra: "Extra-Sackgeld", ac_left: "Sollte übrig sein", ac_short: "Mehr ausgegeben als bekommen", ac_month: "Monat", ac_allow: "Sackgeld", ac_extraShort: "Extra + Job", ac_spentShort: "Ausgaben", ac_leftShort: "Übrig", ac_extras: "Extra-Sackgeld", ac_extrasHint: "Geld zusätzlich zum normalen Sackgeld. Nur du siehst das.", ac_noExtras: "Noch keines.", ac_add: "Extra-Sackgeld hinzufügen", ac_addTitle: "Extra-Sackgeld", ac_noteEx: "z.B. Geburtstag, Schulreise", ac_save: "Speichern", ac_saved: "Gespeichert", ac_removed: "Entfernt", ac_spentTitle: "Als Ausgaben eingetragen",
+      updTitle: "App-Version", updVersion: "Version {v} · {d}", updCheck: "Nach Updates suchen", updChecking: "Suche…", updLatest: "Du hast die neuste Version.", updAvail: "Update verfügbar: {v}", updNow: "Jetzt aktualisieren", updKeeps: "Alle deine Einträge bleiben.", updOffline: "Prüfen ging nicht (kein Internet?).", updNew: "Neu in {v}", updGotIt: "Alles klar", updUndo: "Daten von vor dem Update wiederherstellen", updUndoHint: "Automatisch gespeichert vor dem Update auf {v}.", updUndone: "Daten von vor dem Update wiederhergestellt", updBanner: "Neue Version bereit", updLoading: "Wird aktualisiert…",
+      installTitle: "App installieren", installBtn: "App installieren", installIos: "Tippe in Safari unten auf Teilen und dann auf \"Zum Home-Bildschirm\".", installOther: "Öffne das Browser-Menü (⋮) und tippe auf \"App installieren\" oder \"Zum Startbildschirm hinzufügen\".", installLater: "Später",
       newEntry: "Neuer Eintrag", close: "Schliessen", hoursWorked: "Gearbeitete Stunden", hoursEx: "z.B. 4", amount: "Betrag", balanceShown: "Kontostand in deiner App",
       earned: "Verdient", account: "Konto", date: "Datum", noteOpt: "Notiz (optional)", noteEx: "z.B. Kebab mit Kollegen", saveEntry: "Eintrag speichern",
       whichDebt: "Welche Schuld?", typeAmount: "Gib zuerst einen Betrag ein", balUpdated: "Kontostand aktualisiert", savedLog: "Im Verlauf gespeichert",
-      entryDeleted: "Eintrag gelöscht", deletePaymentsFirst: "Lösche zuerst die Abzahlungen dieser Schuld",
-      h_allowance: "Dein Sackgeld pro Monat: CHF {n}.", h_job: "Gib die Stunden ein, die App rechnet CHF {r} pro Stunde.", h_gas: "Budget diesen Monat: CHF {n}.",
+      entryDeleted: "Eintrag gelöscht", h_allowance: "Dein Sackgeld pro Monat: CHF {n}.", h_job: "CHF {r} pro Stunde.", h_gas: "Budget diesen Monat: CHF {n}.",
       h_parking: "Dein Parkplatz kostet CHF {n} pro Monat.", h_debt: "Noch CHF {n} offen.",
-      h_balance: "Öffne deine Bank-App und übernimm die genaue Zahl. Die Differenz wird eingetragen.", h_income: "Geburtstagsgeld, etwas verkauft…", h_spend: ""
+      h_balance: "Gib den genauen Kontostand aus deiner Bank-App ein.", h_income: "Geburtstagsgeld, etwas verkauft…", updUndoTitle: "Letztes Update rückgängig machen", sec_money: "Geld", sec_share: "Teilen", sec_family: "Familie", sec_app: "App", lv_list: "Einträge", lv_sum: "Übersicht", now_month: "Dieser Monat", now_week: "Diese Woche", now_left: "übrig bis {d}", now_short: "fehlen bis {d}", now_in: "Rein: CHF {n}", now_out: "Raus: CHF {n}", now_toPay: "Diesen Monat zu zahlen", now_log: "Eintragen", now_pay: "Zahlen", now_gas: "Benzin-Budget", details: "Details", pctPaid: "{n}% bezahlt", you_title: "Du", accountN: "Konto {n}", qa_spend: "Ausgabe", h_spend: ""
     }
   };
   var lang = "en";
@@ -441,9 +473,20 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
     debt: '<path d="M4 7h16v12H4z"/><path d="M4 11h16M8 15h3"/>',
     newdebt: '<path d="M4 7h16v12H4z"/><path d="M12 10v6M9 13h6"/>',
     spend: '<path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18M16 10a4 4 0 0 1-8 0"/>',
-    balance: '<path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/>'
+    balance: '<path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/>',
+    left: '<path d="m15 18-6-6 6-6"/>',
+    right: '<path d="m9 18 6-6-6-6"/>',
+    x: '<path d="M18 6 6 18M6 6l12 12"/>',
+    check: '<path d="M20 6 9 17l-5-5"/>',
+    plus: '<path d="M12 5v14M5 12h14"/>',
+    pencil: '<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',
+    share: '<path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"/><path d="m16 6-4-4-4 4M12 2v13"/>',
+    note: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+    trash: '<path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>',
+    sync: '<path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5M3 21v-5h5"/>',
+    wallet: '<path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/>'
   };
-  function icon(k) { return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + IC[k] + '</svg>'; }
+  function icon(k, cls) { return '<svg' + (cls ? ' class="' + cls + '"' : "") + ' viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + IC[k] + '</svg>'; }
 
   var TYPES = {
     allowance: { color: "var(--good)", sign: 1 },
@@ -503,10 +546,10 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
 
   // ---------- app version & updates ----------
   // When releasing: bump APP_VERSION, APP_DATE and NOTES here AND in version.json (a GitHub check compares them).
-  var APP_VERSION = "1.11.0", APP_DATE = "2026-10-25";
+  var APP_VERSION = "1.12.0", APP_DATE = "2026-10-25";
   var NOTES = {
-    en: ["The allowance now counts as received on each payday by itself. Nobody has to log it, and the monthly breakdown shows how many paydays are received and when the next one is.", "The allowance check says this clearly and lists the paydays it counted.", "On Home, the quick button for allowance is now one for other spending.", "With a weekly allowance, the breakdown shows the week by default. Switch to Month, and look back at the last 6 weeks or months. All money in (job, other money, extra allowance) adds up to one total."],
-    de: ["Das Sackgeld zählt jetzt an jedem Zahltag von selbst als erhalten. Niemand muss es eintragen, und die Monatsübersicht zeigt, wie viele Zahltage erhalten sind und wann der nächste ist.", "Der Sackgeld-Check sagt das klar und zeigt die gezählten Zahltage.", "Auf der Startseite ist der Knopf fürs Sackgeld jetzt einer für andere Ausgaben.", "Bei wöchentlichem Sackgeld zeigt die Übersicht standardmässig die Woche. Wechsle auf Monat und schau die letzten 6 Wochen oder Monate an. Alle Einnahmen (Job, anderes Geld, Extra-Sackgeld) ergeben ein Total."]
+    en: ["A new look with calmer colours and a darker, softer dark mode.", "Home shows what is left until payday and a short list of what to pay this month. The full breakdown moved to History → Breakdown.", "Setup is split into Money, Sharing and App. Language is under App."],
+    de: ["Neues Aussehen mit ruhigeren Farben und einem weicheren dunklen Modus.", "Die Startseite zeigt, was bis zum Zahltag übrig ist, und eine kurze Liste, was diesen Monat zu zahlen ist. Die ganze Übersicht ist jetzt unter Verlauf → Übersicht.", "Setup ist aufgeteilt in Geld, Teilen und App. Die Sprache findest du unter App."]
   };
 
 
@@ -541,11 +584,11 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
   function updateBanner() {
     if (ui.viewing && !ui.viewing.parent) return "";
     if (upd.state === "avail" || upd.state === "loading") {
-      return '<section class="card upd-card"><b>' + t("updBanner") + '</b>' + (upd.info ? '<span class="muted" style="font-size:13px">' + esc(t("updAvail", { v: upd.info.version })) + '</span>' : "") +
-        '<button class="btn small" id="upd-now"' + (upd.state === "loading" ? " disabled" : "") + '>' + t(upd.state === "loading" ? "updLoading" : "updNow") + '</button></section>';
+      return '<section class="card upd-card"><div class="card-head"><b>' + t("updBanner") + '</b>' + (upd.info ? '<span class="muted small-text">' + esc(upd.info.version) + '</span>' : "") + '</div>' +
+        '<button class="btn small start" id="upd-now"' + (upd.state === "loading" ? " disabled" : "") + '>' + icon("sync") + t(upd.state === "loading" ? "updLoading" : "updNow") + '</button></section>';
     }
     if (own.seenVersion !== APP_VERSION) {
-      return '<section class="card upd-card"><b>' + esc(t("updNew", { v: APP_VERSION })) + '</b>' + notesList(NOTES) + '<button class="btn ghost small" id="upd-seen" style="align-self:flex-start">' + t("updGotIt") + '</button></section>';
+      return '<section class="card upd-card"><div class="card-head"><b>' + esc(t("updNew", { v: APP_VERSION })) + '</b><button class="btn ghost small" id="upd-seen">' + t("updGotIt") + '</button></div>' + notesList(NOTES) + '</section>';
     }
     return "";
   }
@@ -555,13 +598,12 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
     else if (st === "latest") msg = t("updLatest");
     else if (st === "offline") msg = t("updOffline");
     var avail = st === "avail" || st === "loading";
-    return '<section class="card"><h2>' + t("updTitle") + '</h2>' +
-      '<p class="muted" style="font-size:13px;margin:0">' + esc(t("updVersion", { v: APP_VERSION, d: new Date(APP_DATE).toLocaleDateString(loc(), { day: "numeric", month: "short", year: "numeric" }) })) + '</p>' +
-      (avail && upd.info ? '<div class="callout"><div style="display:flex;flex-direction:column;gap:8px"><b>' + esc(t("updAvail", { v: upd.info.version })) + '</b>' + notesList(upd.info.notes) +
-        '<button class="btn small" id="upd-now" style="align-self:flex-start"' + (st === "loading" ? " disabled" : "") + '>' + t(st === "loading" ? "updLoading" : "updNow") + '</button><span class="muted" style="font-size:12px">' + t("updKeeps") + '</span></div></div>'
-        : '<button class="btn ghost small" id="upd-check" style="align-self:flex-start">' + t("updCheck") + '</button>') +
-      (msg ? '<p class="muted" style="font-size:13px;margin:0">' + esc(msg) + '</p>' : "") +
-      (pre && pre.data ? '<div><button class="btn ghost small" id="upd-undo">' + t("updUndo") + '</button><p class="muted" style="font-size:12px;margin:6px 0 0">' + esc(t("updUndoHint", { v: pre.to || APP_VERSION })) + '</p></div>' : "") +
+    return '<section class="card"><div class="card-head"><h2>' + t("updTitle") + '</h2><span class="muted small-text num">' + esc(t("updVersion", { v: APP_VERSION, d: new Date(APP_DATE).toLocaleDateString(loc(), { day: "numeric", month: "short", year: "numeric" }) })) + '</span></div>' +
+      (avail && upd.info ? '<div class="callout"><b>' + esc(t("updAvail", { v: upd.info.version })) + '</b>' + notesList(upd.info.notes) +
+        '<button class="btn small start" id="upd-now"' + (st === "loading" ? " disabled" : "") + '>' + icon("sync") + t(st === "loading" ? "updLoading" : "updNow") + '</button><span class="muted small-text">' + t("updKeeps") + '</span></div>'
+        : '<button class="btn ghost small start" id="upd-check">' + icon("sync") + t("updCheck") + '</button>') +
+      (msg ? '<p class="muted small-text">' + esc(msg) + '</p>' : "") +
+      (pre && pre.data ? '<details class="more"><summary>' + icon("right") + t("updUndoTitle") + '</summary><div><p class="muted small-text">' + esc(t("updUndoHint", { v: pre.to || APP_VERSION })) + '</p><button class="btn ghost small start" id="upd-undo">' + t("updUndo") + '</button></div></details>' : "") +
       '</section>';
   }
   // ---------- family sync (Supabase "Haruku Apps", schema pocket_money) ----------
@@ -767,42 +809,44 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
       .then(function () { toast(t("pv_debtsSaved")); parentPull(true); }).catch(function () { toast(t("pv_fail")); });
   }
   function viewParentSettings() {
-    var k = pvKid(), name = kidName(), paidOf = {};
+    var k = pvKid(), name = kidName(), paidOf = {}, sec = ["money", "family", "app"].indexOf(ui.sec) >= 0 ? ui.sec : "money";
     (state.debts || []).forEach(function (d) { paidOf[d.id] = d.paid; });
     var rows = (pv.debts || []).map(function (d, i) {
-      return '<div class="pvd" data-pvd="' + i + '"><div class="field"><label>' + t("debtName") + '</label><input type="text" data-f="name" maxlength="40" value="' + esc(d.name || (d.id === "lic" ? t("licence") : "")) + '"></div>' +
+      return '<div class="pvd" data-pvd="' + i + '"><div class="row" style="gap:var(--s-2);align-items:flex-end"><div class="field" style="flex:1;min-width:0"><label>' + t("debtName") + '</label><input type="text" data-f="name" maxlength="40" value="' + esc(d.name || (d.id === "lic" ? t("licence") : "")) + '"></div><button class="icon-btn" style="margin-bottom:6px" data-pvd-rm="' + i + '" aria-label="' + t("removeDebt") + '">' + icon("trash") + '</button></div>' +
         '<div class="grid2"><div class="field"><label>' + t("debtTotal") + '</label><input type="number" inputmode="decimal" data-f="total" min="0" value="' + (d.total || "") + '"></div>' +
         '<div class="field"><label>' + t("debtMonthly") + '</label><input type="number" inputmode="decimal" data-f="monthly" min="0" value="' + (d.monthly || "") + '"></div></div>' +
-        '<div class="row between"><span class="muted" style="font-size:12px">' + (paidOf[d.id] != null ? t("pv_paid", { p: chf(paidOf[d.id]) }) : "") + '</span><button class="btn ghost small" data-pvd-rm="' + i + '">' + t("removeDebt") + '</button></div></div>';
+        (paidOf[d.id] != null ? '<span class="muted small-text">' + t("pv_paid", { p: chf(paidOf[d.id]) }) + '</span>' : "") + '</div>';
     }).join("");
     var code = own.cloud.code && (ui.viewing.waiting || Date.now() - (own.cloud.codeAt || 0) < 864e5) ? own.cloud.code : "";
-    return header(t("setup")) + updateCard() +
-      (code ? '<section class="card upd-card"><h2>' + esc(own.cloud.codeMe ? t("fam_meCodeTitle") : t("fam_codeTitle", { name: name })) + '</h2><div class="code num">' + fmtCode(code) + '</div><p class="muted" style="font-size:13px;margin:0">' + esc(own.cloud.codeMe ? t("fam_meCodeHint") : t("fam_codeHint", { name: name })) + '</p><button class="btn small" id="fam-share" style="align-self:flex-start">' + t("fam_share") + '</button></section>' : "") +
-      (k ? '<section class="card"><h2>' + esc(t("al_titleFor", { name: name })) + '</h2><p class="muted" style="font-size:13px;margin:0">' + esc(t("al_hintParent", { name: name })) + '</p>' + allowanceFields("pa", state.s) +
-        '<button class="btn small" id="pa-save" style="align-self:flex-start">' + t("al_save") + '</button></section>' : "") +
-      '<section class="card"><h2>' + esc(t("pv_debtsTitle", { name: name })) + '</h2><p class="muted" style="font-size:13px;margin:0">' + esc(t("pv_debtsHint", { name: name })) + '</p>' + (rows || '<p class="muted">' + t("noDebts") + '</p>') +
-        '<div class="row" style="flex-wrap:wrap"><button class="btn ghost small" id="pvd-add">' + t("pv_addDebt") + '</button><button class="btn small" id="pvd-save">' + t("pv_saveDebts") + '</button></div></section>' +
-      catEditor(catList(), t("cat_hintParent", { name: name })) +
-      '<section class="card"><h2>' + t("fam_title") + '</h2>' + (k ? '<button class="btn ghost small" id="fam-code" style="align-self:flex-start">' + esc(t("fam_newCode", { name: name })) + '</button><p class="muted" style="font-size:12px;margin:0">' + t("fam_newCodeHint") + '</p>' : "") +
-        '<button class="btn ghost small" id="fam-code-me" style="align-self:flex-start">' + t("fam_meCode") + '</button><p class="muted" style="font-size:12px;margin:0">' + t("fam_meCodeHint") + '</p>' +
+    var codeCard = code ? '<section class="card upd-card"><h2>' + esc(own.cloud.codeMe ? t("fam_meCodeTitle") : t("fam_codeTitle", { name: name })) + '</h2><div class="code num">' + fmtCode(code) + '</div><p class="muted small-text">' + esc(own.cloud.codeMe ? t("fam_meCodeHint") : t("fam_codeHint", { name: name })) + '</p><button class="btn small start" id="fam-share">' + icon("share") + t("fam_share") + '</button></section>' : "";
+    var money = (k ? '<section class="card"><h2>' + esc(t("al_titleFor", { name: name })) + '</h2>' + allowanceFields("pa", state.s) +
+        '<p class="muted small-text">' + esc(t("al_hintParent", { name: name })) + '</p><button class="btn small start" id="pa-save">' + t("al_save") + '</button></section>' : "") +
+      '<section class="card"><h2>' + esc(t("pv_debtsTitle", { name: name })) + '</h2>' + (rows || '<p class="muted">' + t("noDebts") + '</p>') +
+        '<p class="muted small-text">' + esc(t("pv_debtsHint", { name: name })) + '</p><div class="row wrapping"><button class="btn ghost small" id="pvd-add">' + icon("plus") + t("pv_addDebt") + '</button><button class="btn small" id="pvd-save">' + t("pv_saveDebts") + '</button></div></section>' +
+      catEditor(catList(), t("cat_hintParent", { name: name }));
+    var family = '<section class="card"><h2>' + t("fam_title") + '</h2>' +
+        (k ? '<div class="stack"><button class="btn ghost small start" id="fam-code">' + esc(t("fam_newCode", { name: name })) + '</button><p class="muted small-text">' + t("fam_newCodeHint") + '</p></div>' : "") +
+        '<div class="stack"><button class="btn ghost small start" id="fam-code-me">' + t("fam_meCode") + '</button><p class="muted small-text">' + t("fam_meCodeHint") + '</p></div>' +
         '<div id="fam-leave-zone"><button class="btn danger small" id="fam-leave">' + t("fam_leave") + '</button></div></section>';
+    var app2 = updateCard() + '<section class="card"><div class="card-head"><h2>' + t("language") + '</h2>' + langToggle() + '</div></section>';
+    return header(t("setup")) + codeCard + segBar("sec", [["money", t("sec_money")], ["family", t("sec_family")], ["app", t("sec_app")]], sec) +
+      segPane("sec", "money", sec, money) + segPane("sec", "family", sec, family) + segPane("sec", "app", sec, app2);
   }
   function famCard() {
     if (isKidCloud()) {
-      return '<section class="card"><h2>' + t("fam_title") + '</h2><p class="muted" id="fam-status" style="font-size:13px;margin:0">' + esc(famStatus()) + '</p>' +
-        '<div class="row" style="flex-wrap:wrap"><button class="btn small" id="fam-sync">' + t("syncNow") + '</button></div>' +
+      return '<section class="card"><div class="card-head"><h2>' + t("fam_title") + '</h2><button class="btn ghost small" id="fam-sync">' + icon("sync") + t("syncNow") + '</button></div><p class="muted small-text" id="fam-status">' + esc(famStatus()) + '</p>' +
         (own.cloud.err === "unpaired" ? famJoinForm() : "") +
-        '<div id="fam-leave-zone"><button class="btn ghost small" id="fam-leave">' + t("fam_leave") + '</button></div></section>';
+        '<div id="fam-leave-zone"><button class="link-btn" id="fam-leave">' + t("fam_leave") + '</button></div></section>';
     }
     var safari = pv.pairCode && isIos() && !isStandalone() ? '<div class="callout">' + esc(t("fam_safari", { c: fmtCode(pv.pairCode) })) + '</div>' : "";
-    return '<section class="card' + (pv.pairCode ? " upd-card" : "") + '" id="fam-card"><h2>' + t("fam_title") + '</h2><p class="muted" style="font-size:13px;margin:0">' + t("fam_hint") + '</p>' + safari + famJoinForm() +
-      '<details class="fam-parent"><summary>' + t("fam_parentQ") + '</summary><p class="muted" style="font-size:13px">' + t("fam_parentHint") + '</p><div class="grid2">' +
+    return '<section class="card' + (pv.pairCode ? " upd-card" : "") + '" id="fam-card"><h2>' + t("fam_title") + '</h2><p class="muted small-text">' + t("fam_hint") + '</p>' + safari + famJoinForm() +
+      '<details class="more"><summary>' + icon("right") + t("fam_parentQ") + '</summary><div><p class="muted small-text">' + t("fam_parentHint") + '</p><div class="grid2">' +
         '<div class="field"><label for="fam-pname">' + t("fam_parentName") + '</label><input type="text" id="fam-pname" maxlength="40"></div>' +
         '<div class="field"><label for="fam-kname">' + t("fam_kidName") + '</label><input type="text" id="fam-kname" maxlength="40"></div></div>' +
-        '<button class="btn small" id="fam-create">' + t("fam_create") + '</button></details></section>';
+        '<button class="btn small start" id="fam-create">' + t("fam_create") + '</button></div></details></section>';
   }
   function famJoinForm() {
-    return '<div class="field"><label for="fam-code-in">' + t("fam_code") + '</label><input type="text" id="fam-code-in" autocomplete="off" autocapitalize="characters" placeholder="ABC123-DEF456" value="' + esc(fmtCode(pv.pairCode)) + '"></div><button class="btn small" id="fam-join" style="align-self:flex-start">' + t("fam_join") + '</button>';
+    return '<div class="field"><label for="fam-code-in">' + t("fam_code") + '</label><div class="row" style="gap:var(--s-2)"><input type="text" id="fam-code-in" autocomplete="off" autocapitalize="characters" placeholder="ABC123-DEF456" value="' + esc(fmtCode(pv.pairCode)) + '"><button class="btn" id="fam-join">' + t("fam_join") + '</button></div></div>';
   }
 
   // ---------- live sync to the parent's Google Sheet (Apps Script web app) ----------
@@ -926,8 +970,8 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
   function canInstall() { return !isStandalone() && /^https?:$/.test(location.protocol) && /github\.io$|localhost/.test(location.hostname); }
   function installBlock(withLater) {
     if (!canInstall()) return "";
-    var how = installEvt ? '<button class="btn small" id="install-go">' + t("installBtn") + '</button>' : '<p style="font-size:14px"><b>' + (isIos() ? t("installIos") : t("installOther")) + '</b></p>';
-    return '<div class="callout" id="install-box"><div style="display:flex;flex-direction:column;gap:8px"><b>' + t("installTitle") + '</b><span>' + t("installHint") + '</span>' + how + (withLater ? '<button class="btn ghost small" id="install-later" style="align-self:flex-start">' + t("installLater") + '</button>' : "") + '</div></div>';
+    var how = installEvt ? '<button class="btn small start" id="install-go">' + t("installBtn") + '</button>' : '<p>' + (isIos() ? t("installIos") : t("installOther")) + '</p>';
+    return '<div class="callout" id="install-box"><div class="card-head"><b>' + t("installTitle") + '</b>' + (withLater ? '<button class="link-btn" id="install-later">' + t("installLater") + '</button>' : "") + '</div>' + how + '</div>';
   }
   function refreshSync() { var el = document.getElementById("sync-status"); if (el) el.textContent = syncStatus(); }
   var ui = { tab: "home", sim: null, viewing: null };
@@ -964,7 +1008,6 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
   function debtPaidAll() { return state.debts.reduce(function (s, d) { return s + Math.min(d.paid, d.total); }, 0); }
   function monthlyDebtDue() { return r2(state.debts.reduce(function (s, d) { return s + Math.min(d.monthly, debtLeftOf(d)); }, 0)); }
   function goalName() { return state.s.goalName || t("defaultGoal"); }
-  function personName() { return state.name || t("you"); }
 
   // ---------- spending categories ----------
   // Built-in ones are stored as "@key" so they show in the phone's language; own ones as plain text.
@@ -981,10 +1024,10 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
   }
   function catEditor(list, hint) {
     var rows = list.map(function (c) {
-      return '<div class="row cat-row" data-cat="' + esc(c) + '"><input type="text" maxlength="24" value="' + esc(catLabel(c)) + '" aria-label="' + t("cat_label") + '"><button class="btn ghost small" data-cat-rm="1">' + t("removeDebt") + '</button></div>';
+      return '<div class="row cat-row" data-cat="' + esc(c) + '"><input type="text" maxlength="24" value="' + esc(catLabel(c)) + '" aria-label="' + t("cat_label") + '"><button class="icon-btn" data-cat-rm="1" aria-label="' + t("removeDebt") + '">' + icon("trash") + '</button></div>';
     }).join("");
-    return '<section class="card" id="cat-card"><h2>' + t("cat_title") + '</h2><p class="muted" style="font-size:13px;margin:0">' + esc(hint) + '</p><div class="cat-list">' + rows + '</div>' +
-      '<div class="row" style="flex-wrap:wrap"><button class="btn ghost small" id="cat-add">' + t("cat_add") + '</button><button class="btn small" id="cat-save">' + t("cat_save") + '</button></div></section>';
+    return '<section class="card" id="cat-card"><h2>' + t("cat_title") + '</h2><p class="muted small-text">' + esc(hint) + '</p><div class="cat-list">' + rows + '</div>' +
+      '<div class="row wrapping"><button class="btn ghost small" id="cat-add">' + icon("plus") + t("cat_add") + '</button><button class="btn small" id="cat-save">' + t("cat_save") + '</button></div></section>';
   }
   // Reads the editor: the new list, and the old names that are gone (renamed or removed)
   function readCatEditor() {
@@ -1082,42 +1125,20 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
     var e = state.entries[i];
     if (e.approved) return "approved";
     if (e.type === "newdebt") return "parent";
-    if (e.type === "newdebt") {
-      var hasPay = state.entries.some(function (x) { return x.type === "debt" && x.debtId === e.debtId; });
-      if (hasPay) return false;
-      state.debts = state.debts.filter(function (d) { return d.id !== e.debtId; });
-    } else {
-      var a = acct(e.account);
-      a.balance = r2(a.balance - (e.delta || 0));
-      if (e.type === "debt") { var d = debtById(e.debtId); if (d) d.paid = Math.max(0, r2(d.paid - e.amount)); }
-    }
+    var a = acct(e.account);
+    a.balance = r2(a.balance - (e.delta || 0));
+    if (e.type === "debt") { var d = debtById(e.debtId); if (d) d.paid = Math.max(0, r2(d.paid - e.amount)); }
     state.entries.splice(i, 1);
     if (!state.deleted) state.deleted = [];
     state.deleted.push(Object.assign({}, e, { deletedAt: Date.now() }));
     save();
     return true;
   }
-  function addDebt(name, totalAmt, monthly, alreadyPaid, date) {
-    var d = { id: uid(), name: name, total: r2(totalAmt), monthly: r2(monthly), paid: r2(Math.min(alreadyPaid || 0, totalAmt)) };
-    state.debts.push(d);
-    state.entries.push({ id: uid(), ts: Date.now(), type: "newdebt", debtId: d.id, debtName: name, amount: d.total, delta: 0, account: state.accounts[0].id, date: date || today(), note: name });
-    save();
-  }
   function sortedEntries() {
     return state.entries.slice().sort(function (a, b) {
       if (a.date !== b.date) return a.date < b.date ? 1 : -1;
       return (b.ts || 0) - (a.ts || 0);
     });
-  }
-  function monthTotals(key) {
-    var r = { in: 0, gas: 0, parking: 0, debt: 0, spend: 0, job: 0, hours: 0 };
-    state.entries.forEach(function (e) {
-      if (monthKey(e.date) !== key || !TYPES[e.type] || TYPES[e.type].sign === 0) return;
-      if (TYPES[e.type].sign > 0) r.in += e.amount;
-      if (e.type === "job") { r.job += e.amount; r.hours += e.hours || 0; }
-      if (r[e.type] !== undefined && TYPES[e.type].sign < 0) r[e.type] += e.amount;
-    });
-    return r;
   }
 
   // ---------- simulation ----------
@@ -1149,9 +1170,9 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
     if (ui.tab === "log") html = viewLog();
     else if (ui.tab === "plan") html = viewPlan();
     else if (ui.tab === "settings") html = ui.viewing && ui.viewing.parent ? viewParentSettings() : viewSettings();
-    else html = updateBanner() + parentCallout() + viewHome();
+    else html = viewHome();
     app.innerHTML = viewBanner() + html;
-    if (ui.tab === "plan") updatePlan();
+    if (document.getElementById("sim-out")) updatePlan();
   }
   function parentCallout() {
     if (!ui.viewing || !ui.viewing.parent) return "";
@@ -1163,71 +1184,83 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
     if (!ui.viewing) return "";
     if (ui.viewing.parent) {
       var when = ui.viewing.at ? t("pv_synced", { name: kidName(), d: fmtTime(ui.viewing.at) }) : "";
-      return '<div class="viewbar"><div><b>' + esc(t("pv_banner", { name: kidName() })) + '</b><small>' + esc(when) + '</small></div><button class="btn small" id="pv-refresh"' + (pv.busy ? " disabled" : "") + '>' + t("pv_refresh") + '</button></div>';
+      return '<div class="viewbar"><div><b>' + esc(t("pv_banner", { name: kidName() })) + '</b><small>' + esc(when) + '</small></div><button class="btn small" id="pv-refresh"' + (pv.busy ? " disabled" : "") + '>' + icon("sync") + t("pv_refresh") + '</button></div>';
     }
     var d = new Date(ui.viewing.at);
     return '<div class="viewbar"><div><b>' + esc(t("viewing", { name: ui.viewing.name || "?" })) + '</b><small>' + esc(t("sentAt", { d: d.toLocaleString(loc(), { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }) })) + '</small></div><button class="btn small" id="view-close">' + t("closeView") + '</button></div>';
   }
   function langToggle() {
-    return '<div class="lang" role="group" aria-label="' + t("language") + '"><button data-lang="de" aria-pressed="' + (lang === "de") + '">DE</button><button data-lang="en" aria-pressed="' + (lang === "en") + '">EN</button></div>';
+    return '<div class="seg mini" role="group" aria-label="' + t("language") + '"><button data-lang="de" aria-pressed="' + (lang === "de") + '">Deutsch</button><button data-lang="en" aria-pressed="' + (lang === "en") + '">English</button></div>';
   }
   function header(title, right) {
-    return '<div class="topbar"><h1>' + title + '</h1><div class="top-right">' + (right || "") + langToggle() + '</div></div>';
+    return '<div class="topbar"><h1>' + title + '</h1>' + (right ? '<div class="top-right">' + right + '</div>' : "") + '</div>';
   }
+  // Segmented switcher. Sections stay in the page and are only hidden, so typed values survive a switch.
+  function segBar(group, items, cur) {
+    return '<div class="seg" role="tablist">' + items.map(function (it) { return '<button type="button" role="tab" data-seg="' + group + '" data-val="' + it[0] + '" aria-pressed="' + (it[0] === cur) + '">' + it[1] + '</button>'; }).join("") + '</div>';
+  }
+  function segPane(group, val, cur, html) { return '<div class="stack" style="gap:var(--s-4)" data-pane="' + group + '" data-val="' + val + '"' + (val === cur ? "" : " hidden") + '>' + html + '</div>'; }
 
   function viewHome() {
-    var s = state.s, mt = monthTotals(monthKey(today())), dl = debtLeft(), ro = !!ui.viewing;
+    var ro = !!ui.viewing;
     var hasBalance = state.entries.some(function (e) { return e.type === "balance"; });
     var accts = state.accounts.map(function (a) {
-      return '<button class="acct" data-act="balance" data-acct="' + a.id + '"' + (ro ? " disabled" : "") + '><span class="acct-name"><span class="acct-dot" style="background:' + a.color + '"></span>' + esc(a.name) + '</span><span class="acct-bal num">' + chf(a.balance) + '</span>' + (ro ? "" : '<span class="acct-hint">' + t("tapUpdate") + '</span>') + '</button>';
+      return '<button class="acct" data-act="balance" data-acct="' + a.id + '"' + (ro ? " disabled" : ' aria-label="' + esc(a.name) + ': ' + t("ty_balance") + '"') + '><span class="acct-name"><span class="acct-dot" style="background:' + a.color + '"></span><span>' + esc(a.name) + '</span>' + (ro ? "" : icon("pencil", "edit")) + '</span><span class="acct-bal num">' + chf(a.balance) + '</span></button>';
     }).join("");
-
-    var pay = monthlyDebtDue(), allowM = allowNow();
-    var free = allowM - s.parking - s.gas - pay;
-    var parts = [
-      { n: t("parkingSpace"), v: s.parking, c: "var(--c-park)" },
-      { n: t("gasBudget"), v: s.gas, c: "var(--c-gas)" },
-      { n: t("debtPayments"), v: pay, c: "var(--c-debt)" },
-      { n: free >= 0 ? t("leftOver") : t("missing"), v: Math.abs(free), c: free >= 0 ? "var(--c-free)" : "var(--bad)" }
-    ];
-    var totalBar = Math.max(allowM, s.parking + s.gas + pay) || 1;
-    var bar = parts.filter(function (p) { return p.v > 0; }).map(function (p) { return '<span style="width:' + (p.v / totalBar * 100) + '%;background:' + p.c + '"></span>'; }).join("");
-    var legend = parts.map(function (p) { return '<div class="legend-row"><span class="sw" style="background:' + p.c + '"></span>' + p.n + '<span class="amt num">CHF ' + chf(p.v) + '</span></div>'; }).join("");
-
-    var spent = mt.gas + mt.parking + mt.debt + mt.spend;
-    var gasTag = mt.gas > s.gas ? '<span class="tag bad">' + t("over", { n: chf(mt.gas - s.gas) }) + '</span>' : '<span class="tag good">' + t("left", { n: chf(s.gas - mt.gas) }) + '</span>';
-    var parkTag = mt.parking >= s.parking ? '<span class="tag good">' + t("paid") + '</span>' : '<span class="tag warn">' + t("notPaid") + '</span>';
-    var debtTag = dl <= 0 ? '<span class="tag good">' + t("done") + '</span>' : (mt.debt >= pay ? '<span class="tag good">' + t("paid") + '</span>' : '<span class="tag warn">' + t("toGo", { n: chf(pay - mt.debt) }) + '</span>');
-
-    var debtRows = state.debts.map(function (d) {
-      var left = debtLeftOf(d), pct = d.total > 0 ? Math.min(100, d.paid / d.total * 100) : 100;
-      return '<div class="debt-row"><div class="row"><span class="debt-name">' + esc(debtName(d)) + '</span>' + (left <= 0 ? '<span class="tag good">' + t("done") + '</span>' : '<span class="muted num" style="font-size:13px">' + t("leftOf", { l: chf(left), t: chf0(d.total) }) + '</span>') + '</div>' +
-        '<div class="bar"><span style="width:' + pct + '%;background:var(--good)"></span></div>' +
-        (left > 0 ? '<div class="muted" style="font-size:12px">' + t("perMonthShort", { n: chf0(d.monthly) }) + '</div>' : "") + '</div>';
-    }).join("");
-    var allPct = debtTotalAll() > 0 ? Math.round(debtPaidAll() / debtTotalAll() * 100) : 100;
-
-    var recent = sortedEntries().slice(0, 5);
-
-    return header('<span class="brand"><span class="brand-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></svg></span>' + t("appName") + '</span>', '<span class="month-pill">' + new Date().toLocaleDateString(loc(), { month: "short", year: "numeric" }) + '</span>') +
+    var recent = sortedEntries().slice(0, 3);
+    return header('<span class="brand"><span class="brand-ic">' + icon("wallet") + '</span>' + t("appName") + '</span>', '<span class="pill">' + new Date().toLocaleDateString(loc(), { month: "short", year: "numeric" }) + '</span>') +
+      updateBanner() + parentCallout() +
       '<section class="hero" aria-label="' + t("allMoney") + '"><div><div class="label">' + t("allMoney") + '</div><div class="hero-total num"><small>CHF</small>' + chf(total()) + '</div></div><div class="accounts">' + accts + '</div></section>' +
-      (!hasBalance && !ro ? '<div class="callout">' + t("startHere", { a: esc(state.accounts[0].name), b: esc(state.accounts[1] ? state.accounts[1].name : "") }) + '</div>' : "") +
+      (!hasBalance && !ro ? '<div class="callout">' + t("startHere") + '</div>' : "") +
       (ro || own.installLater ? "" : installBlock(true)) +
-      (ro ? "" : '<div class="quick">' + qa("spend", t("ty_spend"), "var(--c-other)") + qa("job", t("qa_job"), "var(--c-other)") + qa("gas", t("qa_gas"), "var(--c-gas)") + qa("debt", t("qa_debt"), "var(--c-debt)") + '</div>') +
-      '<section class="card"><div class="row between"><h2>' + t("debts") + '</h2>' + (dl <= 0 ? '<span class="tag good">' + t("debtFree") + '</span>' : '<span class="tag bad">' + t("open") + '</span>') + '</div>' +
-        (state.debts.length ?
-          '<div class="row between" style="align-items:flex-end"><div><div class="debt-big num">CHF ' + chf(dl) + '</div><div class="muted" style="font-size:13px">' + t("stillToPay") + ' ' + t("ofTotal", { n: chf0(debtTotalAll()) }) + '</div></div><div style="text-align:right"><div class="label">' + t("paid") + '</div><div class="num" style="font-weight:700">' + allPct + '%</div></div></div>' +
-          (dl > 0 ? '<p class="muted" style="font-size:13px">' + t("hoursOfWork", { h: Math.ceil(dl / state.s.rate * 10) / 10, r: state.s.rate }) + '</p>' : "") +
-          '<div class="debt-list">' + debtRows + '</div>'
-          : '<p class="muted">' + t("noDebts") + '</p>') +
-        '<p class="muted" style="font-size:12px">' + t(ui.viewing && ui.viewing.parent ? "pv_manageDebts" : isKidCloud() ? "debtsByParentApp" : "debtsByParent") + '</p>' +
+      (ro ? "" : '<div class="quick">' + qa("spend", t("qa_spend"), "var(--c-other)") + qa("job", t("qa_job"), "var(--c-other)") + qa("gas", t("qa_gas"), "var(--c-gas)") + qa("debt", t("qa_debt"), "var(--c-debt)") + '</div>') +
+      nowCard() + debtCard() +
+      '<section class="card"><div class="card-head"><h2>' + t("latest") + '</h2>' + (recent.length ? '<button class="link-btn" data-go="log">' + t("seeAll") + icon("right") + '</button>' : "") + '</div>' +
+        (recent.length ? '<div class="list">' + recent.map(itemHtml).join("") + '</div>' : '<p class="muted small-text">' + t("nothingYet") + '</p>') +
       '</section>' +
-      breakdownCard() +
-      '<section class="card"><div class="row between"><h2>' + t("latest") + '</h2><button class="btn ghost small" data-go="log">' + t("seeAll") + '</button></div>' +
-        (recent.length ? '<div class="list">' + recent.map(itemHtml).join("") + '</div>' : '<div class="empty">' + t("nothingYet") + '</div>') +
-      '</section>' +
-      (ro ? "" : '<button class="btn ghost" id="share-parent">' + t("sendParent") + '</button><div id="share-fallback" hidden><div class="field"><label for="share-text">' + t("linkHere") + '</label><textarea id="share-text" readonly></textarea></div></div>') +
       (!storageOk ? '<p class="preview-note">' + t("notSaving") + '</p>' : "");
+  }
+  // Home: how much is left until the next payday, and what still has to be paid this month
+  function nowCard() {
+    var s = state.s, ro = !!ui.viewing, tdy = today(), pd = periodOf(0), m = periodStats(pd);
+    var lft = r2(m.inSum - m.outSum);
+    var nextDay = paydays(addDays(tdy, 1), addDays(tdy, 40))[0];
+    var until = nextDay && nextDay <= addDays(pd.to, 1) ? shortDate(nextDay, true) : t("bd_monthEnd");
+    var pct = m.inSum > 0 ? Math.min(100, m.outSum / m.inSum * 100) : (m.outSum > 0 ? 100 : 0);
+
+    // Checklist uses the month, since parking and debts are monthly
+    var mm = pd.week ? periodStats({ from: monthKey(tdy) + "-01", to: monthEnd(monthKey(tdy)) }) : m;
+    function chk(state2, name, amt, action) {
+      return '<div class="check ' + state2 + '"><span class="check-dot">' + icon(state2 === "over" ? "x" : "check") + '</span><span class="check-name">' + name + '</span><span class="check-amt num">' + amt + '</span>' + (action || "") + '</div>';
+    }
+    var rows = "";
+    if (s.parking > 0) rows += chk(mm.parking >= s.parking ? "done" : "", t("parkingSpace"), "CHF " + chf0(s.parking), mm.parking < s.parking && !ro ? '<button class="btn ghost small" data-quick="parking">' + t("now_log") + '</button>' : "");
+    state.debts.forEach(function (d) {
+      var paidM = mm.debt[d.id] || 0, due = Math.min(d.monthly, debtLeftOf(d) + paidM);
+      if (due <= 0) return;
+      rows += chk(paidM >= due ? "done" : "", esc(debtName(d)), "CHF " + chf0(due), paidM < due && !ro ? '<button class="btn ghost small" data-quick="debt" data-debt="' + d.id + '">' + t("now_pay") + '</button>' : "");
+    });
+    if (s.gas > 0) rows += chk(mm.gas > s.gas ? "over" : "", t("now_gas"), "CHF " + chf0(mm.gas) + " / " + chf0(s.gas), "");
+
+    return '<section class="card"><div class="card-head"><h2>' + t(pd.week ? "now_week" : "now_month") + '</h2><button class="link-btn" data-go="log" data-lv="sum">' + t("details") + icon("right") + '</button></div>' +
+      '<div><div class="big num' + (lft < 0 ? " bad" : "") + '">CHF ' + chf(Math.abs(lft)) + '</div><p class="muted small-text">' + esc(t(lft < 0 ? "now_short" : "now_left", { d: until })) + '</p></div>' +
+      '<div class="meter thin"><span style="width:' + pct + '%;background:' + (lft < 0 ? "var(--bad)" : "var(--c-other)") + '"></span></div>' +
+      '<div class="meter-key num"><span>' + t("now_in", { n: chf0(m.inSum) }) + '</span><span>' + t("now_out", { n: chf0(m.outSum) }) + '</span></div>' +
+      (rows ? '<h3 class="bd-h">' + t("now_toPay") + '</h3><div class="checks">' + rows + '</div>' : "") +
+      '</section>';
+  }
+  function debtCard() {
+    var dl = debtLeft();
+    if (!state.debts.length) return "";
+    var allPct = debtTotalAll() > 0 ? Math.round(debtPaidAll() / debtTotalAll() * 100) : 100;
+    var rows = state.debts.map(function (d) {
+      var left = debtLeftOf(d), pct = d.total > 0 ? Math.min(100, d.paid / d.total * 100) : 100;
+      return '<div class="debt-row"><div class="row"><span class="debt-name">' + esc(debtName(d)) + '</span>' + (left <= 0 ? '<span class="tag good">' + icon("check") + t("done") + '</span>' : '<span class="muted num small-text">' + t("leftOf", { l: chf0(left), t: chf0(d.total) }) + '</span>') + '</div>' +
+        '<div class="meter thin"><span style="width:' + pct + '%;background:var(--good)"></span></div></div>';
+    }).join("");
+    return '<section class="card"><div class="card-head"><h2>' + t("debts") + '</h2>' + (dl <= 0 ? '<span class="tag good">' + t("debtFree") + '</span>' : '<span class="muted small-text">' + t("pctPaid", { n: allPct }) + '</span>') + '</div>' +
+      (dl > 0 ? '<div class="big num" style="font-size:26px">CHF ' + chf(dl) + '</div>' : "") +
+      '<div class="debt-list">' + rows + '</div></section>';
   }
   function shiftMonth(key, n) { var d = new Date(key + "-15T12:00:00"); d.setMonth(d.getMonth() + n); return d.toISOString().slice(0, 7); }
   function addDays(iso, n) { var d = new Date(iso + "T12:00:00"); d.setDate(d.getDate() + n); return isoD(d); }
@@ -1264,85 +1297,70 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
     m.outSum = r2(m.parking + m.gas + m.debtAll + m.spend);
     return m;
   }
+  // History → Breakdown: one period in detail, plus the last 6 periods
   function breakdownCard() {
-    var s = state.s, ro = !!ui.viewing, off = ui.bm || 0, pd = periodOf(off), m = periodStats(pd), tdy = today();
+    var s = state.s, off = ui.bm || 0, pd = periodOf(off), m = periodStats(pd), tdy = today();
     function row(color, name, amt, tag) { return '<div class="legend-row"><span class="sw" style="background:' + color + '"></span><span class="bd-name">' + name + '</span><span class="amt num">' + amt + '</span>' + (tag || "") + '</div>'; }
     function tg(cls, txt) { return '<span class="tag ' + cls + '">' + txt + '</span>'; }
     var A = m.A, got = m.got;
 
-    // Money in: allowance, extra allowance, job, other money
     var alName = s.allowMode === "week" ? t("bd_allowW", { c: m.days.length, a: chf0(m.per) }) : t("ty_allowance");
     var nextDay = paydays(addDays(tdy, 1), addDays(tdy, 40))[0];
-    var alTag = m.gotDays.length ? tg("good", t("bd_allowGot", { c: m.gotDays.length, n: m.days.length })) : "";
+    var alTag = m.gotDays.length ? tg("good", icon("check") + t("bd_allowGot", { c: m.gotDays.length, n: m.days.length })) : "";
     if (nextDay && nextDay <= pd.to) alTag += tg("warn", t("bd_allowNext", { d: shortDate(nextDay, true) }));
-    var inRows = row("var(--good)", alName, "CHF " + chf(got) + (got < A ? ' <span class="muted">/ ' + chf0(A) + '</span>' : ""), "") +
+    var inRows = row("var(--good)", alName, "CHF " + chf(got) + (got < A ? ' <span class="muted">/ ' + chf0(A) + '</span>' : "")) +
       (alTag ? '<div class="cat-chips" style="padding-left:20px">' + alTag + '</div>' : "") +
-      '<p class="muted bd-tip" style="padding-left:20px">' + t("bd_allowAuto") + '</p>' +
       (m.extra ? row("var(--good)", t("ac_extra"), "CHF " + chf(m.extra)) : "") +
-      row("var(--c-other)", t("bd_job", { h: Math.round(m.hours * 10) / 10 }), "CHF " + chf(m.job)) +
+      (m.job ? row("var(--c-other)", t("bd_job", { h: Math.round(m.hours * 10) / 10 }), "CHF " + chf(m.job)) : "") +
       (m.income ? row("var(--good)", t("ty_income"), "CHF " + chf(m.income)) : "") +
-      '<div class="flow-row total" style="font-size:14px"><span>' + t("bd_inTotal") + '</span><b class="num" style="font-size:16px;color:var(--good)">CHF ' + chf(m.inSum) + '</b></div>';
-    var jobTip = '<p class="muted bd-tip">' + t("bd_jobTip", { r: chf0(s.rate), h: s.hours, x: chf0(s.hours * s.rate) }) + '</p>';
+      '<div class="total-row"><span>' + t("bd_inTotal") + '</span><b class="num" style="color:var(--good)">CHF ' + chf(m.inSum) + '</b></div>';
 
-    // Must pay: the month's plan, or in week view only what was paid that week
+    // Fixed costs: the month's plan, or in week view only what was paid that week
     var mustRows;
     if (pd.week) {
       mustRows = (m.parking ? row("var(--c-park)", t("parkingSpace"), "CHF " + chf(m.parking)) : "") +
         state.debts.filter(function (d) { return m.debt[d.id]; }).map(function (d) { return row("var(--c-debt)", esc(debtName(d)), "CHF " + chf(m.debt[d.id])); }).join("") +
         (m.gas ? row("var(--c-gas)", t("ty_gas"), "CHF " + chf(m.gas)) : "");
-      if (!mustRows) mustRows = '<p class="muted bd-tip">' + t("bd_nothingPaidW") + '</p>';
+      if (!mustRows) mustRows = '<p class="bd-tip">' + t("bd_nothingPaidW") + '</p>';
     } else {
       var debtRows = state.debts.filter(function (d) { return debtLeftOf(d) > 0 || m.debt[d.id]; }).map(function (d) {
         var due = Math.min(d.monthly, debtLeftOf(d) + (m.debt[d.id] || 0)), pdd = m.debt[d.id] || 0;
-        return row("var(--c-debt)", esc(debtName(d)), "CHF " + chf(due), pdd >= due ? tg("good", t("paid")) : tg("warn", t("toGo", { n: chf(due - pdd) })));
+        return row("var(--c-debt)", esc(debtName(d)), "CHF " + chf(due), pdd >= due ? tg("good", t("paid")) : tg("warn", t("toGo", { n: chf0(due - pdd) })));
       }).join("");
       mustRows = row("var(--c-park)", t("parkingSpace"), "CHF " + chf(s.parking), m.parking >= s.parking ? tg("good", t("paid")) : tg("warn", t("notPaid"))) +
         debtRows +
-        row("var(--c-gas)", t("gasBudget"), "CHF " + chf(m.gas), m.gas > s.gas ? tg("bad", t("over", { n: chf0(m.gas - s.gas) })) : tg("good", t("left", { n: chf0(s.gas - m.gas) })));
+        row("var(--c-gas)", t("ty_gas"), "CHF " + chf(m.gas), m.gas > s.gas ? tg("bad", t("over", { n: chf0(m.gas - s.gas) })) : tg("good", t("left", { n: chf0(s.gas - m.gas) })));
     }
 
-    // Spending by category
     var catKeys = Object.keys(m.cats).sort(function (x, y) { return m.cats[y] - m.cats[x]; });
-    var spendRows = catKeys.length ? catKeys.map(function (c) { return row("var(--c-other)", esc(catLabel(c)), "CHF " + chf(m.cats[c])); }).join("") : '<p class="muted bd-tip">' + t(pd.week ? "bd_nothingW" : "bd_nothing") + '</p>';
-    var spendTag = s.other > 0 && !pd.week ? (m.spend > s.other ? tg("bad", t("over", { n: chf(m.spend - s.other) })) : tg("good", t("left", { n: chf(s.other - m.spend) }))) : "";
+    var spendRows = catKeys.length ? catKeys.map(function (c) { return row("var(--c-other)", esc(catLabel(c)), "CHF " + chf(m.cats[c])); }).join("") : '<p class="bd-tip">' + t(pd.week ? "bd_nothingW" : "bd_nothing") + '</p>';
+    var spendTag = s.other > 0 && !pd.week ? (m.spend > s.other ? tg("bad", t("over", { n: chf0(m.spend - s.other) })) : tg("good", t("left", { n: chf0(s.other - m.spend) }))) : "";
 
-    // Planned split of the allowance (bar), month view only
+    // Planned split of the allowance, month view only
     var plan = "";
     if (!pd.week) {
       var pay = monthlyDebtDue(), free = A - s.parking - s.gas - pay;
       var parts = [{ v: s.parking, c: "var(--c-park)" }, { v: s.gas, c: "var(--c-gas)" }, { v: pay, c: "var(--c-debt)" }, { v: Math.abs(free), c: free >= 0 ? "var(--c-free)" : "var(--bad)" }];
       var totalBar = Math.max(A, s.parking + s.gas + pay) || 1;
-      plan = '<div class="bar">' + parts.filter(function (p) { return p.v > 0; }).map(function (p) { return '<span style="width:' + (p.v / totalBar * 100) + '%;background:' + p.c + '"></span>'; }).join("") + '</div>' +
-        '<p class="muted bd-tip">' + (free >= 0 ? t("bd_freePlan", { a: chf0(A), f: chf0(free) }) : t("bd_shortPlan", { a: chf0(A), f: chf0(-free) })) + '</p>';
+      plan = '<div class="meter">' + parts.filter(function (p) { return p.v > 0; }).map(function (p) { return '<span style="width:' + (p.v / totalBar * 100) + '%;background:' + p.c + '"></span>'; }).join("") + '</div>' +
+        '<p class="bd-tip">' + (free >= 0 ? t("bd_freePlan", { a: chf0(A), f: chf0(free) }) : t("bd_shortPlan", { a: chf0(A), f: chf0(-free) })) + '</p>';
     }
 
-    var inSum = m.inSum, outSum = m.outSum;
-    // Current period: does the money last until the next payday?
-    var lastBox = "";
-    if (!off) {
-      var lft = r2(inSum - outSum), until = nextDay && nextDay <= addDays(pd.to, 1) ? new Date(nextDay + "T12:00:00").toLocaleDateString(loc(), { weekday: "long", day: "numeric", month: "long" }) : t("bd_monthEnd");
-      lastBox = '<div class="callout"' + (lft < 0 ? ' style="background:color-mix(in srgb,var(--bad) 16%,var(--surface))"' : ' style="background:color-mix(in srgb,var(--good) 14%,var(--surface))"') + '>' +
-        t(lft < 0 ? "bd_lastShort" : "bd_lastOk", { n: chf(Math.abs(lft)), d: esc(until) }) + (ro ? "" : '<br><span style="font-size:13px">' + t("bd_addOwn") + '</span>') + '</div>';
-    }
-
-    // Earlier weeks or months, newest first. Tap one to open it.
     var hist = "";
     for (var i = 0; i < 6; i++) {
       var hp = periodOf(-i), hm = periodStats(hp), hl = r2(hm.inSum - hm.outSum);
       hist += '<button type="button" class="fr hist-row' + (-i === off ? " on" : "") + '" data-bm-to="' + (-i) + '"><span>' + esc(hp.short) + '</span><b class="num" style="color:var(--good)">' + chf0(hm.inSum) + '</b><b class="num">' + chf0(hm.outSum) + '</b><b class="num"' + (hl < 0 ? ' style="color:var(--bad)"' : "") + '>' + chf0(hl) + '</b></button>';
     }
-    hist = '<h3 class="bd-h">' + t(pd.week ? "bd_histW" : "bd_histM") + '</h3><div class="ftable"><div class="fr fh"><span></span><span>' + t("moneyIn") + '</span><span>' + t("spent") + '</span><span>' + t("bd_left") + '</span></div>' + hist + '</div>';
+    hist = '<section class="card"><h2>' + t(pd.week ? "bd_histW" : "bd_histM") + '</h2><div class="ftable"><div class="fr fh"><span></span><span>' + t("moneyIn") + '</span><span>' + t("spent") + '</span><span>' + t("bd_left") + '</span></div>' + hist + '</div></section>';
 
-    var toggle = s.allowMode === "week" ? '<div class="lang" role="group" aria-label="' + t("bd_view") + '"><button data-bv="week" aria-pressed="' + pd.week + '">' + t("bd_week") + '</button><button data-bv="month" aria-pressed="' + !pd.week + '">' + t("bd_month") + '</button></div>' : "";
-    return '<section class="card bd"><div class="row between" style="flex-wrap:wrap;gap:8px"><h2>' + t(pd.week ? "bd_titleW" : "bd_title") + '</h2>' + toggle + '</div>' +
-      '<div class="bd-nav" style="justify-content:space-between"><button class="btn ghost small" data-bm="-1" aria-label="' + t("bd_prev") + '">‹</button><span class="label">' + esc(pd.label) + '</span><button class="btn ghost small" data-bm="1" aria-label="' + t("bd_next") + '"' + (off ? "" : " disabled") + '>›</button></div>' +
+    var toggle = s.allowMode === "week" ? '<div class="seg mini" role="group" aria-label="' + t("bd_view") + '"><button data-bv="week" aria-pressed="' + pd.week + '">' + t("bd_week") + '</button><button data-bv="month" aria-pressed="' + !pd.week + '">' + t("bd_month") + '</button></div>' : "";
+    return '<section class="card">' +
+      '<div class="bd-nav"><button class="icon-btn" data-bm="-1" aria-label="' + t("bd_prev") + '">' + icon("left") + '</button><div class="stack" style="align-items:center;gap:6px"><h2>' + esc(pd.label) + '</h2>' + toggle + '</div><button class="icon-btn" data-bm="1" aria-label="' + t("bd_next") + '"' + (off ? "" : " disabled") + '>' + icon("right") + '</button></div>' +
       plan +
-      '<h3 class="bd-h">' + t("bd_in") + '</h3><div class="legend">' + inRows + '</div>' + jobTip +
+      '<h3 class="bd-h">' + t("bd_in") + '</h3><div class="legend">' + inRows + '</div>' +
       '<h3 class="bd-h">' + t(pd.week ? "bd_paidW" : "bd_must") + '</h3><div class="legend">' + mustRows + '</div>' +
-      (!pd.week && m.parking < s.parking && !ro && !off ? '<button class="btn ghost small" data-quick="parking" style="align-self:flex-start">' + t("logParking", { n: chf0(s.parking) }) + '</button>' : "") +
       '<div class="row between"><h3 class="bd-h">' + t("bd_spend") + '</h3>' + spendTag + '</div><div class="legend">' + spendRows + '</div>' +
-      '<div class="stats"><div class="stat"><span>' + t("moneyIn") + '</span><b class="num" style="color:var(--good)">' + chf0(inSum) + '</b></div><div class="stat"><span>' + t("spent") + '</span><b class="num">' + chf0(outSum) + '</b></div><div class="stat"><span>' + t("bd_left") + '</span><b class="num"' + (inSum - outSum < 0 ? ' style="color:var(--bad)"' : "") + '>' + chf0(inSum - outSum) + '</b></div></div>' + lastBox +
-      hist + '</section>';
+      '</section>' + hist;
   }
   function qa(type, label, color) {
     return '<button class="qa" data-quick="' + type + '"><span class="qa-ic" style="background:color-mix(in srgb,' + color + ' 16%,transparent);color:' + color + '">' + icon(type) + '</span>' + label + '</button>';
@@ -1362,24 +1380,31 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
     }
     return '<div class="item"><span class="item-ic" style="background:color-mix(in srgb,' + T.color + ' 16%,transparent);color:' + T.color + '">' + icon(e.type) + '</span>' +
       '<div class="item-main"><div class="item-title">' + title + '</div><div class="item-sub">' + sub + '</div>' +
-        (e.approved || e.parentNote ? '<div class="appr">' + (e.approved ? '<span class="tag good">✓ ' + t("approved") + '</span>' : "") + (e.parentNote ? '<span class="pnote">“' + esc(e.parentNote) + '”</span>' : "") + '</div>' : "") + '</div>' +
+        (e.approved || e.parentNote ? '<div class="appr">' + (e.approved ? '<span class="tag good">' + icon("check") + t("approved") + '</span>' : "") + (e.parentNote ? '<span class="pnote">“' + esc(e.parentNote) + '”</span>' : "") + '</div>' : "") + '</div>' +
       '<div class="item-amt num ' + cls + '">' + amt + '</div>' +
-      (ui.viewing || e.approved || e.type === "newdebt" ? "" : '<button class="del" data-del="' + e.id + '" aria-label="' + t("del") + '">×</button>') + '</div>' +
-      (ui.viewing && ui.viewing.parent && !e._gone ? '<div class="pv-acts">' + (e.type !== "newdebt" ? '<button class="btn small' + (e.approved ? ' ghost' : '') + '" data-pv-ok="' + e.id + '">' + t(e.approved ? "pv_unapprove" : "pv_approve") + '</button><button class="btn ghost small" data-pv-note="' + e.id + '">' + t("pv_note") + '</button>' : "") + '<button class="btn ghost small pv-del" data-pv-del="' + e.id + '">' + t("pv_delete") + '</button></div>' : "") +
+      (ui.viewing || e.approved || e.type === "newdebt" ? "" : '<button class="del" data-del="' + e.id + '" aria-label="' + t("del") + '">' + icon("x") + '</button>') + '</div>' +
+      (ui.viewing && ui.viewing.parent && !e._gone ? '<div class="pv-acts">' + (e.type !== "newdebt" ? '<button class="btn small' + (e.approved ? ' ghost' : '') + '" data-pv-ok="' + e.id + '">' + (e.approved ? "" : icon("check")) + t(e.approved ? "pv_unapprove" : "pv_approve") + '</button><button class="btn ghost small" data-pv-note="' + e.id + '">' + icon("note") + t("pv_note") + '</button>' : "") + '<button class="btn ghost small" data-pv-del="' + e.id + '" aria-label="' + t("pv_delete") + '">' + icon("trash") + '</button></div>' : "") +
       (e._gone && e.deletedBy === "parent" ? '<div class="pv-acts" style="text-decoration:none;opacity:1"><span class="tag">' + t("pv_byYou") + '</span></div>' : "");
+  }
+  // Two-step delete: first tap asks, second tap deletes. Goes back to the icon after 3 seconds.
+  function armDelete(b) {
+    b.dataset.confirm = "1"; b.textContent = t("delQ"); b.classList.add("confirm");
+    setTimeout(function () { if (b.isConnected) { delete b.dataset.confirm; b.innerHTML = icon("x"); b.classList.remove("confirm"); } }, 3000);
   }
 
   function viewLog() {
+    var lv = ui.lv === "sum" ? "sum" : "list";
     var list = sortedEntries();
-    if (!list.length) return header(t("log")) + '<section class="card"><div class="empty"><p>' + t("noEntries") + '</p><p>' + t("noEntriesHint") + '</p></div></section>';
+    var top = header(t("log")) + segBar("lv", [["list", t("lv_list")], ["sum", t("lv_sum")]], lv);
+    if (lv === "sum") return top + breakdownCard();
+    if (!list.length) return top + '<section class="card"><div class="empty"><p>' + t("noEntries") + '</p><p>' + t("noEntriesHint") + '</p></div></section>';
     var html = "", lastMonth = null, lastDay = null;
     list.forEach(function (e) {
       var mk = monthKey(e.date);
       if (mk !== lastMonth) {
         if (lastMonth) html += '</div></section>';
-        var mt = monthTotals(mk);
-        var d = new Date(mk + "-01T12:00:00");
-        html += '<section class="card"><div class="row between"><h2>' + d.toLocaleDateString(loc(), { month: "long", year: "numeric" }) + '</h2><span class="muted num" style="font-size:13px">' + t("inOut", { a: chf0(mt.in), b: chf0(mt.gas + mt.parking + mt.debt + mt.spend) }) + '</span></div><div class="list">';
+        var mt = periodStats({ from: mk + "-01", to: monthEnd(mk) });
+        html += '<section class="card"><div class="card-head"><h2>' + monthLabel(mk) + '</h2><span class="muted num small-text">' + t("inOut", { a: chf0(mt.inSum), b: chf0(mt.outSum) }) + '</span></div><div class="list">';
         lastMonth = mk; lastDay = null;
       }
       if (e.date !== lastDay) {
@@ -1392,7 +1417,7 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
     if (ui.viewing && ui.viewing.parent && (state.deleted || []).length) {
       html += '<section class="card"><h2>' + esc(t("pv_deleted", { name: kidName() })) + '</h2><div class="list gone">' + state.deleted.map(function (e) { return itemHtml(Object.assign({}, e, { _gone: true })); }).join("") + '</div></section>';
     }
-    return header(t("log"), '<span class="month-pill num">' + t("entries", { n: list.length }) + '</span>') + html;
+    return top + html;
   }
 
   // Parent view: allowance from a start date until today, plus extras, minus what the kid logged as spent
@@ -1401,11 +1426,11 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
     var extrasAll = pvExtras().slice().sort(function (x, y) { return x.date < y.date ? 1 : x.date > y.date ? -1 : 0; });
     var exList = extrasAll.length ? '<div class="list">' + extrasAll.map(function (x) {
       return '<div class="item"><span class="item-ic" style="background:color-mix(in srgb,var(--good) 16%,transparent);color:var(--good)">' + icon("allowance") + '</span><div class="item-main"><div class="item-title">' + esc(x.note || t("ac_extra")) + '</div><div class="item-sub">' + new Date(x.date + "T12:00:00").toLocaleDateString(loc(), { day: "numeric", month: "short", year: "numeric" }) + '</div></div>' +
-        '<div class="item-amt num plus">+' + chf(x.amount) + '</div><button class="del" data-ex-rm="' + esc(x.id) + '" aria-label="' + t("removeDebt") + '">×</button></div>';
-    }).join("") + '</div>' : '<p class="muted" style="font-size:13px;margin:0">' + t("ac_noExtras") + '</p>';
-    var extrasHtml = '<h3 class="bd-h">' + t("ac_extras") + '</h3><p class="muted bd-tip">' + t("ac_extrasHint") + '</p>' + exList +
-      '<button class="btn ghost small" id="ac-add" style="align-self:flex-start">' + t("ac_add") + '</button>';
-    var head = '<section class="card" id="ac-card"><h2>' + t("ac_title") + '</h2><p class="muted" style="font-size:13px;margin:0">' + esc(t("ac_hint", { name: name })) + '</p>' +
+        '<div class="item-amt num plus">+' + chf(x.amount) + '</div><button class="del" data-ex-rm="' + esc(x.id) + '" aria-label="' + t("removeDebt") + '">' + icon("x") + '</button></div>';
+    }).join("") + '</div>' : '<p class="muted small-text">' + t("ac_noExtras") + '</p>';
+    var extrasHtml = '</section><section class="card"><h2>' + t("ac_extras") + '</h2><p class="bd-tip">' + t("ac_extrasHint") + '</p>' + exList +
+      '<button class="btn ghost small start" id="ac-add">' + icon("plus") + t("ac_add") + '</button>';
+    var head = '<section class="card" id="ac-card"><p class="muted small-text">' + esc(t("ac_hint", { name: name })) + '</p>' +
       '<div class="field"><label for="ac-start">' + t("ac_start") + '</label><input type="date" id="ac-start" max="' + end + '" value="' + start + '"></div>';
     if (start > end) return head + '<div class="callout">' + t("ac_future") + '</div>' + extrasHtml + '</section>';
 
@@ -1432,24 +1457,22 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
         return '<div class="fr"><span>' + new Date(k + "-15T12:00:00").toLocaleDateString(loc(), { month: "short", year: "2-digit" }) + '</span><b class="num">' + chf0(m.allow) + '</b><b class="num">' + chf0(m.extra) + '</b><b class="num">' + chf0(m.spent) + '</b><b class="num"' + (l < 0 ? ' style="color:var(--bad)"' : "") + '>' + chf0(l) + '</b></div>';
       }).join("") + '</div>';
     return head +
-      '<p class="muted bd-tip">' + esc(allowSummary(a)) + '</p>' +
-      '<div class="callout" style="background:color-mix(in srgb,var(--good) 14%,var(--surface))">✓ ' + esc(t("ac_auto", { name: name })) + '</div>' +
+      '<p class="bd-tip">' + esc(allowSummary(a)) + ' · ' + esc(t("ac_auto")) + '</p>' +
       '<div class="flow">' + line(t("ac_due", { c: pays.length }), due, "var(--good)", "+") +
-        (pays.length ? '<p class="muted bd-tip">' + esc(t("ac_days", { d: (pays.length > 12 ? "… " : "") + pays.slice(-12).map(function (d) { return new Date(d + "T12:00:00").toLocaleDateString(loc(), { day: "numeric", month: "short" }); }).join(", ") })) + '</p>' : "") + (extra ? line(t("ac_extra"), extra, "var(--good)", "+") : "") +
+        (pays.length ? '<p class="bd-tip">' + esc(t("ac_days", { d: (pays.length > 12 ? "… " : "") + pays.slice(-12).map(function (d) { return new Date(d + "T12:00:00").toLocaleDateString(loc(), { day: "numeric", month: "short" }); }).join(", ") })) + '</p>' : "") + (extra ? line(t("ac_extra"), extra, "var(--good)", "+") : "") +
         (earn.job ? line(t("ac_job"), earn.job, "var(--good)", "+") : "") + (earn.income ? line(t("ty_income"), earn.income, "var(--good)", "+") : "") +
         (spentRows ? '<h3 class="bd-h">' + t("ac_spentTitle") + '</h3>' + spentRows : "") +
         '<div class="flow-row total"><span>' + (left >= 0 ? t("ac_left") : t("ac_short")) + '</span><b class="num" style="color:' + (left >= 0 ? "var(--good)" : "var(--bad)") + '">CHF ' + chf(Math.abs(left)) + '</b></div></div>' +
       table + extrasHtml + '</section>';
   }
   function viewPlan() {
-    var s = state.s;
+    var s = state.s, isPv = ui.viewing && ui.viewing.parent && !ui.viewing.waiting, pl = isPv && ui.pl !== "sim" ? "ac" : "sim";
     if (!ui.sim) ui.sim = { hours: s.hours, gas: s.gas, debtPayment: monthlyDebtDue(), other: s.other, save: s.save };
     var p = ui.sim;
     function sl(id, label, min, max, step, val, unit) {
       return '<div class="slider"><div class="slider-top"><label for="' + id + '">' + label + '</label><b class="num" id="' + id + '-v"></b></div><input type="range" id="' + id + '" min="' + min + '" max="' + max + '" step="' + step + '" value="' + val + '" data-unit="' + unit + '"></div>';
     }
-    return header(t("plan")) + (ui.viewing && ui.viewing.parent && !ui.viewing.waiting ? acCard() : "") +
-      '<section class="card"><p class="muted" style="font-size:14px">' + t("planIntro", { a: chf0(allowNow()), p: chf0(s.parking) }) + '</p>' +
+    var sim = '<section class="card"><p class="muted small-text">' + t("planIntro", { a: chf0(allowNow()), p: chf0(s.parking) }) + '</p>' +
         sl("sim-hours", t("sl_hours"), 0, 60, 1, p.hours, "h") +
         sl("sim-gas", t("sl_gas"), 0, 150, 5, p.gas, "chf") +
         sl("sim-debt", t("sl_debt"), 0, 500, 10, p.debtPayment, "chf") +
@@ -1457,11 +1480,13 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
         '<div class="save-slider">' + sl("sim-save", t("sl_save"), 0, 400, 5, p.save, "chf") + '</div>' +
       '</section>' +
       '<section class="card" id="sim-out"></section>' +
-      '<section class="card"><div class="row between"><h2>' + t("next12") + '</h2></div>' +
+      '<section class="card"><h2>' + t("next12") + '</h2>' +
         '<div class="chart-key"><span><i class="k-bar"></i>' + t("savingsPot") + '</span><span><i class="k-line"></i>' + t("debtLeftLbl") + '</span><span><i class="k-dash"></i>' + esc(goalName()) + '</span></div>' +
-        '<div id="sim-chart"></div><div id="sim-table"></div>' +
+        '<div id="sim-chart"></div>' +
       '</section>' +
       (ui.viewing ? "" : '<button class="btn ghost" id="sim-save-btn">' + t("useBudget") + '</button>');
+    if (!isPv) return header(t("plan")) + sim;
+    return header(t("plan")) + segBar("pl", [["ac", t("ac_title")], ["sim", t("plan")]], pl) + (pl === "ac" ? acCard() : sim);
   }
   function readSim() {
     var g = function (id) { return Number(document.getElementById(id).value); };
@@ -1494,12 +1519,8 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
       '<div class="plan-lines"><p>' + debtLine + '</p><p>' + goalLine + '</p></div>';
     var rows = sim.rows.slice(0, 13);
     document.getElementById("sim-chart").innerHTML = chartSvg(rows, s.goalAmount, sim);
-    var pick = [3, 6, 9, 12];
-    document.getElementById("sim-table").innerHTML = '<div class="ftable"><div class="fr fh"><span></span><span>' + t("savingsPot") + '</span><span>' + t("debtLeftLbl") + '</span><span>' + t("allMoneyShort") + '</span></div>' +
-      pick.map(function (m) { var r = rows[m]; return '<div class="fr"><span>' + shortMonth(m) + ' ' + monthYear(m) + '</span><b class="num" style="color:var(--c-save)">' + chf0(r.pot) + '</b><b class="num" style="color:var(--bad)">' + chf0(r.debt) + '</b><b class="num">' + chf0(r.total) + '</b></div>'; }).join("") + '</div>';
   }
   function flowRow(label, v, color, sign) { return '<div class="flow-row"><span>' + label + '</span><b class="num" style="color:' + color + '">' + sign + ' CHF ' + chf0(v) + '</b></div>'; }
-  function monthYear(offset) { var d = new Date(); d.setDate(1); d.setMonth(d.getMonth() + offset); return String(d.getFullYear()).slice(2); }
   function chartSvg(rows, goal, sim) {
     var W = 340, H = 210, Lm = 38, R = 8, T = 18, B = 24;
     var vals = rows.map(function (r) { return r.pot; }).concat(rows.map(function (r) { return r.debt; }), [goal, 0]);
@@ -1536,47 +1557,54 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
   }
 
   function viewSettings() {
-    var s = state.s;
+    var s = state.s, sec = ["money", "share", "app"].indexOf(ui.sec) >= 0 ? ui.sec : "money";
     function nf(id, label, val, step) { return '<div class="field"><label for="' + id + '">' + label + '</label><input type="number" inputmode="decimal" id="' + id + '" value="' + val + '" step="' + (step || 1) + '" min="0"></div>'; }
-    var debts = state.debts.map(function (d) {
-      return '<div class="legend-row"><span class="sw" style="background:var(--c-debt)"></span>' + esc(debtName(d)) + '<span class="amt num">' + t("leftOf", { l: chf(debtLeftOf(d)), t: chf0(d.total) }) + '</span></div>';
-    }).join("");
     var report = null;
     try { report = JSON.parse(localStorage.getItem(KEY + "-report")); } catch (e) {}
-    return header(t("setup")) + updateCard() + famCard() +
-      (report ? '<section class="card"><div class="row between"><h3>' + esc(t("lastReport", { name: report.name || "?" })) + '</h3><button class="btn small" id="report-open">' + t("openReport") + '</button></div><p class="muted" style="font-size:13px">' + new Date(report.at).toLocaleString(loc(), { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }) + '</p></section>' : "") +
-      installBlock(false) +
-      '<section class="card"><h2>' + t("syncTitle") + '</h2><p class="muted" style="font-size:13px">' + t("syncHint") + '</p>' +
-        '<div class="field"><label for="sync-url">' + t("syncUrl") + '</label><input type="text" id="sync-url" inputmode="url" autocomplete="off" placeholder="https://script.google.com/macros/s/…/exec" value="' + esc(own.syncUrl || "") + '"></div>' +
-        '<div class="row" style="flex-wrap:wrap"><button class="btn small" id="sync-save">' + t("syncNow") + '</button>' + (own.syncUrl ? '<button class="btn ghost small" id="sync-share">' + t("syncShare") + '</button><button class="btn ghost small" id="sync-remove">' + t("syncRemove") + '</button>' : "") + '</div>' +
-        '<p class="muted" id="sync-status" style="font-size:13px">' + esc(syncStatus()) + '</p></section>' +
-      '<section class="card"><h2>' + t("parentTitle") + '</h2><p class="muted" style="font-size:13px">' + t("parentHint") + '</p>' +
-        '<div class="field"><label for="set-name">' + t("f_name") + '</label><input type="text" id="set-name" value="' + esc(state.name || "") + '" maxlength="20"></div>' +
-        '<button class="btn" id="share-parent">' + t("sendParent") + '</button><div id="share-fallback" hidden><div class="field"><label for="share-text">' + t("linkHere") + '</label><textarea id="share-text" readonly></textarea></div></div></section>' +
+
+    var money =
       '<section class="card"><h2>' + t("al_title") + '</h2>' + (isKidCloud() && own.allowByParent
-        ? '<p style="font-weight:600;margin:0">' + esc(allowSummary(allowObj(s))) + '</p><p class="muted" style="font-size:13px;margin:0">' + esc(allowPreview(allowObj(s))) + '</p><p class="muted" style="font-size:12px;margin:0">' + t("al_byParent") + '</p>'
+        ? '<p style="font-weight:600">' + esc(allowSummary(allowObj(s))) + '</p><p class="muted small-text">' + esc(allowPreview(allowObj(s))) + ' · ' + t("al_byParent") + '</p>'
         : allowanceFields("ka", s)) + '</section>' +
       '<section class="card"><h2>' + t("monthlyMoney") + '</h2><div class="grid2">' +
-        nf("set-parking", t("f_parking"), s.parking) +
-        nf("set-gas", t("f_gas"), s.gas) + nf("set-other", t("f_other"), s.other) +
-        nf("set-rate", t("f_rate"), s.rate, 0.5) + nf("set-hours", t("f_hours"), s.hours) +
+        nf("set-parking", t("f_parking"), s.parking) + nf("set-gas", t("f_gas"), s.gas) +
+        nf("set-other", t("f_other"), s.other) + nf("set-rate", t("f_rate"), s.rate, 0.5) +
+        nf("set-hours", t("f_hours"), s.hours) +
       '</div></section>' +
-      '<section class="card"><h2>' + t("debts") + '</h2>' + (debts ? '<div class="legend">' + debts + '</div>' : '<p class="muted">' + t("noDebts") + '</p>') + '<p class="muted" style="font-size:12px">' + t(isKidCloud() ? "debtsByParentApp" : "debtsByParent") + '</p></section>' +
-      (isKidCloud()
-        ? '<section class="card"><h2>' + t("cat_title") + '</h2><div class="cat-chips">' + catList().map(function (c) { return '<span class="chip">' + esc(catLabel(c)) + '</span>'; }).join("") + '</div><p class="muted" style="font-size:12px;margin:0">' + t("cat_hintKid") + '</p></section>'
-        : catEditor(catList(), t("cat_hintSelf"))) +
       '<section class="card"><h2>' + t("savingsGoal") + '</h2><div class="grid2">' +
         '<div class="field"><label for="set-goalName">' + t("whatFor") + '</label><input type="text" id="set-goalName" value="' + esc(goalName()) + '" maxlength="30"></div>' + nf("set-goalAmount", t("amountChf"), s.goalAmount) +
       '</div></section>' +
-      '<section class="card"><h2>' + t("accounts") + '</h2><div class="grid2">' +
-        state.accounts.map(function (a) { return '<div class="field"><label for="set-acct-' + a.id + '">' + t("accountName") + '</label><input type="text" id="set-acct-' + a.id + '" value="' + esc(a.name) + '" maxlength="20"></div>'; }).join("") +
+      '<section class="card"><h2>' + t("you_title") + '</h2>' +
+        '<div class="field"><label for="set-name">' + t("f_name") + '</label><input type="text" id="set-name" value="' + esc(state.name || "") + '" maxlength="20"></div><div class="grid2">' +
+        state.accounts.map(function (a, i) { return '<div class="field"><label for="set-acct-' + a.id + '">' + t("accountN", { n: i + 1 }) + '</label><input type="text" id="set-acct-' + a.id + '" value="' + esc(a.name) + '" maxlength="20"></div>'; }).join("") +
       '</div></section>' +
       '<button class="btn" id="set-save">' + t("saveSetup") + '</button>' +
-      '<section class="card"><h2>' + t("backup") + '</h2><p class="muted" style="font-size:13px">' + t("backupHint") + '</p>' +
-        '<div class="row" style="flex-wrap:wrap"><button class="btn ghost small" id="bk-copy">' + t("copyBackup") + '</button><button class="btn ghost small" id="bk-show">' + t("restoreFrom") + '</button></div>' +
-        '<div id="bk-area" hidden><div class="field"><label for="bk-text">' + t("pasteBackup") + '</label><textarea id="bk-text"></textarea></div><button class="btn small" id="bk-restore">' + t("restore") + '</button></div>' +
+      (isKidCloud()
+        ? '<section class="card"><h2>' + t("cat_title") + '</h2><div class="cat-chips">' + catList().map(function (c) { return '<span class="tag">' + esc(catLabel(c)) + '</span>'; }).join("") + '</div><p class="muted small-text">' + t("cat_hintKid") + '</p></section>'
+        : catEditor(catList(), t("cat_hintSelf")));
+
+    var share = famCard() +
+      '<section class="card"><h2>' + t("parentTitle") + '</h2><p class="muted small-text">' + t("parentHint") + '</p>' +
+        '<button class="btn small start" id="share-parent">' + icon("share") + t("sendParent") + '</button><div id="share-fallback" hidden><div class="field"><label for="share-text">' + t("linkHere") + '</label><textarea id="share-text" readonly></textarea></div></div>' +
+        (report ? '<div class="card-head" style="border-top:1px solid var(--line);padding-top:var(--s-3)"><span class="small-text"><b>' + esc(t("lastReport", { name: report.name || "?" })) + '</b><br><span class="muted">' + fmtTime(report.at) + '</span></span><button class="btn ghost small" id="report-open">' + t("openReport") + '</button></div>' : "") +
       '</section>' +
-      '<section class="card"><h2>' + t("startOver") + '</h2><p class="muted" style="font-size:13px">' + t("startOverHint") + '</p><div id="reset-zone"><button class="btn danger small" id="reset-ask">' + t("deleteAll") + '</button></div></section>';
+      '<section class="card"><details class="more"' + (own.syncUrl ? " open" : "") + '><summary>' + icon("right") + t("syncTitle") + '</summary><div>' +
+        '<p class="muted small-text">' + t("syncHint") + '</p>' +
+        '<div class="field"><label for="sync-url">' + t("syncUrl") + '</label><input type="text" id="sync-url" inputmode="url" autocomplete="off" placeholder="script.google.com/macros/s/…/exec" value="' + esc(own.syncUrl || "") + '"></div>' +
+        '<div class="row wrapping"><button class="btn small" id="sync-save">' + t("syncNow") + '</button>' + (own.syncUrl ? '<button class="btn ghost small" id="sync-share">' + icon("share") + t("syncShare") + '</button><button class="btn ghost small" id="sync-remove">' + t("syncRemove") + '</button>' : "") + '</div>' +
+        '<p class="muted small-text" id="sync-status">' + esc(syncStatus()) + '</p></div></details></section>';
+
+    var app2 = updateCard() +
+      '<section class="card"><div class="card-head"><h2>' + t("language") + '</h2>' + langToggle() + '</div></section>' +
+      installBlock(false) +
+      '<section class="card"><h2>' + t("backup") + '</h2><p class="muted small-text">' + t("backupHint") + '</p>' +
+        '<div class="row wrapping"><button class="btn ghost small" id="bk-copy">' + t("copyBackup") + '</button><button class="btn ghost small" id="bk-show">' + t("restoreFrom") + '</button></div>' +
+        '<div id="bk-area" class="stack" hidden><div class="field"><label for="bk-text">' + t("pasteBackup") + '</label><textarea id="bk-text"></textarea></div><button class="btn small start" id="bk-restore">' + t("restore") + '</button></div>' +
+      '</section>' +
+      '<section class="card"><h2>' + t("startOver") + '</h2><p class="muted small-text">' + t("startOverHint") + '</p><div id="reset-zone"><button class="btn danger small" id="reset-ask">' + t("deleteAll") + '</button></div></section>';
+
+    return header(t("setup")) + segBar("sec", [["money", t("sec_money")], ["share", t("sec_share")], ["app", t("sec_app")]], sec) +
+      segPane("sec", "money", sec, money) + segPane("sec", "share", sec, share) + segPane("sec", "app", sec, app2);
   }
   function saveSettings(quiet) {
     var el = function (id) { return document.getElementById(id); };
@@ -1588,11 +1616,6 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
     state.s.goalName = gname === t("defaultGoal") ? "" : gname;
     state.name = el("set-name").value.trim();
     state.accounts.forEach(function (a) { var v = el("set-acct-" + a.id).value.trim(); if (v) a.name = v; });
-    state.debts.forEach(function (d) {
-      var n = el("dn-" + d.id); if (!n) return;
-      var nv = n.value.trim(); d.name = (nv === t("licence") && !d.name) ? "" : nv;
-      d.total = num("dt-" + d.id, d.total); d.monthly = num("dm-" + d.id, d.monthly);
-    });
     ui.sim = null; save(); if (!quiet) toast(t("setupSaved"));
   }
 
@@ -1662,24 +1685,24 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
   var layer = document.getElementById("layer");
   function sheetShell(title, body) {
     layer.innerHTML = '<div class="scrim" id="scrim"><form class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title" novalidate>' +
-      '<div class="grab"></div><div class="row between"><h2 id="sheet-title">' + title + '</h2><button type="button" class="btn ghost small" id="sheet-close">' + t("close") + '</button></div>' + body + '</form></div>';
+      '<div class="grab"></div><div class="row between"><h2 id="sheet-title">' + title + '</h2><button type="button" class="icon-btn" id="sheet-close" aria-label="' + t("close") + '">' + icon("x") + '</button></div>' + body + '</form></div>';
     document.getElementById("sheet-close").onclick = closeSheet;
     document.getElementById("scrim").addEventListener("click", function (ev) { if (ev.target.id === "scrim") closeSheet(); });
   }
-  function openSheet(type, accountId) {
+  function openSheet(type, accountId, debtId) {
     type = type || "spend";
     var s = state.s;
     var order = ["allowance", "job", "income", "gas", "parking", "debt", "spend", "balance"];
     if (type === "debt" && !openDebts().length) type = "spend";
     var chips = order.filter(function (k) { return k !== "debt" || openDebts().length; }).map(function (k) { return '<button type="button" class="chip" data-type="' + k + '" aria-pressed="' + (k === type) + '"><span class="d" style="background:' + TYPES[k].color + '"></span>' + t("ty_" + k) + '</button>'; }).join("");
     var accOpts = state.accounts.map(function (a) { return '<option value="' + a.id + '"' + (a.id === (accountId || state.accounts[0].id) ? " selected" : "") + '>' + esc(a.name) + ' (CHF ' + chf(a.balance) + ')</option>'; }).join("");
-    var debtOpts = openDebts().map(function (d) { return '<option value="' + d.id + '">' + esc(debtName(d)) + ' (CHF ' + chf(debtLeftOf(d)) + ')</option>'; }).join("");
+    var debtOpts = openDebts().map(function (d) { return '<option value="' + d.id + '"' + (d.id === debtId ? " selected" : "") + '>' + esc(debtName(d)) + ' (CHF ' + chf(debtLeftOf(d)) + ')</option>'; }).join("");
     sheetShell(t("newEntry"),
       '<div class="chips" id="type-chips">' + chips + '</div>' +
       '<div class="field" id="f-debt" hidden><label for="in-debt">' + t("whichDebt") + '</label><select id="in-debt">' + debtOpts + '</select></div>' +
       '<div class="field" id="f-cat" hidden><label>' + t("cat_label") + '</label><div class="chips" id="cat-chips">' +
         catList().map(function (c) { return '<button type="button" class="chip" data-cat="' + esc(c) + '" aria-pressed="false">' + esc(catLabel(c)) + '</button>'; }).join("") +
-        '<button type="button" class="chip" id="cat-new-btn">' + t("cat_new") + '</button></div>' +
+        '<button type="button" class="chip" id="cat-new-btn">' + icon("plus", "ic") + t("cat_new") + '</button></div>' +
         '<input type="text" id="in-cat-new" maxlength="24" placeholder="' + t("cat_newPh") + '" hidden style="margin-top:8px"></div>' +
       '<div class="field" id="f-hours" hidden><label for="in-hours">' + t("hoursWorked") + '</label><input type="number" inputmode="decimal" id="in-hours" step="0.25" min="0" placeholder="' + t("hoursEx") + '"></div>' +
       '<div class="field"><label for="in-amount" id="lbl-amount">' + t("amount") + '</label><div class="money-input"><span>CHF</span><input type="number" inputmode="decimal" id="in-amount" step="0.05" min="0" placeholder="0.00"></div></div>' +
@@ -1739,24 +1762,6 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
     });
     setTimeout(function () { (cur === "job" ? hrs : amt).focus(); }, 60);
   }
-  function openDebtSheet() {
-    if (ui.tab === "settings") saveSettings(true);
-    sheetShell(t("newDebtTitle"),
-      '<div class="field"><label for="nd-name">' + t("debtName") + '</label><input type="text" id="nd-name" maxlength="30" placeholder="' + t("debtNameEx") + '"></div>' +
-      '<div class="field"><label for="nd-total">' + t("debtTotal") + '</label><div class="money-input"><span>CHF</span><input type="number" inputmode="decimal" id="nd-total" step="1" min="0" placeholder="0"></div></div>' +
-      '<div class="grid2"><div class="field"><label for="nd-monthly">' + t("debtMonthly") + '</label><input type="number" inputmode="decimal" id="nd-monthly" step="5" min="0" value="20"></div>' +
-      '<div class="field"><label for="nd-paid">' + t("debtAlready") + '</label><input type="number" inputmode="decimal" id="nd-paid" step="5" min="0" value="0"></div></div>' +
-      '<button class="btn" type="submit">' + t("saveDebt") + '</button>');
-    document.getElementById("sheet").addEventListener("submit", function (ev) {
-      ev.preventDefault();
-      var name = document.getElementById("nd-name").value.trim(), tot = Number(document.getElementById("nd-total").value);
-      if (!name) { document.getElementById("nd-name").focus(); toast(t("needName")); return; }
-      if (!(tot > 0)) { document.getElementById("nd-total").focus(); toast(t("typeAmount")); return; }
-      addDebt(name, tot, Number(document.getElementById("nd-monthly").value) || 0, Number(document.getElementById("nd-paid").value) || 0);
-      ui.sim = null; closeSheet(); render(); toast(t("debtAdded"));
-    });
-    setTimeout(function () { document.getElementById("nd-name").focus(); }, 60);
-  }
   function closeSheet() { layer.innerHTML = ""; }
   document.addEventListener("keydown", function (e) { if (e.key === "Escape" && layer.innerHTML) closeSheet(); });
 
@@ -1789,7 +1794,7 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
       if ((b = ev.target.closest("[data-pv-del]"))) {
         if (b.dataset.confirm) return parentRemove(b.dataset.pvDel);
         b.dataset.confirm = "1"; b.textContent = t("pv_deleteQ"); b.classList.add("danger"); b.classList.remove("ghost");
-        setTimeout(function () { if (b.isConnected) { delete b.dataset.confirm; b.textContent = t("pv_delete"); b.classList.remove("danger"); b.classList.add("ghost"); } }, 3000);
+        setTimeout(function () { if (b.isConnected) { delete b.dataset.confirm; b.innerHTML = icon("trash"); b.classList.remove("danger"); b.classList.add("ghost"); } }, 3000);
         return;
       }
       if ((b = ev.target.closest("[data-pvd-rm]"))) { readPvDebts(); pv.debts.splice(Number(b.dataset.pvdRm), 1); render(); return; }
@@ -1799,19 +1804,26 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
       if (id === "ac-add") return openExtraSheet();
       if ((b = ev.target.closest("[data-ex-rm]"))) {
         if (b.dataset.confirm) { var xid = b.dataset.exRm; return saveExtras(pvExtras().filter(function (x) { return x.id !== xid; }), "ac_removed"); }
-        b.dataset.confirm = "1"; b.textContent = t("delQ"); b.style.fontSize = "12px"; b.style.color = "var(--bad)";
-        setTimeout(function () { if (b.isConnected) { delete b.dataset.confirm; b.textContent = "×"; b.style.fontSize = ""; b.style.color = ""; } }, 3000);
+        armDelete(b);
         return;
       }
       if (id === "fam-share" && own.cloud.code) return shareCode(own.cloud.code);
       if (id === "fam-code-me") { rpc("pm_invite", { p_token: own.cloud.token, p_member: own.cloud.member }).then(function (r) { own.cloud.code = r.code; own.cloud.codeAt = Date.now(); own.cloud.codeMe = true; persist(); render(); window.scrollTo(0, 0); }).catch(function () { toast(t("pv_fail")); }); return; }
       if (id === "fam-code") { own.cloud.codeMe = false; rpc("pm_invite", { p_token: own.cloud.token, p_member: ui.viewing.member || null }).then(function (r) { own.cloud.code = r.code; own.cloud.codeAt = Date.now(); persist(); render(); window.scrollTo(0, 0); }).catch(function () { toast(t("pv_fail")); }); return; }
     }
-    if (id === "fam-leave") { document.getElementById("fam-leave-zone").innerHTML = '<div class="row" style="flex-wrap:wrap"><span style="font-weight:600">' + t("fam_leaveQ") + '</span><button class="btn danger small" id="fam-leave-yes">' + t("yesRemove") + '</button><button class="btn ghost small" id="fam-leave-no">' + t("cancel") + '</button></div>'; return; }
+    if (id === "fam-leave") { document.getElementById("fam-leave-zone").innerHTML = '<div class="row wrapping"><span style="font-weight:600">' + t("fam_leaveQ") + '</span><button class="btn danger small" id="fam-leave-yes">' + t("yesRemove") + '</button><button class="btn ghost small" id="fam-leave-no">' + t("cancel") + '</button></div>'; return; }
     if (id === "fam-leave-yes") return leaveFamily();
     if (id === "fam-leave-no") { render(); return; }
 
-    if ((b = ev.target.closest("[data-go]"))) return go(b.dataset.go);
+    if ((b = ev.target.closest("[data-seg]"))) {
+      var grp = b.dataset.seg, panes = app.querySelectorAll('[data-pane="' + grp + '"]');
+      ui[grp] = b.dataset.val;
+      if (!panes.length) { render(); return; }
+      app.querySelectorAll('[data-seg="' + grp + '"]').forEach(function (x) { x.setAttribute("aria-pressed", x === b); });
+      panes.forEach(function (x) { x.hidden = x.dataset.val !== b.dataset.val; });
+      return;
+    }
+    if ((b = ev.target.closest("[data-go]"))) { if (b.dataset.go === "log") ui.lv = b.dataset.lv || "list"; return go(b.dataset.go); }
     if ((b = ev.target.closest("[data-bv]"))) { ui.bv = b.dataset.bv; ui.bm = 0; render(); return; }
     if ((b = ev.target.closest("[data-bm-to]"))) { ui.bm = Number(b.dataset.bmTo) || 0; render(); return; }
     if ((b = ev.target.closest("[data-bm]"))) { ui.bm = Math.min(0, (ui.bm || 0) + Number(b.dataset.bm)); render(); return; }
@@ -1831,25 +1843,13 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
       own.cats = readCatEditor().list; save(); render(); toast(t("cat_saved")); return;
     }
     if (ui.viewing) return;
-    if ((b = ev.target.closest("[data-quick]"))) return openSheet(b.dataset.quick);
+    if ((b = ev.target.closest("[data-quick]"))) return openSheet(b.dataset.quick, null, b.dataset.debt);
     if ((b = ev.target.closest("[data-act=balance]"))) return openSheet("balance", b.dataset.acct);
     if ((b = ev.target.closest("[data-del]"))) {
-      if (b.dataset.confirm) { var rr = removeEntry(b.dataset.del); if (rr === "approved") toast(t("approvedLocked")); else if (rr === "parent") toast(t("debtsByParent")); else if (rr) { render(); toast(t("entryDeleted")); } else toast(t("deletePaymentsFirst")); }
-      else { b.dataset.confirm = "1"; b.textContent = t("delQ"); b.style.fontSize = "12px"; b.style.color = "var(--bad)"; setTimeout(function () { if (b.isConnected) { delete b.dataset.confirm; b.textContent = "×"; b.style.fontSize = ""; b.style.color = ""; } }, 3000); }
+      if (b.dataset.confirm) { var rr = removeEntry(b.dataset.del); if (rr === "approved") toast(t("approvedLocked")); else if (rr === "parent") toast(t("debtsByParent")); else { render(); toast(t("entryDeleted")); } }
+      else armDelete(b);
       return;
     }
-    if ((b = ev.target.closest("[data-rm]"))) {
-      saveSettings(true);
-      b.parentNode.innerHTML = '<span class="row" style="gap:6px;flex-wrap:wrap"><button class="btn danger small" data-rm-yes="' + b.dataset.rm + '">' + t("yesRemove") + '</button><button class="btn ghost small" data-rm-no="1">' + t("cancel") + '</button></span>';
-      return;
-    }
-    if ((b = ev.target.closest("[data-rm-yes]"))) {
-      var did = b.dataset.rmYes;
-      state.debts = state.debts.filter(function (d) { return d.id !== did; });
-      state.entries = state.entries.filter(function (e) { return !(e.type === "newdebt" && e.debtId === did); });
-      ui.sim = null; save(); render(); toast(t("debtRemoved")); return;
-    }
-    if (ev.target.closest("[data-rm-no]")) { render(); return; }
     if (id === "upd-undo") {
       var pu = preUpdate();
       if (pu && pu.data) { var keepUrl = own.syncUrl, keepCloud = own.cloud; own = state = normalize(pu.data); if (!own.syncUrl) own.syncUrl = keepUrl; if (!own.cloud) own.cloud = keepCloud; own.seenVersion = APP_VERSION; save(); try { localStorage.removeItem(KEY + "-preupdate"); } catch (e) {} ui.sim = null; render(); toast(t("updUndone")); }
@@ -1858,7 +1858,6 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
     if (id === "fam-join") return joinFamily(document.getElementById("fam-code-in").value);
     if (id === "fam-create") return createFamily(document.getElementById("fam-pname").value.trim(), document.getElementById("fam-kname").value.trim());
     if (id === "fam-sync") return cloudSync(true);
-    if (id === "debt-add") return openDebtSheet();
     if (id === "sync-save") {
       var u = document.getElementById("sync-url").value.trim();
       if (!/^https:\/\/script\.google(usercontent)?\.com\//.test(u)) { toast(t("syncBad")); return; }
@@ -1899,7 +1898,7 @@ textarea { min-height: 90px; font-family: var(--f-mono); font-size: 12px; }
       return;
     }
     if (id === "reset-ask") {
-      document.getElementById("reset-zone").innerHTML = '<div class="row" style="flex-wrap:wrap"><span style="font-weight:600">' + t("reallyDelete") + '</span><button class="btn danger small" id="reset-yes">' + t("yesDelete") + '</button><button class="btn ghost small" id="reset-no">' + t("cancel") + '</button></div>';
+      document.getElementById("reset-zone").innerHTML = '<div class="row wrapping"><span style="font-weight:600">' + t("reallyDelete") + '</span><button class="btn danger small" id="reset-yes">' + t("yesDelete") + '</button><button class="btn ghost small" id="reset-no">' + t("cancel") + '</button></div>';
       return;
     }
     if (id === "reset-no") { render(); return; }
