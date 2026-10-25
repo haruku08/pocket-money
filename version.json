@@ -1,16 +1,16 @@
 {
-  "version": "1.10.0",
+  "version": "1.10.1",
   "date": "2026-10-25",
   "notes": {
     "en": [
-      "Parents set the allowance in Setup: per month or per week, with the payday they choose. A month with five paydays gets five payments, and every view shows the month's grand total.",
-      "New allowance check for parents under Plan: pick a start date and see the allowance from then until today, minus what was logged as spent, month by month.",
-      "Parents can add extra allowance they gave. It counts in the allowance check."
+      "The allowance now counts as received on each payday by itself. Nobody has to log it, and the monthly breakdown shows how many paydays are received and when the next one is.",
+      "The allowance check says this clearly and lists the paydays it counted.",
+      "On Home, the quick button for allowance is now one for other spending."
     ],
     "de": [
-      "Eltern legen das Sackgeld im Setup fest: pro Monat oder pro Woche, mit dem Zahltag, den sie wählen. Ein Monat mit fünf Zahltagen bekommt fünf Zahlungen, und überall steht das Total des Monats.",
-      "Neu für Eltern unter Plan: der Sackgeld-Check. Wähle ein Startdatum und sieh das Sackgeld von dann bis heute, minus die eingetragenen Ausgaben, Monat für Monat.",
-      "Eltern können Extra-Sackgeld eintragen, das sie gegeben haben. Es zählt im Sackgeld-Check mit."
+      "Das Sackgeld zählt jetzt an jedem Zahltag von selbst als erhalten. Niemand muss es eintragen, und die Monatsübersicht zeigt, wie viele Zahltage erhalten sind und wann der nächste ist.",
+      "Der Sackgeld-Check sagt das klar und zeigt die gezählten Zahltage.",
+      "Auf der Startseite ist der Knopf fürs Sackgeld jetzt einer für andere Ausgaben."
     ]
   }
 }
