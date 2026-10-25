@@ -1,16 +1,16 @@
 {
-  "version": "1.9.0",
-  "date": "2026-10-19",
+  "version": "1.10.0",
+  "date": "2026-10-25",
   "notes": {
     "en": [
-      "New on Home: a monthly breakdown with money in, what must be paid, spending by category, and what extra work hours would bring.",
-      "Other spending can have a category, like Food or Games. Add a new one right while logging. Parents manage the list in Setup.",
-      "Parents can delete any log entry, and the Debts card shows the parent's debts right away."
+      "Parents set the allowance in Setup: per month or per week, with the payday they choose. A month with five paydays gets five payments, and every view shows the month's grand total.",
+      "New allowance check for parents under Plan: pick a start date and see the allowance from then until today, minus what was logged as spent, month by month.",
+      "Parents can add extra allowance they gave. It counts in the allowance check."
     ],
     "de": [
-      "Neu auf der Startseite: eine Monatsübersicht mit Einnahmen, was bezahlt werden muss, Ausgaben nach Kategorie und was zusätzliche Arbeitsstunden bringen.",
-      "Andere Ausgaben können eine Kategorie haben, zum Beispiel Essen oder Games. Neue kannst du direkt beim Eintragen hinzufügen. Eltern verwalten die Liste im Setup.",
-      "Eltern können jeden Eintrag löschen, und die Schulden-Karte zeigt die Schulden der Eltern sofort."
+      "Eltern legen das Sackgeld im Setup fest: pro Monat oder pro Woche, mit dem Zahltag, den sie wählen. Ein Monat mit fünf Zahltagen bekommt fünf Zahlungen, und überall steht das Total des Monats.",
+      "Neu für Eltern unter Plan: der Sackgeld-Check. Wähle ein Startdatum und sieh das Sackgeld von dann bis heute, minus die eingetragenen Ausgaben, Monat für Monat.",
+      "Eltern können Extra-Sackgeld eintragen, das sie gegeben haben. Es zählt im Sackgeld-Check mit."
     ]
   }
 }

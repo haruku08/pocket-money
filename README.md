@@ -23,6 +23,8 @@ Setup → **Family sync** connects the phones through the Supabase project "Haru
 
 - The parent taps **Are you the parent? → Create family** on their own phone. That phone becomes the parent view and shows a one-time code for the child's phone.
 - The child types the code in Setup → Family sync. From then on every entry is saved online, approvals and notes come back, and debts come from the parent.
+- The parent sets the allowance under Setup: per month (on a day of the month) or per week (on a weekday). A weekly allowance counts the real paydays, so a month with five gets five payments.
+- Under **Plan**, the parent's **Allowance check** takes a start date and shows the allowance from then until today, plus any extra allowance the parent gave, minus what the child logged as spent.
 - The parent view shows the child's app read-only, with **Approve** and **Note** on each entry, deleted entries at the bottom of the log, and the debt list under Setup.
 
 The database only answers the `pm_*` functions, and each one checks the phone's own secret key. The Google Sheet sync keeps working next to it.
