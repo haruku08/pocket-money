@@ -1,18 +1,16 @@
 {
-  "version": "1.11.0",
+  "version": "1.12.0",
   "date": "2026-10-25",
   "notes": {
     "en": [
-      "The allowance now counts as received on each payday by itself. Nobody has to log it, and the monthly breakdown shows how many paydays are received and when the next one is.",
-      "The allowance check says this clearly and lists the paydays it counted.",
-      "On Home, the quick button for allowance is now one for other spending.",
-      "With a weekly allowance, the breakdown shows the week by default. Switch to Month, and look back at the last 6 weeks or months. All money in (job, other money, extra allowance) adds up to one total."
+      "A new look with calmer colours and a darker, softer dark mode.",
+      "Home shows what is left until payday and a short list of what to pay this month. The full breakdown moved to History → Breakdown.",
+      "Setup is split into Money, Sharing and App. Language is under App."
     ],
     "de": [
-      "Das Sackgeld zählt jetzt an jedem Zahltag von selbst als erhalten. Niemand muss es eintragen, und die Monatsübersicht zeigt, wie viele Zahltage erhalten sind und wann der nächste ist.",
-      "Der Sackgeld-Check sagt das klar und zeigt die gezählten Zahltage.",
-      "Auf der Startseite ist der Knopf fürs Sackgeld jetzt einer für andere Ausgaben.",
-      "Bei wöchentlichem Sackgeld zeigt die Übersicht standardmässig die Woche. Wechsle auf Monat und schau die letzten 6 Wochen oder Monate an. Alle Einnahmen (Job, anderes Geld, Extra-Sackgeld) ergeben ein Total."
+      "Neues Aussehen mit ruhigeren Farben und einem weicheren dunklen Modus.",
+      "Die Startseite zeigt, was bis zum Zahltag übrig ist, und eine kurze Liste, was diesen Monat zu zahlen ist. Die ganze Übersicht ist jetzt unter Verlauf → Übersicht.",
+      "Setup ist aufgeteilt in Geld, Teilen und App. Die Sprache findest du unter App."
     ]
   }
 }
