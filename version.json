@@ -1,16 +1,12 @@
 {
-  "version": "1.12.0",
-  "date": "2026-10-25",
+  "version": "1.12.1",
+  "date": "2026-10-26",
   "notes": {
     "en": [
-      "A new look with calmer colours and a darker, softer dark mode.",
-      "Home shows what is left until payday and a short list of what to pay this month. The full breakdown moved to History → Breakdown.",
-      "Setup is split into Money, Sharing and App. Language is under App."
+      "With a weekly allowance, everything shows the week: Home says how much is left this week, the gas and other spending budgets are shared out per week, the log is grouped by week, and Plan shows the result per week."
     ],
     "de": [
-      "Neues Aussehen mit ruhigeren Farben und einem weicheren dunklen Modus.",
-      "Die Startseite zeigt, was bis zum Zahltag übrig ist, und eine kurze Liste, was diesen Monat zu zahlen ist. Die ganze Übersicht ist jetzt unter Verlauf → Übersicht.",
-      "Setup ist aufgeteilt in Geld, Teilen und App. Die Sprache findest du unter App."
+      "Bei wöchentlichem Sackgeld zeigt alles die Woche: Die Startseite sagt, wie viel diese Woche übrig ist, das Benzin- und Ausgaben-Budget wird pro Woche gerechnet, der Verlauf ist nach Wochen gruppiert, und Plan zeigt das Ergebnis pro Woche."
     ]
   }
 }
