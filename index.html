@@ -369,7 +369,7 @@ input[type=range] { width: 100%; accent-color: var(--brand); height: 28px; }
       inOut: "in {a} · out {b}", set: "set", del: "Delete entry", delQ: "Delete?",
       plan: "What if…", planIntro: "Move the sliders. Allowance (CHF {a}) and parking (CHF {p}) are included.",
       sl_hours: "Job hours per month", sl_gas: "Scooter gas", sl_debt: "Debt payments (all debts)", sl_other: "Other spending (food, games, going out)",
-      moneyOut: "Money out", overspend: "You spend <b>CHF {n}</b> more than you get each month. Work about <b>{h} more hours</b> or spend less.",
+      moneyOut: "Money out", overspend: "You spend <b>CHF {n}</b> more than you get each month. Work about <b>{h} more hours</b> or spend less.", overspendW: "You spend <b>CHF {n}</b> more than you get each week. Work about <b>{h} more hours</b> a week or spend less.",
       noDebtLeft: "<b>No debts left.</b> Nice.", noPay: "With no debt payments, the CHF {n} never goes away.",
       debtFreeIn: "Debt free in <b>{m}</b>, in {d}.", tooLong: "At this pace the debts take more than 5 years.",
       goalIn: "<b>{g}</b> (CHF {n}) reached in <b>{m}</b>.",
@@ -401,7 +401,7 @@ input[type=range] { width: 100%; accent-color: var(--brand); height: 28px; }
       whichDebt: "Which debt?", typeAmount: "Type an amount first", balUpdated: "Balance updated", savedLog: "Saved to your log",
       entryDeleted: "Entry deleted", h_allowance: "Your monthly CHF {n}.", h_job: "CHF {r} per hour.", h_gas: "Budget this month: CHF {n}.",
       h_parking: "Your parking space costs CHF {n} per month.", h_debt: "CHF {n} still open.",
-      h_balance: "Type the exact balance from your bank app.", h_income: "Birthday money, selling something…", updUndoTitle: "Undo the last update", sec_money: "Money", sec_share: "Sharing", sec_family: "Family", sec_app: "App", lv_list: "Entries", lv_sum: "Breakdown", now_month: "This month", now_week: "This week", now_left: "left until {d}", now_short: "short until {d}", now_in: "In: CHF {n}", now_out: "Out: CHF {n}", now_toPay: "To pay this month", now_log: "Log", now_pay: "Pay", now_gas: "Gas budget", details: "Details", pctPaid: "{n}% paid", you_title: "You", accountN: "Account {n}", qa_spend: "Spending", h_spend: ""
+      h_balance: "Type the exact balance from your bank app.", h_income: "Birthday money, selling something…", updUndoTitle: "Undo the last update", sec_money: "Money", sec_share: "Sharing", sec_family: "Family", sec_app: "App", lv_list: "Entries", lv_sum: "Breakdown", now_month: "This month", now_week: "This week", now_left: "left until {d}", now_short: "short until {d}", now_in: "In: CHF {n}", now_out: "Out: CHF {n}", now_toPay: "To pay this month", now_log: "Log", now_pay: "Pay", now_gas: "Gas budget", now_gasW: "Gas", now_otherW: "Other spending", now_budgetW: "Budget this week", h_gasW: "Budget this week: CHF {n}.", perWeekShort: "≈ {n}/week", planPerWeek: "An average week", planIntroW: "Move the sliders (per month). Allowance (CHF {a} a week) and parking (CHF {p} a month) are included. The result is shown per week.", details: "Details", pctPaid: "{n}% paid", you_title: "You", accountN: "Account {n}", qa_spend: "Spending", h_spend: ""
     },
     de: {
       appName: "Sackgeld", tab_home: "Start", tab_log: "Verlauf", tab_plan: "Plan", tab_setup: "Setup", addEntry: "Eintrag hinzufügen",
@@ -419,7 +419,7 @@ input[type=range] { width: 100%; accent-color: var(--brand); height: 28px; }
       inOut: "rein {a} · raus {b}", set: "neu", del: "Eintrag löschen", delQ: "Löschen?",
       plan: "Was wäre, wenn…", planIntro: "Verschieb die Regler. Sackgeld (CHF {a}) und Parkplatz (CHF {p}) sind eingerechnet.",
       sl_hours: "Arbeitsstunden pro Monat", sl_gas: "Benzin", sl_debt: "Abzahlungen (alle Schulden)", sl_other: "Andere Ausgaben (Essen, Games, Ausgang)",
-      moneyOut: "Ausgaben", overspend: "Du gibst jeden Monat <b>CHF {n}</b> mehr aus, als du bekommst. Arbeite etwa <b>{h} Stunden mehr</b> oder gib weniger aus.",
+      moneyOut: "Ausgaben", overspend: "Du gibst jeden Monat <b>CHF {n}</b> mehr aus, als du bekommst. Arbeite etwa <b>{h} Stunden mehr</b> oder gib weniger aus.", overspendW: "Du gibst jede Woche <b>CHF {n}</b> mehr aus, als du bekommst. Arbeite etwa <b>{h} Stunden mehr</b> pro Woche oder gib weniger aus.",
       noDebtLeft: "<b>Keine Schulden mehr.</b> Stark.", noPay: "Ohne Abzahlung bleiben die CHF {n} für immer.",
       debtFreeIn: "Schuldenfrei in <b>{m}</b>, im {d}.", tooLong: "In diesem Tempo dauern die Schulden über 5 Jahre.",
       goalIn: "<b>{g}</b> (CHF {n}) erreicht in <b>{m}</b>.",
@@ -451,7 +451,7 @@ input[type=range] { width: 100%; accent-color: var(--brand); height: 28px; }
       whichDebt: "Welche Schuld?", typeAmount: "Gib zuerst einen Betrag ein", balUpdated: "Kontostand aktualisiert", savedLog: "Im Verlauf gespeichert",
       entryDeleted: "Eintrag gelöscht", h_allowance: "Dein Sackgeld pro Monat: CHF {n}.", h_job: "CHF {r} pro Stunde.", h_gas: "Budget diesen Monat: CHF {n}.",
       h_parking: "Dein Parkplatz kostet CHF {n} pro Monat.", h_debt: "Noch CHF {n} offen.",
-      h_balance: "Gib den genauen Kontostand aus deiner Bank-App ein.", h_income: "Geburtstagsgeld, etwas verkauft…", updUndoTitle: "Letztes Update rückgängig machen", sec_money: "Geld", sec_share: "Teilen", sec_family: "Familie", sec_app: "App", lv_list: "Einträge", lv_sum: "Übersicht", now_month: "Dieser Monat", now_week: "Diese Woche", now_left: "übrig bis {d}", now_short: "fehlen bis {d}", now_in: "Rein: CHF {n}", now_out: "Raus: CHF {n}", now_toPay: "Diesen Monat zu zahlen", now_log: "Eintragen", now_pay: "Zahlen", now_gas: "Benzin-Budget", details: "Details", pctPaid: "{n}% bezahlt", you_title: "Du", accountN: "Konto {n}", qa_spend: "Ausgabe", h_spend: ""
+      h_balance: "Gib den genauen Kontostand aus deiner Bank-App ein.", h_income: "Geburtstagsgeld, etwas verkauft…", updUndoTitle: "Letztes Update rückgängig machen", sec_money: "Geld", sec_share: "Teilen", sec_family: "Familie", sec_app: "App", lv_list: "Einträge", lv_sum: "Übersicht", now_month: "Dieser Monat", now_week: "Diese Woche", now_left: "übrig bis {d}", now_short: "fehlen bis {d}", now_in: "Rein: CHF {n}", now_out: "Raus: CHF {n}", now_toPay: "Diesen Monat zu zahlen", now_log: "Eintragen", now_pay: "Zahlen", now_gas: "Benzin-Budget", now_gasW: "Benzin", now_otherW: "Andere Ausgaben", now_budgetW: "Budget diese Woche", h_gasW: "Budget diese Woche: CHF {n}.", perWeekShort: "≈ {n}/Woche", planPerWeek: "Eine Woche im Schnitt", planIntroW: "Verschieb die Regler (pro Monat). Sackgeld (CHF {a} pro Woche) und Parkplatz (CHF {p} pro Monat) sind eingerechnet. Das Ergebnis siehst du pro Woche.", details: "Details", pctPaid: "{n}% bezahlt", you_title: "Du", accountN: "Konto {n}", qa_spend: "Ausgabe", h_spend: ""
     }
   };
   var lang = "en";
@@ -546,10 +546,10 @@ input[type=range] { width: 100%; accent-color: var(--brand); height: 28px; }
 
   // ---------- app version & updates ----------
   // When releasing: bump APP_VERSION, APP_DATE and NOTES here AND in version.json (a GitHub check compares them).
-  var APP_VERSION = "1.12.0", APP_DATE = "2026-10-25";
+  var APP_VERSION = "1.12.1", APP_DATE = "2026-10-26";
   var NOTES = {
-    en: ["A new look with calmer colours and a darker, softer dark mode.", "Home shows what is left until payday and a short list of what to pay this month. The full breakdown moved to History → Breakdown.", "Setup is split into Money, Sharing and App. Language is under App."],
-    de: ["Neues Aussehen mit ruhigeren Farben und einem weicheren dunklen Modus.", "Die Startseite zeigt, was bis zum Zahltag übrig ist, und eine kurze Liste, was diesen Monat zu zahlen ist. Die ganze Übersicht ist jetzt unter Verlauf → Übersicht.", "Setup ist aufgeteilt in Geld, Teilen und App. Die Sprache findest du unter App."]
+    en: ["With a weekly allowance, everything shows the week: Home says how much is left this week, the gas and other spending budgets are shared out per week, the log is grouped by week, and Plan shows the result per week."],
+    de: ["Bei wöchentlichem Sackgeld zeigt alles die Woche: Die Startseite sagt, wie viel diese Woche übrig ist, das Benzin- und Ausgaben-Budget wird pro Woche gerechnet, der Verlauf ist nach Wochen gruppiert, und Plan zeigt das Ergebnis pro Woche."]
   };
 
 
@@ -1208,7 +1208,7 @@ input[type=range] { width: 100%; accent-color: var(--brand); height: 28px; }
       return '<button class="acct" data-act="balance" data-acct="' + a.id + '"' + (ro ? " disabled" : ' aria-label="' + esc(a.name) + ': ' + t("ty_balance") + '"') + '><span class="acct-name"><span class="acct-dot" style="background:' + a.color + '"></span><span>' + esc(a.name) + '</span>' + (ro ? "" : icon("pencil", "edit")) + '</span><span class="acct-bal num">' + chf(a.balance) + '</span></button>';
     }).join("");
     var recent = sortedEntries().slice(0, 3);
-    return header('<span class="brand"><span class="brand-ic">' + icon("wallet") + '</span>' + t("appName") + '</span>', '<span class="pill">' + new Date().toLocaleDateString(loc(), { month: "short", year: "numeric" }) + '</span>') +
+    return header('<span class="brand"><span class="brand-ic">' + icon("wallet") + '</span>' + t("appName") + '</span>', '<span class="pill">' + (isWeekly() ? esc(periodOf(0, true).label) : new Date().toLocaleDateString(loc(), { month: "short", year: "numeric" })) + '</span>') +
       updateBanner() + parentCallout() +
       '<section class="hero" aria-label="' + t("allMoney") + '"><div><div class="label">' + t("allMoney") + '</div><div class="hero-total num"><small>CHF</small>' + chf(total()) + '</div></div><div class="accounts">' + accts + '</div></section>' +
       (!hasBalance && !ro ? '<div class="callout">' + t("startHere") + '</div>' : "") +
@@ -1222,7 +1222,7 @@ input[type=range] { width: 100%; accent-color: var(--brand); height: 28px; }
   }
   // Home: how much is left until the next payday, and what still has to be paid this month
   function nowCard() {
-    var s = state.s, ro = !!ui.viewing, tdy = today(), pd = periodOf(0), m = periodStats(pd);
+    var s = state.s, ro = !!ui.viewing, tdy = today(), pd = periodOf(0, true), m = periodStats(pd);
     var lft = r2(m.inSum - m.outSum);
     var nextDay = paydays(addDays(tdy, 1), addDays(tdy, 40))[0];
     var until = nextDay && nextDay <= addDays(pd.to, 1) ? shortDate(nextDay, true) : t("bd_monthEnd");
@@ -1240,13 +1240,18 @@ input[type=range] { width: 100%; accent-color: var(--brand); height: 28px; }
       if (due <= 0) return;
       rows += chk(paidM >= due ? "done" : "", esc(debtName(d)), "CHF " + chf0(due), paidM < due && !ro ? '<button class="btn ghost small" data-quick="debt" data-debt="' + d.id + '">' + t("now_pay") + '</button>' : "");
     });
-    if (s.gas > 0) rows += chk(mm.gas > s.gas ? "over" : "", t("now_gas"), "CHF " + chf0(mm.gas) + " / " + chf0(s.gas), "");
+    var gasRow = "";
+    if (s.gas > 0) gasRow = pd.week ? chk(m.gas > perWeek(s.gas) ? "over" : "", t("now_gasW"), "CHF " + chf0(m.gas) + " / " + chf0(perWeek(s.gas)), "")
+      : chk(mm.gas > s.gas ? "over" : "", t("now_gas"), "CHF " + chf0(mm.gas) + " / " + chf0(s.gas), "");
+    var otherRow = pd.week && s.other > 0 ? chk(m.spend > perWeek(s.other) ? "over" : "", t("now_otherW"), "CHF " + chf0(m.spend) + " / " + chf0(perWeek(s.other)), "") : "";
 
     return '<section class="card"><div class="card-head"><h2>' + t(pd.week ? "now_week" : "now_month") + '</h2><button class="link-btn" data-go="log" data-lv="sum">' + t("details") + icon("right") + '</button></div>' +
       '<div><div class="big num' + (lft < 0 ? " bad" : "") + '">CHF ' + chf(Math.abs(lft)) + '</div><p class="muted small-text">' + esc(t(lft < 0 ? "now_short" : "now_left", { d: until })) + '</p></div>' +
       '<div class="meter thin"><span style="width:' + pct + '%;background:' + (lft < 0 ? "var(--bad)" : "var(--c-other)") + '"></span></div>' +
       '<div class="meter-key num"><span>' + t("now_in", { n: chf0(m.inSum) }) + '</span><span>' + t("now_out", { n: chf0(m.outSum) }) + '</span></div>' +
-      (rows ? '<h3 class="bd-h">' + t("now_toPay") + '</h3><div class="checks">' + rows + '</div>' : "") +
+      (pd.week && (gasRow || otherRow) ? '<h3 class="bd-h">' + t("now_budgetW") + '</h3><div class="checks">' + gasRow + otherRow + '</div>' : "") +
+      (pd.week ? (rows ? '<h3 class="bd-h">' + t("now_toPay") + '</h3><div class="checks">' + rows + '</div>' : "")
+        : (rows + gasRow ? '<h3 class="bd-h">' + t("now_toPay") + '</h3><div class="checks">' + rows + gasRow + '</div>' : "")) +
       '</section>';
   }
   function debtCard() {
@@ -1266,12 +1271,15 @@ input[type=range] { width: 100%; accent-color: var(--brand); height: 28px; }
   function addDays(iso, n) { var d = new Date(iso + "T12:00:00"); d.setDate(d.getDate() + n); return isoD(d); }
   function shortDate(iso, wd) { return new Date(iso + "T12:00:00").toLocaleDateString(loc(), wd ? { weekday: "short", day: "numeric", month: "short" } : { day: "numeric", month: "short" }); }
   // Week view: a week runs from one payday to the day before the next one
-  function weekView() { return state.s.allowMode === "week" && ui.bv !== "month"; }
-  function periodOf(off) {
+  function isWeekly() { return state.s.allowMode === "week"; }
+  function weekView() { return isWeekly() && ui.bv !== "month"; }
+  function perWeek(monthly) { return r2(monthly * 12 / 52); } // a monthly budget shared over the weeks
+  function weekStart(iso) { var back = (new Date(iso + "T12:00:00").getDay() - allowObj(state.s).day + 7) % 7; return addDays(iso, -back); }
+  // forceWeek: Home always shows the current week when the allowance is weekly
+  function periodOf(off, forceWeek) {
     var tdy = today();
-    if (weekView()) {
-      var a = allowObj(state.s), back = (new Date(tdy + "T12:00:00").getDay() - a.day + 7) % 7;
-      var from = addDays(addDays(tdy, -back), 7 * off), to = addDays(from, 6);
+    if (forceWeek ? isWeekly() : weekView()) {
+      var from = addDays(weekStart(tdy), 7 * off), to = addDays(from, 6);
       return { week: true, from: from, to: to, label: shortDate(from) + " – " + shortDate(to), short: shortDate(from) };
     }
     var key = shiftMonth(monthKey(tdy), off);
@@ -1320,7 +1328,7 @@ input[type=range] { width: 100%; accent-color: var(--brand); height: 28px; }
     if (pd.week) {
       mustRows = (m.parking ? row("var(--c-park)", t("parkingSpace"), "CHF " + chf(m.parking)) : "") +
         state.debts.filter(function (d) { return m.debt[d.id]; }).map(function (d) { return row("var(--c-debt)", esc(debtName(d)), "CHF " + chf(m.debt[d.id])); }).join("") +
-        (m.gas ? row("var(--c-gas)", t("ty_gas"), "CHF " + chf(m.gas)) : "");
+        (m.gas || s.gas ? row("var(--c-gas)", t("ty_gas"), "CHF " + chf(m.gas), s.gas > 0 ? (m.gas > perWeek(s.gas) ? tg("bad", t("over", { n: chf0(m.gas - perWeek(s.gas)) })) : tg("good", t("left", { n: chf0(perWeek(s.gas) - m.gas) }))) : "") : "");
       if (!mustRows) mustRows = '<p class="bd-tip">' + t("bd_nothingPaidW") + '</p>';
     } else {
       var debtRows = state.debts.filter(function (d) { return debtLeftOf(d) > 0 || m.debt[d.id]; }).map(function (d) {
@@ -1334,7 +1342,8 @@ input[type=range] { width: 100%; accent-color: var(--brand); height: 28px; }
 
     var catKeys = Object.keys(m.cats).sort(function (x, y) { return m.cats[y] - m.cats[x]; });
     var spendRows = catKeys.length ? catKeys.map(function (c) { return row("var(--c-other)", esc(catLabel(c)), "CHF " + chf(m.cats[c])); }).join("") : '<p class="bd-tip">' + t(pd.week ? "bd_nothingW" : "bd_nothing") + '</p>';
-    var spendTag = s.other > 0 && !pd.week ? (m.spend > s.other ? tg("bad", t("over", { n: chf0(m.spend - s.other) })) : tg("good", t("left", { n: chf0(s.other - m.spend) }))) : "";
+    var otherB = pd.week ? perWeek(s.other) : s.other;
+    var spendTag = otherB > 0 ? (m.spend > otherB ? tg("bad", t("over", { n: chf0(m.spend - otherB) })) : tg("good", t("left", { n: chf0(otherB - m.spend) }))) : "";
 
     // Planned split of the allowance, month view only
     var plan = "";
@@ -1399,12 +1408,13 @@ input[type=range] { width: 100%; accent-color: var(--brand); height: 28px; }
     if (lv === "sum") return top + breakdownCard();
     if (!list.length) return top + '<section class="card"><div class="empty"><p>' + t("noEntries") + '</p><p>' + t("noEntriesHint") + '</p></div></section>';
     var html = "", lastMonth = null, lastDay = null;
+    var wk = isWeekly();
     list.forEach(function (e) {
-      var mk = monthKey(e.date);
+      var mk = wk ? weekStart(e.date) : monthKey(e.date);
       if (mk !== lastMonth) {
         if (lastMonth) html += '</div></section>';
-        var mt = periodStats({ from: mk + "-01", to: monthEnd(mk) });
-        html += '<section class="card"><div class="card-head"><h2>' + monthLabel(mk) + '</h2><span class="muted num small-text">' + t("inOut", { a: chf0(mt.inSum), b: chf0(mt.outSum) }) + '</span></div><div class="list">';
+        var mt = periodStats(wk ? { from: mk, to: addDays(mk, 6) } : { from: mk + "-01", to: monthEnd(mk) });
+        html += '<section class="card"><div class="card-head"><h2>' + (wk ? esc(shortDate(mk) + " – " + shortDate(addDays(mk, 6))) : monthLabel(mk)) + '</h2><span class="muted num small-text">' + t("inOut", { a: chf0(mt.inSum), b: chf0(mt.outSum) }) + '</span></div><div class="list">';
         lastMonth = mk; lastDay = null;
       }
       if (e.date !== lastDay) {
@@ -1472,7 +1482,7 @@ input[type=range] { width: 100%; accent-color: var(--brand); height: 28px; }
     function sl(id, label, min, max, step, val, unit) {
       return '<div class="slider"><div class="slider-top"><label for="' + id + '">' + label + '</label><b class="num" id="' + id + '-v"></b></div><input type="range" id="' + id + '" min="' + min + '" max="' + max + '" step="' + step + '" value="' + val + '" data-unit="' + unit + '"></div>';
     }
-    var sim = '<section class="card"><p class="muted small-text">' + t("planIntro", { a: chf0(allowNow()), p: chf0(s.parking) }) + '</p>' +
+    var sim = '<section class="card"><p class="muted small-text">' + (isWeekly() ? t("planIntroW", { a: chf0(perPay(allowObj(s))), p: chf0(s.parking) }) : t("planIntro", { a: chf0(allowNow()), p: chf0(s.parking) })) + '</p>' +
         sl("sim-hours", t("sl_hours"), 0, 60, 1, p.hours, "h") +
         sl("sim-gas", t("sl_gas"), 0, 150, 5, p.gas, "chf") +
         sl("sim-debt", t("sl_debt"), 0, 500, 10, p.debtPayment, "chf") +
@@ -1496,26 +1506,28 @@ input[type=range] { width: 100%; accent-color: var(--brand); height: 28px; }
     var s = state.s, p = ui.sim;
     ["sim-hours", "sim-gas", "sim-debt", "sim-other", "sim-save"].forEach(function (id) {
       var el = document.getElementById(id);
-      document.getElementById(id + "-v").textContent = el.dataset.unit === "h" ? el.value + " h = CHF " + chf0(el.value * s.rate) : "CHF " + el.value;
+      document.getElementById(id + "-v").textContent = (el.dataset.unit === "h" ? el.value + " h = CHF " + chf0(el.value * s.rate) : "CHF " + el.value) + (isWeekly() && el.dataset.unit !== "h" ? " · " + t("perWeekShort", { n: chf0(perWeek(el.value)) }) : "");
     });
     var dl = debtLeft();
     var inc = allowNow() + p.hours * s.rate;
     var pay = Math.min(p.debtPayment, dl);
     var out = s.parking + p.gas + p.other + pay;
     var free = inc - out - p.save;
+    if (isWeekly()) { inc = perWeek(inc); out = perWeek(out); free = perWeek(free); }
     var nowKey = monthKey(today());
     var sim = simulate({ allowanceAt: function (m) { return allowanceFor(shiftMonth(nowKey, m)).total; }, rate: s.rate, parking: s.parking, gas: p.gas, other: p.other, debtPayment: p.debtPayment, hours: p.hours, save: p.save, goal: s.goalAmount }, 60);
     var g = esc(goalName()), gn = chf0(s.goalAmount);
     var debtLine = dl <= 0 ? t("noDebtLeft") : p.debtPayment <= 0 ? t("noPay", { n: chf0(dl) }) : sim.debtFree !== null ? t("debtFreeIn", { m: monthsTxt(sim.debtFree), d: monthName(sim.debtFree) }) : t("tooLong");
     var goalLine = p.save <= 0 ? t("goalNoSave", { g: g }) : sim.goalAt !== null ? t("goalIn", { g: g, n: gn, m: monthsTxt(sim.goalAt) }) : t("goalNo", { g: g, n: gn });
     document.getElementById("sim-out").innerHTML =
+      (isWeekly() ? '<h2>' + t("planPerWeek") + '</h2>' : "") +
       '<div class="flow">' +
         flowRow(t("moneyIn"), inc, "var(--good)", "+") +
         flowRow(t("moneyOut"), out, "var(--ink)", "−") +
-        flowRow(t("toSavings"), p.save, "var(--c-save)", "−") +
+        flowRow(t("toSavings"), isWeekly() ? perWeek(p.save) : p.save, "var(--c-save)", "−") +
         '<div class="flow-row total"><span>' + (free >= 0 ? t("freeLeft") : t("missing")) + '</span><b class="num" style="color:' + (free >= 0 ? "var(--good)" : "var(--bad)") + '">CHF ' + chf0(Math.abs(free)) + '</b></div>' +
       '</div>' +
-      (free < 0 ? '<div class="callout" style="background:color-mix(in srgb,var(--bad) 16%,var(--surface))">' + t("overspend", { n: chf0(-free), h: Math.ceil(-free / s.rate) }) + '</div>' : "") +
+      (free < 0 ? '<div class="callout" style="background:color-mix(in srgb,var(--bad) 16%,var(--surface))">' + t(isWeekly() ? "overspendW" : "overspend", { n: chf0(-free), h: Math.ceil(-free / s.rate) }) + '</div>' : "") +
       '<div class="plan-lines"><p>' + debtLine + '</p><p>' + goalLine + '</p></div>';
     var rows = sim.rows.slice(0, 13);
     document.getElementById("sim-chart").innerHTML = chartSvg(rows, s.goalAmount, sim);
@@ -1722,7 +1734,7 @@ input[type=range] { width: 100%; accent-color: var(--brand); height: 28px; }
       document.getElementById("lbl-amount").textContent = k === "balance" ? t("balanceShown") : k === "job" ? t("earned") : t("amount");
       var d = debtById(dsel.value);
       var wkA = k === "allowance" && s.allowMode === "week";
-      document.getElementById("sheet-hint").textContent = t(wkA ? "h_allowanceW" : "h_" + k, { d: wkA ? wdName(allowObj(s).day) : "", n: k === "allowance" ? chf0(perPay(allowObj(s))) : k === "gas" ? chf0(s.gas) : k === "parking" ? chf0(s.parking) : k === "debt" && d ? chf(debtLeftOf(d)) : "", r: s.rate });
+      document.getElementById("sheet-hint").textContent = t(wkA ? "h_allowanceW" : k === "gas" && isWeekly() ? "h_gasW" : "h_" + k, { d: wkA ? wdName(allowObj(s).day) : "", n: k === "allowance" ? chf0(perPay(allowObj(s))) : k === "gas" ? chf0(isWeekly() ? perWeek(s.gas) : s.gas) : k === "parking" ? chf0(s.parking) : k === "debt" && d ? chf(debtLeftOf(d)) : "", r: s.rate });
       if (k === "balance") amt.value = acct(document.getElementById("in-account").value).balance || "";
       else amt.value = { allowance: perPay(allowObj(s)), parking: s.parking, debt: debtDefault() }[k] || "";
       if (k === "job") hrs.value = "";
